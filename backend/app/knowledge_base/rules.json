@@ -1,0 +1,282 @@
+[
+  {
+    "code": "R01",
+    "conditions": [
+      {
+        "feature": "F01",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "URL menggunakan IP address sebagai hostname sehingga identitas domain asli sulit diverifikasi.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R02",
+    "conditions": [
+      {
+        "feature": "F02",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "URL terlalu panjang sehingga berpotensi digunakan untuk menyamarkan alamat asli.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R03",
+    "conditions": [
+      {
+        "feature": "F03",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "URL menggunakan layanan pemendek URL yang dapat menyembunyikan alamat tujuan sebenarnya.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R04",
+    "conditions": [
+      {
+        "feature": "F04",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "URL mengandung simbol @ yang sering digunakan untuk mengelabui pembacaan alamat oleh pengguna.",
+    "source": "Aljofey et al. (2022); Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R05",
+    "conditions": [
+      {
+        "feature": "F05",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "Terdapat double slash tambahan yang dapat mengindikasikan redirect mencurigakan.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R06",
+    "conditions": [
+      {
+        "feature": "F06",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "Domain menggunakan tanda hubung yang sering dimanfaatkan untuk meniru nama domain resmi.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R07",
+    "conditions": [
+      {
+        "feature": "F07",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "Jumlah subdomain berlebihan dapat digunakan untuk menyamarkan domain utama.",
+    "source": "Aljofey et al. (2022); Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R08",
+    "conditions": [
+      {
+        "feature": "F08",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "SSL tidak valid atau tidak tersedia sehingga keamanan website tidak dapat dipercaya.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R09",
+    "conditions": [
+      {
+        "feature": "F09",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "Masa registrasi domain pendek sehingga kredibilitas domain perlu diperiksa lebih lanjut.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R10",
+    "conditions": [
+      {
+        "feature": "F10",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "Favicon berasal dari domain berbeda, yang dapat menunjukkan peniruan elemen visual website lain.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R11",
+    "conditions": [
+      {
+        "feature": "F12",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "Token HTTPS muncul pada bagian domain atau path, bukan sebagai protokol yang valid.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R12",
+    "conditions": [
+      {
+        "feature": "F13",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "Resource halaman terlalu banyak berasal dari domain eksternal.",
+    "source": "Aljofey et al. (2022); Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R13",
+    "conditions": [
+      {
+        "feature": "F14",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "Mayoritas anchor mengarah ke domain berbeda sehingga struktur halaman terlihat tidak wajar.",
+    "source": "Aljofey et al. (2022); Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R14",
+    "conditions": [
+      {
+        "feature": "F16",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "Form action kosong atau mengarah ke domain berbeda, sehingga berisiko digunakan untuk mengambil data pengguna.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R15",
+    "conditions": [
+      {
+        "feature": "F17",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "Form mengirim data melalui email, yang dapat menjadi indikasi pencurian data.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R16",
+    "conditions": [
+      {
+        "feature": "F21",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "Klik kanan dinonaktifkan sehingga pengguna lebih sulit memeriksa elemen halaman.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R17",
+    "conditions": [
+      {
+        "feature": "F24",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "Umur domain terlalu baru sehingga tingkat kepercayaannya rendah.",
+    "source": "Aljofey et al. (2022); Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R18",
+    "conditions": [
+      {
+        "feature": "F25",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "DNS record tidak tersedia atau tidak valid.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R19",
+    "conditions": [
+      {
+        "feature": "F28",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "Website tidak terindeks Google sehingga perlu diperiksa lebih lanjut.",
+    "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R20",
+    "conditions": [
+      {
+        "feature": "F30",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "phishing",
+    "severity": "high",
+    "explanation": "Website masuk laporan atau blacklist phishing.",
+    "source": "Suwarno & Hardjianto (2024)"
+  }
+]
