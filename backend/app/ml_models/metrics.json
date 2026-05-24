@@ -1,0 +1,71 @@
+{
+  "random_forest": {
+    "accuracy": 0.6689,
+    "precision": 0.7342,
+    "recall": 0.5293,
+    "f1_score": 0.6151,
+    "confusion_matrix": [
+      [
+        924,
+        219
+      ],
+      [
+        538,
+        605
+      ]
+    ]
+  },
+  "xgboost": {
+    "accuracy": 0.6689,
+    "precision": 0.7342,
+    "recall": 0.5293,
+    "f1_score": 0.6151,
+    "confusion_matrix": [
+      [
+        924,
+        219
+      ],
+      [
+        538,
+        605
+      ]
+    ]
+  },
+  "feature_columns": [
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "F05",
+    "F06",
+    "F07",
+    "F08",
+    "F09",
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+    "F16",
+    "F17",
+    "F18",
+    "F19",
+    "F20",
+    "F21",
+    "F22",
+    "F23",
+    "F24",
+    "F25",
+    "F26",
+    "F27",
+    "F28",
+    "F29",
+    "F30"
+  ],
+  "label_mapping": {
+    "0": "legitimate",
+    "1": "phishing"
+  },
+  "note": "Model dilatih menggunakan fitur F01-F30 yang dibentuk dari proses ekstraksi URL agar kompatibel dengan rule-based system pada backend."
+}
