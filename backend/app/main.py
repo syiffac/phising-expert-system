@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes_features import router as features_router
 from app.api.routes_rules import router as rules_router
 from app.api.routes_detection import router as detection_router
+from app.api.routes_history import router as history_router 
 
 app = FastAPI(
     title="PhishGuard Expert System API",
@@ -27,6 +28,7 @@ app.add_middleware(
 app.include_router(features_router)
 app.include_router(rules_router)
 app.include_router(detection_router)
+app.include_router(history_router)
 @app.get("/")
 def root():
     return {
