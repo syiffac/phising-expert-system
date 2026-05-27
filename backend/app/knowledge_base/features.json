@@ -43,9 +43,9 @@
   },
   {
     "code": "F08",
-    "name": "SSL Final State",
-    "description": "Status SSL atau HTTPS tidak valid atau tidak meyakinkan.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "name": "TLD in Path",
+    "description": "Terdapat top-level domain atau pola TLD pada bagian path URL yang dapat menyamarkan struktur alamat sebenarnya.",
+    "source": "Hannousse & Yahiouche (2021); Suwarno & Hardjianto (2024)"
   },
   {
     "code": "F09",
@@ -68,8 +68,8 @@
   {
     "code": "F12",
     "name": "HTTPS Token",
-    "description": "Terdapat token HTTPS palsu pada bagian domain atau path URL.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "description": "Terdapat token atau kata HTTPS pada bagian URL yang tidak semestinya, seperti domain atau path, untuk memberi kesan aman palsu.",
+    "source": "Hannousse & Yahiouche (2021); Suwarno & Hardjianto (2024)"
   },
   {
     "code": "F13",
@@ -169,9 +169,9 @@
   },
   {
     "code": "F29",
-    "name": "Links Pointing to Page",
-    "description": "Jumlah backlink menuju halaman rendah.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "name": "External Hyperlink Ratio",
+    "description": "Rasio hyperlink eksternal yang tinggi menunjukkan halaman banyak mengarahkan pengguna ke domain lain.",
+    "source": "Hannousse & Yahiouche (2021); Suwarno & Hardjianto (2024)"
   },
   {
     "code": "F30",

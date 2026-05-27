@@ -106,10 +106,10 @@
         "value": -1
       }
     ],
-    "conclusion": "phishing",
-    "severity": "high",
-    "explanation": "SSL tidak valid atau tidak tersedia sehingga keamanan website tidak dapat dipercaya.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "TLD ditemukan pada bagian path URL, yang dapat mengindikasikan penyamaran struktur URL.",
+    "source": "Hannousse & Yahiouche (2021); Suwarno & Hardjianto (2024)"
   },
   {
     "code": "R09",
@@ -150,8 +150,8 @@
     ],
     "conclusion": "phishing",
     "severity": "high",
-    "explanation": "Token HTTPS muncul pada bagian domain atau path, bukan sebagai protokol yang valid.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "explanation": "URL mengandung token HTTPS pada bagian yang tidak semestinya, sehingga dapat memberikan kesan aman palsu kepada pengguna.",
+    "source": "Hannousse & Yahiouche (2021); Suwarno & Hardjianto (2024)"
   },
   {
     "code": "R12",
@@ -278,5 +278,19 @@
     "severity": "high",
     "explanation": "Website masuk laporan atau blacklist phishing.",
     "source": "Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R21",
+    "conditions": [
+      {
+        "feature": "F29",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "Rasio hyperlink eksternal yang tinggi menunjukkan bahwa halaman banyak mengarah ke domain luar, sehingga perlu dicurigai sebagai pola halaman phishing.",
+    "source": "Hannousse & Yahiouche (2021); Suwarno & Hardjianto (2024)"
   }
 ]

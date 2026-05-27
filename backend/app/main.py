@@ -5,6 +5,7 @@ from app.api.routes_rules import router as rules_router
 from app.api.routes_detection import router as detection_router
 from app.api.routes_history import router as history_router 
 from app.api.routes_evaluation import router as evaluation_router
+from app.api.routes_dataset import router as dataset_router
 
 app = FastAPI(
     title="PhishGuard Expert System API",
@@ -31,6 +32,7 @@ app.include_router(rules_router)
 app.include_router(detection_router)
 app.include_router(history_router)
 app.include_router(evaluation_router)
+app.include_router(dataset_router)
 
 @app.get("/")
 def root():

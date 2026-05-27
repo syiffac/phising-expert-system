@@ -1,0 +1,453 @@
+[
+  {
+    "feature_code": "F01",
+    "feature_name": "Have IP Address",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "ip"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika ip = 1 (URL menggunakan alamat IP) maka -1; jika ip = 0 maka 1.",
+    "safe_value_condition": "ip = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "ip = 1",
+    "is_trainable": true,
+    "notes": "Kolom ip secara langsung menyatakan penggunaan IP address pada hostname URL."
+  },
+  {
+    "feature_code": "F02",
+    "feature_name": "URL Length",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "length_url"
+    ],
+    "transformation_type": "threshold",
+    "transformation_rule": "Jika length_url < 54 maka 1; jika 54 <= length_url <= 75 maka 0; jika length_url > 75 maka -1.",
+    "safe_value_condition": "length_url < 54",
+    "suspicious_value_condition": "54 <= length_url <= 75",
+    "danger_value_condition": "length_url > 75",
+    "is_trainable": true,
+    "notes": "Threshold mengikuti kategorisasi URL Length yang telah digunakan pada prototype ekstraksi URL."
+  },
+  {
+    "feature_code": "F03",
+    "feature_name": "Shortening Service",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "shortening_service"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika shortening_service = 1 maka -1; jika shortening_service = 0 maka 1.",
+    "safe_value_condition": "shortening_service = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "shortening_service = 1",
+    "is_trainable": true,
+    "notes": "Kolom dataset langsung menandai penggunaan layanan pemendek URL."
+  },
+  {
+    "feature_code": "F04",
+    "feature_name": "Having @ Symbol",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "nb_at"
+    ],
+    "transformation_type": "count_binary",
+    "transformation_rule": "Jika nb_at = 0 maka 1; jika nb_at >= 1 maka -1.",
+    "safe_value_condition": "nb_at = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "nb_at >= 1",
+    "is_trainable": true,
+    "notes": "Jumlah karakter @ dapat langsung ditransformasikan menjadi indikator keberadaan simbol @."
+  },
+  {
+    "feature_code": "F05",
+    "feature_name": "Double Slash Redirecting",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "nb_dslash"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika nb_dslash = 1 (double slash tambahan terdeteksi) maka -1; jika nb_dslash = 0 maka 1.",
+    "safe_value_condition": "nb_dslash = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "nb_dslash = 1",
+    "is_trainable": true,
+    "notes": "Dataset menyediakan indikator double slash tambahan sebagai kolom biner."
+  },
+  {
+    "feature_code": "F06",
+    "feature_name": "Prefix-Suffix",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "prefix_suffix"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika prefix_suffix = 1 maka -1; jika prefix_suffix = 0 maka 1.",
+    "safe_value_condition": "prefix_suffix = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "prefix_suffix = 1",
+    "is_trainable": true,
+    "notes": "Kolom prefix_suffix mewakili penggunaan pola hubung pada domain."
+  },
+  {
+    "feature_code": "F07",
+    "feature_name": "Having Subdomain",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "nb_subdomains"
+    ],
+    "transformation_type": "threshold",
+    "transformation_rule": "Jika nb_subdomains = 1 maka 1; jika nb_subdomains = 2 maka 0; jika nb_subdomains >= 3 maka -1.",
+    "safe_value_condition": "nb_subdomains = 1",
+    "suspicious_value_condition": "nb_subdomains = 2",
+    "danger_value_condition": "nb_subdomains >= 3",
+    "is_trainable": true,
+    "notes": "Nilai dataset berada pada rentang 1 sampai 3 dan dapat dikategorikan berdasarkan banyaknya subdomain."
+  },
+  {
+    "feature_code": "F08",
+    "feature_name": "TLD in Path",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "tld_in_path"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika tld_in_path = 1 maka -1; jika tld_in_path = 0 maka 1.",
+    "safe_value_condition": "tld_in_path = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "tld_in_path = 1",
+    "is_trainable": true,
+    "notes": "Kolom tld_in_path secara langsung menandai pola TLD pada bagian path URL."
+  },
+  {
+    "feature_code": "F09",
+    "feature_name": "Domain Registration Length",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "domain_registration_length"
+    ],
+    "transformation_type": "threshold",
+    "transformation_rule": "Jika domain_registration_length > 365 hari maka 1; jika 0 <= domain_registration_length <= 365 hari maka -1; jika nilainya < 0 maka 0 karena informasi tidak tersedia.",
+    "safe_value_condition": "domain_registration_length > 365",
+    "suspicious_value_condition": "domain_registration_length < 0",
+    "danger_value_condition": "0 <= domain_registration_length <= 365",
+    "is_trainable": true,
+    "notes": "Kolom menyimpan panjang registrasi domain dalam satuan hari; nilai negatif dipertahankan sebagai kondisi data tidak tersedia."
+  },
+  {
+    "feature_code": "F10",
+    "feature_name": "Favicon",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "external_favicon"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika external_favicon = 1 maka -1; jika external_favicon = 0 maka 1.",
+    "safe_value_condition": "external_favicon = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "external_favicon = 1",
+    "is_trainable": true,
+    "notes": "Kolom menyatakan apakah favicon berasal dari sumber eksternal."
+  },
+  {
+    "feature_code": "F11",
+    "feature_name": "Port",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "port"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika port = 1 (indikator port tidak umum tersedia) maka -1; jika port = 0 maka 1.",
+    "safe_value_condition": "port = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "port = 1",
+    "is_trainable": true,
+    "notes": "Kolom port dipetakan sebagai indikator biner penggunaan port yang mencurigakan."
+  },
+  {
+    "feature_code": "F12",
+    "feature_name": "HTTPS Token",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "https_token"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika https_token = 1 maka -1; jika https_token = 0 maka 1.",
+    "safe_value_condition": "https_token = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "https_token = 1",
+    "is_trainable": true,
+    "notes": "Knowledge base diselaraskan dengan kolom https_token untuk mendeteksi token HTTPS yang muncul pada bagian URL yang tidak semestinya."
+  },
+  {
+    "feature_code": "F13",
+    "feature_name": "Request URL",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "ratio_extMedia"
+    ],
+    "transformation_type": "ratio_threshold",
+    "transformation_rule": "Jika ratio_extMedia < 22 maka 1; jika 22 <= ratio_extMedia <= 61 maka 0; jika ratio_extMedia > 61 maka -1.",
+    "safe_value_condition": "ratio_extMedia < 22",
+    "suspicious_value_condition": "22 <= ratio_extMedia <= 61",
+    "danger_value_condition": "ratio_extMedia > 61",
+    "is_trainable": true,
+    "notes": "Rasio media eksternal mewakili resource halaman yang diminta dari domain lain."
+  },
+  {
+    "feature_code": "F14",
+    "feature_name": "URL of Anchor",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "safe_anchor"
+    ],
+    "transformation_type": "ratio_threshold",
+    "transformation_rule": "Jika safe_anchor < 31 maka 1; jika 31 <= safe_anchor <= 67 maka 0; jika safe_anchor > 67 maka -1.",
+    "safe_value_condition": "safe_anchor < 31",
+    "suspicious_value_condition": "31 <= safe_anchor <= 67",
+    "danger_value_condition": "safe_anchor > 67",
+    "is_trainable": true,
+    "notes": "Meskipun bernama safe_anchor, definisi sumber dataset menghitung anchor tidak aman seperti #, javascript, atau mailto; rasio tinggi lebih berbahaya."
+  },
+  {
+    "feature_code": "F15",
+    "feature_name": "Links in Tags",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "links_in_tags"
+    ],
+    "transformation_type": "internal_ratio_threshold",
+    "transformation_rule": "Jika links_in_tags > 81 maka 1; jika 17 <= links_in_tags <= 81 maka 0; jika links_in_tags < 17 maka -1.",
+    "safe_value_condition": "links_in_tags > 81",
+    "suspicious_value_condition": "17 <= links_in_tags <= 81",
+    "danger_value_condition": "links_in_tags < 17",
+    "is_trainable": true,
+    "notes": "Sumber dataset mendefinisikan fitur sebagai rasio link internal pada tag Link; rasio internal rendah lebih berbahaya."
+  },
+  {
+    "feature_code": "F16",
+    "feature_name": "SFH / Server Form Handler",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "sfh"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika sfh = 1 maka -1; jika sfh = 0 maka 1.",
+    "safe_value_condition": "sfh = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "sfh = 1",
+    "is_trainable": true,
+    "notes": "Kolom sfh tersedia langsung, walaupun pada dataset saat ini nilai teramati hanya 0 sehingga daya diskriminasinya perlu dicatat."
+  },
+  {
+    "feature_code": "F17",
+    "feature_name": "Submitting to Email",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "submit_email"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika submit_email = 1 maka -1; jika submit_email = 0 maka 1.",
+    "safe_value_condition": "submit_email = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "submit_email = 1",
+    "is_trainable": true,
+    "notes": "Kolom submit_email tersedia langsung, walaupun pada dataset saat ini nilai teramati hanya 0 sehingga daya diskriminasinya perlu dicatat."
+  },
+  {
+    "feature_code": "F18",
+    "feature_name": "Abnormal URL",
+    "mapping_status": "derived",
+    "dataset_columns": [
+      "abnormal_subdomain",
+      "random_domain"
+    ],
+    "transformation_type": "composite_binary",
+    "transformation_rule": "Jika abnormal_subdomain = 1 atau random_domain = 1 maka -1; jika keduanya = 0 maka 1.",
+    "safe_value_condition": "abnormal_subdomain = 0 AND random_domain = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "abnormal_subdomain = 1 OR random_domain = 1",
+    "is_trainable": true,
+    "notes": "Abnormal URL diturunkan dari indikator struktur subdomain abnormal atau domain acak yang tersedia pada dataset."
+  },
+  {
+    "feature_code": "F19",
+    "feature_name": "Redirect",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "nb_redirection"
+    ],
+    "transformation_type": "threshold",
+    "transformation_rule": "Jika nb_redirection <= 1 maka 1; jika 2 <= nb_redirection <= 3 maka 0; jika nb_redirection >= 4 maka -1.",
+    "safe_value_condition": "nb_redirection <= 1",
+    "suspicious_value_condition": "2 <= nb_redirection <= 3",
+    "danger_value_condition": "nb_redirection >= 4",
+    "is_trainable": true,
+    "notes": "Jumlah redirect tersedia langsung dan dapat dikategorikan berdasarkan tingkat berlebihan."
+  },
+  {
+    "feature_code": "F20",
+    "feature_name": "On MouseOver",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "onmouseover"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika onmouseover = 1 maka -1; jika onmouseover = 0 maka 1.",
+    "safe_value_condition": "onmouseover = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "onmouseover = 1",
+    "is_trainable": true,
+    "notes": "Kolom langsung menunjukkan penggunaan event onmouseover yang relevan dengan manipulasi tampilan URL."
+  },
+  {
+    "feature_code": "F21",
+    "feature_name": "Right Click Disabled",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "right_clic"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika right_clic = 1 maka -1; jika right_clic = 0 maka 1.",
+    "safe_value_condition": "right_clic = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "right_clic = 1",
+    "is_trainable": true,
+    "notes": "Nama kolom dataset menggunakan right_clic dan memetakan gejala klik kanan dinonaktifkan."
+  },
+  {
+    "feature_code": "F22",
+    "feature_name": "Pop-Up Window",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "popup_window"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika popup_window = 1 maka -1; jika popup_window = 0 maka 1.",
+    "safe_value_condition": "popup_window = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "popup_window = 1",
+    "is_trainable": true,
+    "notes": "Kolom dataset langsung menunjukkan keberadaan pop-up window."
+  },
+  {
+    "feature_code": "F23",
+    "feature_name": "IFrame",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "iframe"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika iframe = 1 maka -1; jika iframe = 0 maka 1.",
+    "safe_value_condition": "iframe = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "iframe = 1",
+    "is_trainable": true,
+    "notes": "Kolom dataset langsung menunjukkan keberadaan iframe."
+  },
+  {
+    "feature_code": "F24",
+    "feature_name": "Age of Domain",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "domain_age"
+    ],
+    "transformation_type": "threshold",
+    "transformation_rule": "Jika domain_age >= 180 hari maka 1; jika 0 <= domain_age < 180 hari maka -1; jika domain_age < 0 maka 0 karena informasi tidak tersedia.",
+    "safe_value_condition": "domain_age >= 180",
+    "suspicious_value_condition": "domain_age < 0",
+    "danger_value_condition": "0 <= domain_age < 180",
+    "is_trainable": true,
+    "notes": "Umur domain tersedia dalam hari; nilai negatif tidak dipaksa aman dan diperlakukan sebagai tidak diketahui."
+  },
+  {
+    "feature_code": "F25",
+    "feature_name": "DNS Record",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "dns_record"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika dns_record = 1 (domain memiliki DNS record) maka 1; jika dns_record = 0 maka -1.",
+    "safe_value_condition": "dns_record = 1",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "dns_record = 0",
+    "is_trainable": true,
+    "notes": "Sumber dataset menyatakan DNS record yang hilang sebagai indikator phishing; mapping mempertahankan arti keberadaan record."
+  },
+  {
+    "feature_code": "F26",
+    "feature_name": "Web Traffic",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "web_traffic"
+    ],
+    "transformation_type": "rank_threshold",
+    "transformation_rule": "Jika 1 <= web_traffic <= 100000 maka 1; jika web_traffic > 100000 maka 0; jika web_traffic = 0 maka -1.",
+    "safe_value_condition": "1 <= web_traffic <= 100000",
+    "suspicious_value_condition": "web_traffic > 100000",
+    "danger_value_condition": "web_traffic = 0",
+    "is_trainable": true,
+    "notes": "Web traffic diperlakukan sebagai ranking; nol menunjukkan ranking tidak tersedia."
+  },
+  {
+    "feature_code": "F27",
+    "feature_name": "Page Rank",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "page_rank"
+    ],
+    "transformation_type": "score_threshold",
+    "transformation_rule": "Jika page_rank >= 5 maka 1; jika 3 <= page_rank < 5 maka 0; jika page_rank < 3 maka -1.",
+    "safe_value_condition": "page_rank >= 5",
+    "suspicious_value_condition": "3 <= page_rank < 5",
+    "danger_value_condition": "page_rank < 3",
+    "is_trainable": true,
+    "notes": "Dataset menyediakan page_rank pada skala 0 sampai 10; threshold memisahkan skor rendah, menengah, dan tinggi."
+  },
+  {
+    "feature_code": "F28",
+    "feature_name": "Google Index",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "google_index"
+    ],
+    "transformation_type": "binary",
+    "transformation_rule": "Jika google_index = 1 (halaman terindeks Google) maka 1; jika google_index = 0 maka -1.",
+    "safe_value_condition": "google_index = 1",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "google_index = 0",
+    "is_trainable": true,
+    "notes": "Sumber dataset menyatakan halaman yang tidak terindeks Google sebagai indikator phishing."
+  },
+  {
+    "feature_code": "F29",
+    "feature_name": "External Hyperlink Ratio",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "ratio_extHyperlinks"
+    ],
+    "transformation_type": "threshold",
+    "transformation_rule": "Deteksi skala ratio_extHyperlinks terlebih dahulu. Jika nilai maksimum <= 1: nilai <= 0.30 maka 1, 0.30 < nilai <= 0.50 maka 0, dan nilai > 0.50 maka -1. Jika nilai maksimum > 1: nilai <= 30 maka 1, 30 < nilai <= 50 maka 0, dan nilai > 50 maka -1.",
+    "safe_value_condition": "ratio_extHyperlinks <= 0.30 atau <= 30, tergantung skala dataset",
+    "suspicious_value_condition": "0.30 < ratio_extHyperlinks <= 0.50 atau 30 < ratio_extHyperlinks <= 50",
+    "danger_value_condition": "ratio_extHyperlinks > 0.50 atau > 50",
+    "is_trainable": true,
+    "notes": "Kolom ratio_extHyperlinks tersedia langsung; dataset saat ini menggunakan skala 0 sampai 1 (nilai maksimum teramati 1.0)."
+  },
+  {
+    "feature_code": "F30",
+    "feature_name": "Statistical Report",
+    "mapping_status": "direct",
+    "dataset_columns": [
+      "statistical_report"
+    ],
+    "transformation_type": "binary_indicator",
+    "transformation_rule": "Jika statistical_report = 0 maka 1; jika statistical_report > 0 maka -1.",
+    "safe_value_condition": "statistical_report = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "statistical_report > 0",
+    "is_trainable": true,
+    "notes": "Nilai nonnol menunjukkan indikator laporan statistik/blacklist pada dataset."
+  }
+]

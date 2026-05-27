@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 import ipaddress
+import re
 
 
 SHORTENING_SERVICES = {
@@ -7,6 +8,11 @@ SHORTENING_SERVICES = {
     "is.gd", "buff.ly", "adf.ly", "bitly.com", "cutt.ly",
     "s.id", "rebrand.ly"
 }
+
+PATH_TLD_PATTERN = re.compile(
+    r"\.(?:com|net|org|id|co|biz|info|io|gov|edu|ac|me|xyz)(?:/|$)",
+    re.IGNORECASE,
+)
 
 
 def normalize_url(url: str) -> str:
@@ -53,6 +59,10 @@ def has_double_slash_redirect(url: str) -> bool:
     return "//" in after_protocol
 
 
+def has_tld_in_path(path: str) -> bool:
+    return bool(PATH_TLD_PATTERN.search(path))
+
+
 def extract_features_from_url(url: str) -> dict:
     normalized_url = normalize_url(url)
     parsed = urlparse(normalized_url)
@@ -94,12 +104,15 @@ def extract_features_from_url(url: str) -> dict:
     else:
         facts["F07"] = -1
 
-    # F08 - SSL Final State
-    facts["F08"] = 1 if parsed.scheme == "https" else -1
+    # F08 - TLD in Path
+    facts["F08"] = -1 if has_tld_in_path(parsed.path) else 1
 
     # F12 - HTTPS Token
     url_without_scheme = normalized_url.replace("https://", "").replace("http://", "")
     facts["F12"] = -1 if "https" in url_without_scheme.lower() else 1
+
+    # F29 - External Hyperlink Ratio requires fetched HTML, not only a URL.
+    facts["F29"] = None
 
     return {
         "original_url": url,
@@ -107,5 +120,5 @@ def extract_features_from_url(url: str) -> dict:
         "hostname": hostname,
         "facts": facts,
         "evaluated_features": ["F01", "F02", "F03", "F04", "F05", "F06", "F07", "F08", "F12"],
-        "note": "Pada prototype awal, fitur yang membutuhkan data eksternal seperti umur domain, DNS record, Google Index, Page Rank, dan Statistical Report belum dicek secara real-time."
+        "note": "F29 External Hyperlink Ratio tidak tersedia pada mode URL manual karena halaman belum diambil dan diparsing. Fitur eksternal lain seperti umur domain, DNS record, Google Index, Page Rank, dan Statistical Report juga belum dicek secara real-time."
     }

@@ -61,8 +61,26 @@ def predict_manual_baseline(facts: dict) -> dict:
             "xgboost": None,
         }
 
+    unavailable_features = [
+        feature for feature in feature_columns if facts.get(feature) is None
+    ]
+
+    if unavailable_features:
+        return {
+            "available": False,
+            "mode": "manual_url_baseline_f01_f30",
+            "note": (
+                "Prediksi baseline F01-F30 tidak dijalankan karena fitur "
+                "berikut belum tersedia pada input URL manual: "
+                + ", ".join(unavailable_features)
+                + "."
+            ),
+            "random_forest": None,
+            "xgboost": None,
+        }
+
     input_data = {
-        feature: facts.get(feature, 1)
+        feature: facts[feature]
         for feature in feature_columns
     }
 
