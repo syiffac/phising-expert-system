@@ -1,0 +1,246 @@
+{
+  "random_forest": [
+    {
+      "feature": "F28",
+      "importance": 0.3361
+    },
+    {
+      "feature": "F27",
+      "importance": 0.156916
+    },
+    {
+      "feature": "F26",
+      "importance": 0.120497
+    },
+    {
+      "feature": "F14",
+      "importance": 0.0505
+    },
+    {
+      "feature": "F15",
+      "importance": 0.045879
+    },
+    {
+      "feature": "F01",
+      "importance": 0.043676
+    },
+    {
+      "feature": "F02",
+      "importance": 0.03188
+    },
+    {
+      "feature": "F07",
+      "importance": 0.030266
+    },
+    {
+      "feature": "F29",
+      "importance": 0.026291
+    },
+    {
+      "feature": "F13",
+      "importance": 0.0196
+    },
+    {
+      "feature": "F24",
+      "importance": 0.016822
+    },
+    {
+      "feature": "F09",
+      "importance": 0.016328
+    },
+    {
+      "feature": "F12",
+      "importance": 0.015478
+    },
+    {
+      "feature": "F10",
+      "importance": 0.014778
+    },
+    {
+      "feature": "F06",
+      "importance": 0.014486
+    },
+    {
+      "feature": "F03",
+      "importance": 0.014346
+    },
+    {
+      "feature": "F19",
+      "importance": 0.011564
+    },
+    {
+      "feature": "F08",
+      "importance": 0.007457
+    },
+    {
+      "feature": "F18",
+      "importance": 0.007361
+    },
+    {
+      "feature": "F30",
+      "importance": 0.006004
+    },
+    {
+      "feature": "F05",
+      "importance": 0.003757
+    },
+    {
+      "feature": "F04",
+      "importance": 0.003725
+    },
+    {
+      "feature": "F25",
+      "importance": 0.003379
+    },
+    {
+      "feature": "F11",
+      "importance": 0.001246
+    },
+    {
+      "feature": "F22",
+      "importance": 0.000833
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00055
+    },
+    {
+      "feature": "F23",
+      "importance": 0.000214
+    },
+    {
+      "feature": "F20",
+      "importance": 6.9e-05
+    },
+    {
+      "feature": "F16",
+      "importance": 0.0
+    },
+    {
+      "feature": "F17",
+      "importance": 0.0
+    }
+  ],
+  "xgboost": [
+    {
+      "feature": "F28",
+      "importance": 0.541593
+    },
+    {
+      "feature": "F27",
+      "importance": 0.083167
+    },
+    {
+      "feature": "F01",
+      "importance": 0.050545
+    },
+    {
+      "feature": "F04",
+      "importance": 0.034204
+    },
+    {
+      "feature": "F26",
+      "importance": 0.034106
+    },
+    {
+      "feature": "F14",
+      "importance": 0.033466
+    },
+    {
+      "feature": "F29",
+      "importance": 0.017171
+    },
+    {
+      "feature": "F05",
+      "importance": 0.01603
+    },
+    {
+      "feature": "F15",
+      "importance": 0.015991
+    },
+    {
+      "feature": "F03",
+      "importance": 0.015813
+    },
+    {
+      "feature": "F13",
+      "importance": 0.015042
+    },
+    {
+      "feature": "F02",
+      "importance": 0.014557
+    },
+    {
+      "feature": "F07",
+      "importance": 0.014047
+    },
+    {
+      "feature": "F12",
+      "importance": 0.013563
+    },
+    {
+      "feature": "F19",
+      "importance": 0.012444
+    },
+    {
+      "feature": "F30",
+      "importance": 0.012054
+    },
+    {
+      "feature": "F24",
+      "importance": 0.011876
+    },
+    {
+      "feature": "F06",
+      "importance": 0.011869
+    },
+    {
+      "feature": "F08",
+      "importance": 0.011464
+    },
+    {
+      "feature": "F10",
+      "importance": 0.010653
+    },
+    {
+      "feature": "F09",
+      "importance": 0.010188
+    },
+    {
+      "feature": "F18",
+      "importance": 0.007748
+    },
+    {
+      "feature": "F11",
+      "importance": 0.005239
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00308
+    },
+    {
+      "feature": "F25",
+      "importance": 0.002801
+    },
+    {
+      "feature": "F21",
+      "importance": 0.001288
+    },
+    {
+      "feature": "F16",
+      "importance": 0.0
+    },
+    {
+      "feature": "F17",
+      "importance": 0.0
+    },
+    {
+      "feature": "F20",
+      "importance": 0.0
+    },
+    {
+      "feature": "F23",
+      "importance": 0.0
+    }
+  ]
+}
