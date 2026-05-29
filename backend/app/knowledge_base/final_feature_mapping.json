@@ -256,19 +256,18 @@
   },
   {
     "feature_code": "F18",
-    "feature_name": "Abnormal URL",
-    "mapping_status": "derived",
+    "feature_name": "Phishing Hints",
+    "mapping_status": "direct",
     "dataset_columns": [
-      "abnormal_subdomain",
-      "random_domain"
+      "phish_hints"
     ],
-    "transformation_type": "composite_binary",
-    "transformation_rule": "Jika abnormal_subdomain = 1 atau random_domain = 1 maka -1; jika keduanya = 0 maka 1.",
-    "safe_value_condition": "abnormal_subdomain = 0 AND random_domain = 0",
-    "suspicious_value_condition": null,
-    "danger_value_condition": "abnormal_subdomain = 1 OR random_domain = 1",
+    "transformation_type": "threshold",
+    "transformation_rule": "Jika phish_hints = 0 maka 1; jika phish_hints = 1 atau 2 maka 0; jika phish_hints > 2 maka -1.",
+    "safe_value_condition": "phish_hints = 0",
+    "suspicious_value_condition": "phish_hints = 1 OR phish_hints = 2",
+    "danger_value_condition": "phish_hints > 2",
     "is_trainable": true,
-    "notes": "Abnormal URL diturunkan dari indikator struktur subdomain abnormal atau domain acak yang tersedia pada dataset."
+    "notes": "Kolom phish_hints mengukur indikator kata pemancing yang dapat direproduksi dari URL dan teks HTML."
   },
   {
     "feature_code": "F19",
@@ -377,48 +376,48 @@
   },
   {
     "feature_code": "F26",
-    "feature_name": "Web Traffic",
+    "feature_name": "Brand in Path",
     "mapping_status": "direct",
     "dataset_columns": [
-      "web_traffic"
+      "brand_in_path"
     ],
-    "transformation_type": "rank_threshold",
-    "transformation_rule": "Jika 1 <= web_traffic <= 100000 maka 1; jika web_traffic > 100000 maka 0; jika web_traffic = 0 maka -1.",
-    "safe_value_condition": "1 <= web_traffic <= 100000",
-    "suspicious_value_condition": "web_traffic > 100000",
-    "danger_value_condition": "web_traffic = 0",
+    "transformation_type": "binary",
+    "transformation_rule": "Jika brand_in_path = 0 maka 1; jika brand_in_path = 1 maka -1.",
+    "safe_value_condition": "brand_in_path = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "brand_in_path = 1",
     "is_trainable": true,
-    "notes": "Web traffic diperlakukan sebagai ranking; nol menunjukkan ranking tidak tersedia."
+    "notes": "Kolom brand_in_path dapat dihitung ulang dari path URL tanpa layanan traffic pihak ketiga."
   },
   {
     "feature_code": "F27",
-    "feature_name": "Page Rank",
+    "feature_name": "Suspicious TLD",
     "mapping_status": "direct",
     "dataset_columns": [
-      "page_rank"
+      "suspecious_tld"
     ],
-    "transformation_type": "score_threshold",
-    "transformation_rule": "Jika page_rank >= 5 maka 1; jika 3 <= page_rank < 5 maka 0; jika page_rank < 3 maka -1.",
-    "safe_value_condition": "page_rank >= 5",
-    "suspicious_value_condition": "3 <= page_rank < 5",
-    "danger_value_condition": "page_rank < 3",
+    "transformation_type": "binary",
+    "transformation_rule": "Jika suspecious_tld = 0 maka 1; jika suspecious_tld = 1 maka -1.",
+    "safe_value_condition": "suspecious_tld = 0",
+    "suspicious_value_condition": null,
+    "danger_value_condition": "suspecious_tld = 1",
     "is_trainable": true,
-    "notes": "Dataset menyediakan page_rank pada skala 0 sampai 10; threshold memisahkan skor rendah, menengah, dan tinggi."
+    "notes": "Nama kolom dataset mempertahankan ejaan sumber dan dapat dihitung ulang dari TLD hostname."
   },
   {
     "feature_code": "F28",
-    "feature_name": "Google Index",
+    "feature_name": "Domain in Title",
     "mapping_status": "direct",
     "dataset_columns": [
-      "google_index"
+      "domain_in_title"
     ],
     "transformation_type": "binary",
-    "transformation_rule": "Jika google_index = 1 (halaman terindeks Google) maka 1; jika google_index = 0 maka -1.",
-    "safe_value_condition": "google_index = 1",
+    "transformation_rule": "Jika domain_in_title = 1 maka 1; jika domain_in_title = 0 maka -1.",
+    "safe_value_condition": "domain_in_title = 1",
     "suspicious_value_condition": null,
-    "danger_value_condition": "google_index = 0",
+    "danger_value_condition": "domain_in_title = 0",
     "is_trainable": true,
-    "notes": "Sumber dataset menyatakan halaman yang tidak terindeks Google sebagai indikator phishing."
+    "notes": "Kolom domain_in_title dapat dihitung dari title HTML dan hostname tanpa API indexing."
   },
   {
     "feature_code": "F29",
@@ -437,17 +436,17 @@
   },
   {
     "feature_code": "F30",
-    "feature_name": "Statistical Report",
+    "feature_name": "Empty Title",
     "mapping_status": "direct",
     "dataset_columns": [
-      "statistical_report"
+      "empty_title"
     ],
-    "transformation_type": "binary_indicator",
-    "transformation_rule": "Jika statistical_report = 0 maka 1; jika statistical_report > 0 maka -1.",
-    "safe_value_condition": "statistical_report = 0",
+    "transformation_type": "binary",
+    "transformation_rule": "Jika empty_title = 0 maka 1; jika empty_title = 1 maka -1.",
+    "safe_value_condition": "empty_title = 0",
     "suspicious_value_condition": null,
-    "danger_value_condition": "statistical_report > 0",
+    "danger_value_condition": "empty_title = 1",
     "is_trainable": true,
-    "notes": "Nilai nonnol menunjukkan indikator laporan statistik/blacklist pada dataset."
+    "notes": "Kolom empty_title dapat dihitung langsung setelah HTML berhasil diparsing."
   }
 ]

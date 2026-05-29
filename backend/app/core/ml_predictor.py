@@ -108,9 +108,11 @@ def get_model_evaluation_metrics() -> dict:
     baseline_metrics = load_json_file("metrics.json")
     dataset_metrics = load_json_file("dataset_metrics.json")
     final_metrics = load_json_file("final_metrics.json")
+    resilient_metrics = load_json_file("resilient_metrics.json")
 
     return {
         "baseline_f01_f30": baseline_metrics,
         "dataset_87_features": dataset_metrics,
         "final_f01_f30": final_metrics,
+        "resilient_f01_f30": resilient_metrics,
     }

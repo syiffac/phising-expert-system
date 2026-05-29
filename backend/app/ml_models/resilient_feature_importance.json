@@ -1,0 +1,734 @@
+{
+  "clean_random_forest": [
+    {
+      "feature": "F18",
+      "importance": 0.13621678
+    },
+    {
+      "feature": "F15",
+      "importance": 0.09481718
+    },
+    {
+      "feature": "F01",
+      "importance": 0.08936084
+    },
+    {
+      "feature": "F14",
+      "importance": 0.08717726
+    },
+    {
+      "feature": "F28",
+      "importance": 0.08306218
+    },
+    {
+      "feature": "F07",
+      "importance": 0.06163599
+    },
+    {
+      "feature": "F02",
+      "importance": 0.05797885
+    },
+    {
+      "feature": "F24",
+      "importance": 0.04799521
+    },
+    {
+      "feature": "F29",
+      "importance": 0.04680735
+    },
+    {
+      "feature": "F13",
+      "importance": 0.04669278
+    },
+    {
+      "feature": "F09",
+      "importance": 0.04265309
+    },
+    {
+      "feature": "F10",
+      "importance": 0.02981684
+    },
+    {
+      "feature": "F30",
+      "importance": 0.02890762
+    },
+    {
+      "feature": "F03",
+      "importance": 0.02691552
+    },
+    {
+      "feature": "F06",
+      "importance": 0.02549194
+    },
+    {
+      "feature": "F12",
+      "importance": 0.0246787
+    },
+    {
+      "feature": "F19",
+      "importance": 0.01908973
+    },
+    {
+      "feature": "F25",
+      "importance": 0.01134654
+    },
+    {
+      "feature": "F27",
+      "importance": 0.01099945
+    },
+    {
+      "feature": "F08",
+      "importance": 0.01040347
+    },
+    {
+      "feature": "F04",
+      "importance": 0.00891567
+    },
+    {
+      "feature": "F22",
+      "importance": 0.0024764
+    },
+    {
+      "feature": "F05",
+      "importance": 0.00204801
+    },
+    {
+      "feature": "F26",
+      "importance": 0.00140527
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00109742
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00076274
+    },
+    {
+      "feature": "F11",
+      "importance": 0.00072031
+    },
+    {
+      "feature": "F20",
+      "importance": 0.00052688
+    },
+    {
+      "feature": "F16",
+      "importance": 0.0
+    },
+    {
+      "feature": "F17",
+      "importance": 0.0
+    }
+  ],
+  "clean_xgboost": [
+    {
+      "feature": "F01",
+      "importance": 0.16942024
+    },
+    {
+      "feature": "F18",
+      "importance": 0.15515345
+    },
+    {
+      "feature": "F04",
+      "importance": 0.09770679
+    },
+    {
+      "feature": "F28",
+      "importance": 0.07456904
+    },
+    {
+      "feature": "F25",
+      "importance": 0.04569587
+    },
+    {
+      "feature": "F15",
+      "importance": 0.04188621
+    },
+    {
+      "feature": "F14",
+      "importance": 0.03853847
+    },
+    {
+      "feature": "F27",
+      "importance": 0.03580324
+    },
+    {
+      "feature": "F05",
+      "importance": 0.03493405
+    },
+    {
+      "feature": "F24",
+      "importance": 0.03366599
+    },
+    {
+      "feature": "F03",
+      "importance": 0.02871265
+    },
+    {
+      "feature": "F26",
+      "importance": 0.02495517
+    },
+    {
+      "feature": "F13",
+      "importance": 0.02422973
+    },
+    {
+      "feature": "F09",
+      "importance": 0.0220615
+    },
+    {
+      "feature": "F29",
+      "importance": 0.01967731
+    },
+    {
+      "feature": "F07",
+      "importance": 0.01965559
+    },
+    {
+      "feature": "F10",
+      "importance": 0.01814734
+    },
+    {
+      "feature": "F30",
+      "importance": 0.01710694
+    },
+    {
+      "feature": "F19",
+      "importance": 0.01504095
+    },
+    {
+      "feature": "F02",
+      "importance": 0.01486468
+    },
+    {
+      "feature": "F08",
+      "importance": 0.01179575
+    },
+    {
+      "feature": "F12",
+      "importance": 0.0116622
+    },
+    {
+      "feature": "F06",
+      "importance": 0.01113498
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00902688
+    },
+    {
+      "feature": "F20",
+      "importance": 0.00894972
+    },
+    {
+      "feature": "F11",
+      "importance": 0.00671298
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00464757
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00424472
+    },
+    {
+      "feature": "F16",
+      "importance": 0.0
+    },
+    {
+      "feature": "F17",
+      "importance": 0.0
+    }
+  ],
+  "robust_random_forest": [
+    {
+      "feature": "F18",
+      "importance": 0.1351382
+    },
+    {
+      "feature": "F01",
+      "importance": 0.09070929
+    },
+    {
+      "feature": "F15",
+      "importance": 0.09006982
+    },
+    {
+      "feature": "F28",
+      "importance": 0.0859153
+    },
+    {
+      "feature": "F14",
+      "importance": 0.08497682
+    },
+    {
+      "feature": "F07",
+      "importance": 0.05847925
+    },
+    {
+      "feature": "F02",
+      "importance": 0.05198248
+    },
+    {
+      "feature": "F24",
+      "importance": 0.04507512
+    },
+    {
+      "feature": "F13",
+      "importance": 0.0433411
+    },
+    {
+      "feature": "F09",
+      "importance": 0.04124106
+    },
+    {
+      "feature": "F29",
+      "importance": 0.04094644
+    },
+    {
+      "feature": "F10",
+      "importance": 0.03287992
+    },
+    {
+      "feature": "F30",
+      "importance": 0.03156369
+    },
+    {
+      "feature": "F03",
+      "importance": 0.02659399
+    },
+    {
+      "feature": "F06",
+      "importance": 0.02467484
+    },
+    {
+      "feature": "F12",
+      "importance": 0.02305259
+    },
+    {
+      "feature": "F19",
+      "importance": 0.01646123
+    },
+    {
+      "feature": "F25",
+      "importance": 0.01448194
+    },
+    {
+      "feature": "F27",
+      "importance": 0.01061407
+    },
+    {
+      "feature": "F04",
+      "importance": 0.00964393
+    },
+    {
+      "feature": "F08",
+      "importance": 0.00930898
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00585282
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00526528
+    },
+    {
+      "feature": "F21",
+      "importance": 0.0047007
+    },
+    {
+      "feature": "F17",
+      "importance": 0.00469399
+    },
+    {
+      "feature": "F20",
+      "importance": 0.00428469
+    },
+    {
+      "feature": "F16",
+      "importance": 0.00373495
+    },
+    {
+      "feature": "F05",
+      "importance": 0.00216309
+    },
+    {
+      "feature": "F26",
+      "importance": 0.0014019
+    },
+    {
+      "feature": "F11",
+      "importance": 0.00075255
+    }
+  ],
+  "robust_xgboost": [
+    {
+      "feature": "F18",
+      "importance": 0.17863201
+    },
+    {
+      "feature": "F01",
+      "importance": 0.16361469
+    },
+    {
+      "feature": "F04",
+      "importance": 0.08280985
+    },
+    {
+      "feature": "F28",
+      "importance": 0.06737637
+    },
+    {
+      "feature": "F27",
+      "importance": 0.04549336
+    },
+    {
+      "feature": "F15",
+      "importance": 0.04329967
+    },
+    {
+      "feature": "F14",
+      "importance": 0.03531867
+    },
+    {
+      "feature": "F24",
+      "importance": 0.0337761
+    },
+    {
+      "feature": "F25",
+      "importance": 0.02992755
+    },
+    {
+      "feature": "F05",
+      "importance": 0.02955147
+    },
+    {
+      "feature": "F03",
+      "importance": 0.02857037
+    },
+    {
+      "feature": "F13",
+      "importance": 0.02276023
+    },
+    {
+      "feature": "F26",
+      "importance": 0.02112483
+    },
+    {
+      "feature": "F09",
+      "importance": 0.02072244
+    },
+    {
+      "feature": "F07",
+      "importance": 0.02036441
+    },
+    {
+      "feature": "F29",
+      "importance": 0.01938286
+    },
+    {
+      "feature": "F30",
+      "importance": 0.01862331
+    },
+    {
+      "feature": "F02",
+      "importance": 0.01636157
+    },
+    {
+      "feature": "F10",
+      "importance": 0.01608827
+    },
+    {
+      "feature": "F08",
+      "importance": 0.01382819
+    },
+    {
+      "feature": "F19",
+      "importance": 0.01343683
+    },
+    {
+      "feature": "F06",
+      "importance": 0.01208655
+    },
+    {
+      "feature": "F12",
+      "importance": 0.01186911
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00892042
+    },
+    {
+      "feature": "F11",
+      "importance": 0.00876281
+    },
+    {
+      "feature": "F17",
+      "importance": 0.00827546
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00797156
+    },
+    {
+      "feature": "F20",
+      "importance": 0.00752813
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00726112
+    },
+    {
+      "feature": "F16",
+      "importance": 0.00626176
+    }
+  ],
+  "soft_voting_ensemble": [
+    {
+      "feature": "F18",
+      "importance": 0.15688511
+    },
+    {
+      "feature": "F01",
+      "importance": 0.12716199
+    },
+    {
+      "feature": "F28",
+      "importance": 0.07664583
+    },
+    {
+      "feature": "F15",
+      "importance": 0.06668474
+    },
+    {
+      "feature": "F14",
+      "importance": 0.06014775
+    },
+    {
+      "feature": "F04",
+      "importance": 0.04622689
+    },
+    {
+      "feature": "F24",
+      "importance": 0.03942561
+    },
+    {
+      "feature": "F07",
+      "importance": 0.03942183
+    },
+    {
+      "feature": "F02",
+      "importance": 0.03417202
+    },
+    {
+      "feature": "F13",
+      "importance": 0.03305066
+    },
+    {
+      "feature": "F09",
+      "importance": 0.03098175
+    },
+    {
+      "feature": "F29",
+      "importance": 0.03016465
+    },
+    {
+      "feature": "F27",
+      "importance": 0.02805371
+    },
+    {
+      "feature": "F03",
+      "importance": 0.02758218
+    },
+    {
+      "feature": "F30",
+      "importance": 0.0250935
+    },
+    {
+      "feature": "F10",
+      "importance": 0.02448409
+    },
+    {
+      "feature": "F25",
+      "importance": 0.02220475
+    },
+    {
+      "feature": "F06",
+      "importance": 0.01838069
+    },
+    {
+      "feature": "F12",
+      "importance": 0.01746085
+    },
+    {
+      "feature": "F05",
+      "importance": 0.01585728
+    },
+    {
+      "feature": "F19",
+      "importance": 0.01494903
+    },
+    {
+      "feature": "F08",
+      "importance": 0.01156858
+    },
+    {
+      "feature": "F26",
+      "importance": 0.01126337
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00738662
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00661842
+    },
+    {
+      "feature": "F17",
+      "importance": 0.00648473
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00598091
+    },
+    {
+      "feature": "F20",
+      "importance": 0.00590641
+    },
+    {
+      "feature": "F16",
+      "importance": 0.00499835
+    },
+    {
+      "feature": "F11",
+      "importance": 0.00475768
+    }
+  ],
+  "best_model": [
+    {
+      "feature": "F18",
+      "importance": 0.15688511
+    },
+    {
+      "feature": "F01",
+      "importance": 0.12716199
+    },
+    {
+      "feature": "F28",
+      "importance": 0.07664583
+    },
+    {
+      "feature": "F15",
+      "importance": 0.06668474
+    },
+    {
+      "feature": "F14",
+      "importance": 0.06014775
+    },
+    {
+      "feature": "F04",
+      "importance": 0.04622689
+    },
+    {
+      "feature": "F24",
+      "importance": 0.03942561
+    },
+    {
+      "feature": "F07",
+      "importance": 0.03942183
+    },
+    {
+      "feature": "F02",
+      "importance": 0.03417202
+    },
+    {
+      "feature": "F13",
+      "importance": 0.03305066
+    },
+    {
+      "feature": "F09",
+      "importance": 0.03098175
+    },
+    {
+      "feature": "F29",
+      "importance": 0.03016465
+    },
+    {
+      "feature": "F27",
+      "importance": 0.02805371
+    },
+    {
+      "feature": "F03",
+      "importance": 0.02758218
+    },
+    {
+      "feature": "F30",
+      "importance": 0.0250935
+    },
+    {
+      "feature": "F10",
+      "importance": 0.02448409
+    },
+    {
+      "feature": "F25",
+      "importance": 0.02220475
+    },
+    {
+      "feature": "F06",
+      "importance": 0.01838069
+    },
+    {
+      "feature": "F12",
+      "importance": 0.01746085
+    },
+    {
+      "feature": "F05",
+      "importance": 0.01585728
+    },
+    {
+      "feature": "F19",
+      "importance": 0.01494903
+    },
+    {
+      "feature": "F08",
+      "importance": 0.01156858
+    },
+    {
+      "feature": "F26",
+      "importance": 0.01126337
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00738662
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00661842
+    },
+    {
+      "feature": "F17",
+      "importance": 0.00648473
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00598091
+    },
+    {
+      "feature": "F20",
+      "importance": 0.00590641
+    },
+    {
+      "feature": "F16",
+      "importance": 0.00499835
+    },
+    {
+      "feature": "F11",
+      "importance": 0.00475768
+    }
+  ]
+}

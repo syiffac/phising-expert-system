@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 from app.core.feature_extraction import extract_features_from_url
 from app.core.inference_engine import forward_chaining
 from app.core.json_loader import load_json
-from app.core.ml_predictor import predict_manual_baseline
 from app.database import get_db
 from app.models.database_models import DetectionHistory
 
@@ -28,11 +27,25 @@ def detect_url(payload: DetectionRequest, db: Session = Depends(get_db)):
     inference_result = forward_chaining(
         facts=feature_result["facts"],
         rules=rules,
+        feature_status=feature_result["feature_status"],
     )
 
-    ml_result = predict_manual_baseline(feature_result["facts"])
+    quality = feature_result.get("feature_quality", feature_result["feature_completeness"])
+    ml_result = {
+        "available": False,
+        "mode": "manual_full_feature_f01_f30",
+        "note": (
+            "Model resilient F01-F30 belum diintegrasikan ke mode URL manual. "
+            "Rule-based system tetap berjalan lebih dulu; metrics resilient tersedia "
+            "di endpoint evaluasi setelah training."
+        ),
+        "random_forest": None,
+        "xgboost": None,
+    }
 
     final_result = inference_result["initial_status"]
+    if quality.get("imputed_unknown", 0) and final_result == "legitimate":
+        final_result = "needs_review"
 
     rf_prediction = None
     rf_confidence = None
@@ -84,6 +97,10 @@ def detect_url(payload: DetectionRequest, db: Session = Depends(get_db)):
         "normalized_url": feature_result["normalized_url"],
         "hostname": feature_result["hostname"],
         "facts": feature_result["facts"],
+        "feature_status": feature_result["feature_status"],
+        "feature_sources": feature_result["feature_sources"],
+        "feature_quality": feature_result.get("feature_quality"),
+        "feature_completeness": feature_result["feature_completeness"],
         "evaluated_features": feature_result["evaluated_features"],
         "expert_system": inference_result,
         "machine_learning": ml_result,

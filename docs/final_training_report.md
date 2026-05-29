@@ -4,6 +4,20 @@
 
 Training final ini membangun model Random Forest dan XGBoost pendukung hybrid expert system menggunakan fitur F01-F30 yang telah tervalidasi pada knowledge base dan rule base. Sistem pakar dengan working memory, inference engine, dan forward chaining tetap menjadi sumber penjelasan keputusan.
 
+## Revisi Fitur untuk Input Manual
+
+Lima fitur yang sebelumnya sulit direproduksi dari input manual diganti dengan fitur dataset yang dapat dihitung dari URL atau HTML:
+
+| Kode | Definisi Final | Kolom Dataset | Sumber Manual |
+|---|---|---|---|
+| F18 | Phishing Hints | `phish_hints` | URL string dan teks HTML |
+| F26 | Brand in Path | `brand_in_path` | URL string |
+| F27 | Suspicious TLD | `suspecious_tld` | URL string |
+| F28 | Domain in Title | `domain_in_title` | HTML parsing |
+| F30 | Empty Title | `empty_title` | HTML parsing |
+
+Revisi ini menggantikan ketergantungan pada indikator eksternal lama agar mode URL manual dapat membentuk bukti tanpa API traffic, ranking, indexing, atau blacklist. Landasan pemilihan fitur berasal dari Hannousse & Yahiouche, didukung penggunaan fitur URL/HTML/text tanpa layanan pihak ketiga oleh Aljofey et al. (Scientific Reports, 2022) dan pendekatan URL/text oleh Shaukat et al. (Sensors, 2023).
+
 ## Dataset dan Cleaning
 
 - Dataset: `dataset/raw/dataset_phishing.csv`
@@ -41,18 +55,18 @@ Hyperparameter tuning dilakukan menggunakan `RandomizedSearchCV` dengan ruang pe
 
 | Model | Accuracy | Precision | Recall | F1 Score | CV F1 Mean +/- Std |
 |---|---:|---:|---:|---:|---:|
-| Random Forest | 0.9309 | 0.9401 | 0.9204 | 0.9302 | 0.9355 +/- 0.0075 |
-| XGBoost | 0.9243 | 0.9262 | 0.9221 | 0.9242 | 0.9344 +/- 0.0062 |
+| Random Forest | 0.8670 | 0.8803 | 0.8495 | 0.8646 | 0.8639 +/- 0.0083 |
+| XGBoost | 0.8622 | 0.8743 | 0.8460 | 0.8599 | 0.8628 +/- 0.0053 |
 
-- Parameter terbaik Random Forest: `{"n_estimators": 200, "min_samples_split": 5, "min_samples_leaf": 1, "max_features": "sqrt", "max_depth": 20}`
-- Parameter terbaik XGBoost: `{"subsample": 1.0, "n_estimators": 500, "max_depth": 5, "learning_rate": 0.1, "colsample_bytree": 0.9}`
-- Confusion matrix Random Forest: `[[1076, 67], [91, 1052]]`
-- Confusion matrix XGBoost: `[[1059, 84], [89, 1054]]`
+- Parameter terbaik Random Forest: `{"n_estimators": 200, "min_samples_split": 5, "min_samples_leaf": 1, "max_features": "log2", "max_depth": 20}`
+- Parameter terbaik XGBoost: `{"subsample": 0.9, "n_estimators": 500, "max_depth": 5, "learning_rate": 0.1, "colsample_bytree": 1.0}`
+- Confusion matrix Random Forest: `[[1011, 132], [172, 971]]`
+- Confusion matrix XGBoost: `[[1004, 139], [176, 967]]`
 
 ## Feature Importance
 
-- Lima fitur teratas Random Forest: F28 (0.3361), F27 (0.1569), F26 (0.1205), F14 (0.0505), F15 (0.0459)
-- Lima fitur teratas XGBoost: F28 (0.5416), F27 (0.0832), F01 (0.0505), F04 (0.0342), F26 (0.0341)
+- Lima fitur teratas Random Forest: F18 (0.1227), F15 (0.0950), F14 (0.0906), F01 (0.0814), F28 (0.0808)
+- Lima fitur teratas XGBoost: F18 (0.1469), F01 (0.1395), F28 (0.0994), F04 (0.0900), F14 (0.0494)
 - Data lengkap: `backend/app/ml_models/final_feature_importance.json`
 
 ## Distribusi Nilai Fitur
@@ -76,7 +90,7 @@ Hyperparameter tuning dilakukan menggunakan `RandomizedSearchCV` dengan ruang pe
 | F15 | 3906 | 3214 | 4310 |
 | F16 | 0 | 0 | 11430 |
 | F17 | 0 | 0 | 11430 |
-| F18 | 1188 | 0 | 10242 |
+| F18 | 502 | 1539 | 9389 |
 | F19 | 38 | 790 | 10602 |
 | F20 | 13 | 0 | 11417 |
 | F21 | 16 | 0 | 11414 |
@@ -84,11 +98,11 @@ Hyperparameter tuning dilakukan menggunakan `RandomizedSearchCV` dengan ruang pe
 | F23 | 15 | 0 | 11415 |
 | F24 | 357 | 1837 | 9236 |
 | F25 | 11200 | 0 | 230 |
-| F26 | 4444 | 3727 | 3259 |
-| F27 | 4954 | 2612 | 3864 |
-| F28 | 5327 | 0 | 6103 |
+| F26 | 56 | 0 | 11374 |
+| F27 | 205 | 0 | 11225 |
+| F28 | 2562 | 0 | 8868 |
 | F29 | 2638 | 1378 | 7414 |
-| F30 | 377 | 0 | 11053 |
+| F30 | 1426 | 0 | 10004 |
 
 ## Kesimpulan
 

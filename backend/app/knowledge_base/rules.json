@@ -262,8 +262,8 @@
     ],
     "conclusion": "suspicious",
     "severity": "medium",
-    "explanation": "Website tidak terindeks Google sehingga perlu diperiksa lebih lanjut.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "explanation": "Title halaman tidak menunjukkan kesesuaian dengan domain, sehingga identitas halaman perlu dicurigai.",
+    "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"
   },
   {
     "code": "R20",
@@ -274,10 +274,10 @@
         "value": -1
       }
     ],
-    "conclusion": "phishing",
-    "severity": "high",
-    "explanation": "Website masuk laporan atau blacklist phishing.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "Halaman tidak memiliki title atau title kosong, yang dapat menunjukkan kualitas halaman rendah atau pola halaman phishing.",
+    "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"
   },
   {
     "code": "R21",
@@ -292,5 +292,47 @@
     "severity": "medium",
     "explanation": "Rasio hyperlink eksternal yang tinggi menunjukkan bahwa halaman banyak mengarah ke domain luar, sehingga perlu dicurigai sebagai pola halaman phishing.",
     "source": "Hannousse & Yahiouche (2021); Suwarno & Hardjianto (2024)"
+  },
+  {
+    "code": "R22",
+    "conditions": [
+      {
+        "feature": "F18",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "URL atau teks halaman mengandung banyak kata pemancing yang umum digunakan dalam phishing, seperti login, verify, secure, account, update, atau password.",
+    "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022); Shaukat et al. (2023)"
+  },
+  {
+    "code": "R23",
+    "conditions": [
+      {
+        "feature": "F26",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "Nama brand ditemukan pada bagian path URL, yang dapat mengindikasikan upaya impersonasi brand.",
+    "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"
+  },
+  {
+    "code": "R24",
+    "conditions": [
+      {
+        "feature": "F27",
+        "operator": "==",
+        "value": -1
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "Domain menggunakan TLD yang tergolong mencurigakan sehingga perlu diwaspadai.",
+    "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"
   }
 ]

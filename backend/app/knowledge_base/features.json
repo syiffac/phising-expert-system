@@ -103,9 +103,9 @@
   },
   {
     "code": "F18",
-    "name": "Abnormal URL",
-    "description": "Struktur URL tidak normal atau tidak sesuai dengan identitas domain.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "name": "Phishing Hints",
+    "description": "Mendeteksi kata-kata mencurigakan atau kata pemancing pada URL/teks halaman seperti login, verify, secure, account, update, bank, password, dan kata lain yang sering digunakan untuk mengelabui pengguna.",
+    "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022); Shaukat et al. (2023)"
   },
   {
     "code": "F19",
@@ -151,21 +151,21 @@
   },
   {
     "code": "F26",
-    "name": "Web Traffic",
-    "description": "Traffic website rendah atau tidak tersedia.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "name": "Brand in Path",
+    "description": "Mendeteksi keberadaan nama brand pada bagian path URL yang dapat mengindikasikan impersonasi brand.",
+    "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"
   },
   {
     "code": "F27",
-    "name": "Page Rank",
-    "description": "Page rank rendah atau tidak tersedia.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "name": "Suspicious TLD",
+    "description": "Mendeteksi penggunaan top-level domain yang tergolong mencurigakan berdasarkan daftar suspicious TLD.",
+    "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"
   },
   {
     "code": "F28",
-    "name": "Google Index",
-    "description": "Website tidak terindeks Google.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "name": "Domain in Title",
+    "description": "Mendeteksi apakah domain utama muncul pada title halaman. Ketidaksesuaian title dengan domain dapat menjadi indikator halaman mencurigakan.",
+    "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"
   },
   {
     "code": "F29",
@@ -175,8 +175,8 @@
   },
   {
     "code": "F30",
-    "name": "Statistical Report",
-    "description": "Website masuk laporan atau blacklist phishing.",
-    "source": "Suwarno & Hardjianto (2024)"
+    "name": "Empty Title",
+    "description": "Mendeteksi apakah halaman tidak memiliki title atau title kosong.",
+    "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"
   }
 ]

@@ -136,6 +136,20 @@ def write_report(metrics: dict, importance: dict, distributions: dict) -> None:
 
 Training final ini membangun model Random Forest dan XGBoost pendukung hybrid expert system menggunakan fitur F01-F30 yang telah tervalidasi pada knowledge base dan rule base. Sistem pakar dengan working memory, inference engine, dan forward chaining tetap menjadi sumber penjelasan keputusan.
 
+## Revisi Fitur untuk Input Manual
+
+Lima fitur yang sebelumnya sulit direproduksi dari input manual diganti dengan fitur dataset yang dapat dihitung dari URL atau HTML:
+
+| Kode | Definisi Final | Kolom Dataset | Sumber Manual |
+|---|---|---|---|
+| F18 | Phishing Hints | `phish_hints` | URL string dan teks HTML |
+| F26 | Brand in Path | `brand_in_path` | URL string |
+| F27 | Suspicious TLD | `suspecious_tld` | URL string |
+| F28 | Domain in Title | `domain_in_title` | HTML parsing |
+| F30 | Empty Title | `empty_title` | HTML parsing |
+
+Revisi ini menggantikan ketergantungan pada indikator eksternal lama agar mode URL manual dapat membentuk bukti tanpa API traffic, ranking, indexing, atau blacklist. Landasan pemilihan fitur berasal dari Hannousse & Yahiouche, didukung penggunaan fitur URL/HTML/text tanpa layanan pihak ketiga oleh Aljofey et al. (Scientific Reports, 2022) dan pendekatan URL/text oleh Shaukat et al. (Sensors, 2023).
+
 ## Dataset dan Cleaning
 
 - Dataset: `dataset/raw/dataset_phishing.csv`
@@ -334,7 +348,8 @@ def main() -> None:
         "best_model": choose_best_model(rf_metrics, xgb_metrics),
         "notes": (
             "Model final dilatih menggunakan fitur F01-F30 yang valid berdasarkan "
-            "mapping terbaru, tanpa nilai default asal isi."
+            "mapping terbaru, termasuk revisi F18/F26/F27/F28/F30 untuk ekstraksi "
+            "manual tanpa indikator eksternal lama, tanpa nilai default asal isi."
         ),
     }
 

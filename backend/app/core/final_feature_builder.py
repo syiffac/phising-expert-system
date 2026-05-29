@@ -127,6 +127,9 @@ def transform_feature(df: pd.DataFrame, mapping_item: dict) -> pd.Series:
         "F21",
         "F22",
         "F23",
+        "F26",
+        "F27",
+        "F30",
     }:
         values = _numeric_column(df, columns[0], code)
         return _binary_danger_indicator(values, code, columns[0])
@@ -183,20 +186,12 @@ def transform_feature(df: pd.DataFrame, mapping_item: dict) -> pd.Series:
         )
 
     if code == "F18":
-        abnormal = _numeric_column(df, "abnormal_subdomain", code)
-        random_domain = _numeric_column(df, "random_domain", code)
-        for series, source in (
-            (abnormal, "abnormal_subdomain"),
-            (random_domain, "random_domain"),
-        ):
-            invalid = sorted(set(series.unique()) - {0, 1})
-            if invalid:
-                raise FinalFeatureValidationError(
-                    f"F18: {source} harus biner 0/1, ditemukan {invalid}."
-                )
+        values = _numeric_column(df, "phish_hints", code)
+        if (values < 0).any():
+            raise FinalFeatureValidationError("F18: phish_hints tidak boleh negatif.")
         return _categorized(
-            [(abnormal == 1) | (random_domain == 1), (abnormal == 0) & (random_domain == 0)],
-            [-1, 1],
+            [values == 0, values.between(1, 2), values > 2],
+            [1, 0, -1],
             code,
         )
 
@@ -212,28 +207,6 @@ def transform_feature(df: pd.DataFrame, mapping_item: dict) -> pd.Series:
         values = _numeric_column(df, "domain_age", code)
         return _categorized(
             [values >= 180, values < 0, values.between(0, 179)], [1, 0, -1], code
-        )
-
-    if code == "F26":
-        values = _numeric_column(df, "web_traffic", code)
-        if (values < 0).any():
-            raise FinalFeatureValidationError("F26: web_traffic tidak boleh negatif.")
-        return _categorized(
-            [values.between(1, 100000), values > 100000, values == 0],
-            [1, 0, -1],
-            code,
-        )
-
-    if code == "F27":
-        values = _numeric_column(df, "page_rank", code)
-        if ((values < 0) | (values > 10)).any():
-            raise FinalFeatureValidationError(
-                "F27: page_rank harus berada pada skala 0 sampai 10."
-            )
-        return _categorized(
-            [values >= 5, values.between(3, 5, inclusive="left"), values < 3],
-            [1, 0, -1],
-            code,
         )
 
     if code == "F29":
@@ -258,14 +231,6 @@ def transform_feature(df: pd.DataFrame, mapping_item: dict) -> pd.Series:
         raise FinalFeatureValidationError(
             "F29: skala ratio_extHyperlinks tidak dikenali; maksimum melebihi 100."
         )
-
-    if code == "F30":
-        values = _numeric_column(df, "statistical_report", code)
-        if (values < 0).any():
-            raise FinalFeatureValidationError(
-                "F30: statistical_report tidak boleh negatif."
-            )
-        return _categorized([values == 0, values > 0], [1, -1], code)
 
     raise FinalFeatureValidationError(
         f"{code}: transformasi belum diimplementasikan dari mapping final."

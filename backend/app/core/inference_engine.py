@@ -18,7 +18,11 @@ def compare_value(actual: Any, operator: str, expected: Any) -> bool:
     return False
 
 
-def is_rule_triggered(rule: dict, facts: dict) -> bool:
+def is_rule_triggered(
+    rule: dict,
+    facts: dict,
+    feature_status: dict | None = None,
+) -> bool:
     conditions = rule.get("conditions", [])
 
     for condition in conditions:
@@ -30,6 +34,13 @@ def is_rule_triggered(rule: dict, facts: dict) -> bool:
 
         if actual_value is None:
             return False
+
+        if feature_status is not None:
+            status = feature_status.get(feature)
+            if status == "imputed_unknown" and expected_value != 0:
+                return False
+            if status not in {None, "available", "imputed_unknown"}:
+                return False
 
         if not compare_value(actual_value, operator, expected_value):
             return False
@@ -49,11 +60,15 @@ def determine_initial_status(triggered_rules: list[dict]) -> str:
     return "legitimate"
 
 
-def forward_chaining(facts: dict, rules: list[dict]) -> dict:
+def forward_chaining(
+    facts: dict,
+    rules: list[dict],
+    feature_status: dict | None = None,
+) -> dict:
     triggered_rules = []
 
     for rule in rules:
-        if is_rule_triggered(rule, facts):
+        if is_rule_triggered(rule, facts, feature_status):
             triggered_rules.append(rule)
 
     initial_status = determine_initial_status(triggered_rules)

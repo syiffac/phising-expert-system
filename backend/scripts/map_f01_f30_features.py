@@ -203,15 +203,15 @@ MAPPING_SPECS = {
         "notes": "Kolom submit_email tersedia langsung, walaupun pada dataset saat ini nilai teramati hanya 0 sehingga daya diskriminasinya perlu dicatat.",
     },
     "F18": {
-        "mapping_status": "derived",
-        "dataset_columns": ["abnormal_subdomain", "random_domain"],
-        "transformation_type": "composite_binary",
-        "transformation_rule": "Jika abnormal_subdomain = 1 atau random_domain = 1 maka -1; jika keduanya = 0 maka 1.",
-        "safe_value_condition": "abnormal_subdomain = 0 AND random_domain = 0",
-        "suspicious_value_condition": None,
-        "danger_value_condition": "abnormal_subdomain = 1 OR random_domain = 1",
+        "mapping_status": "direct",
+        "dataset_columns": ["phish_hints"],
+        "transformation_type": "threshold",
+        "transformation_rule": "Jika phish_hints = 0 maka 1; jika phish_hints = 1 atau 2 maka 0; jika phish_hints > 2 maka -1.",
+        "safe_value_condition": "phish_hints = 0",
+        "suspicious_value_condition": "phish_hints = 1 OR phish_hints = 2",
+        "danger_value_condition": "phish_hints > 2",
         "is_trainable": True,
-        "notes": "Abnormal URL diturunkan dari indikator struktur subdomain abnormal atau domain acak yang tersedia pada dataset.",
+        "notes": "Kolom phish_hints mengukur indikator kata pemancing yang dapat direproduksi dari URL dan teks HTML.",
     },
     "F19": {
         "mapping_status": "direct",
@@ -292,36 +292,36 @@ MAPPING_SPECS = {
     },
     "F26": {
         "mapping_status": "direct",
-        "dataset_columns": ["web_traffic"],
-        "transformation_type": "rank_threshold",
-        "transformation_rule": "Jika 1 <= web_traffic <= 100000 maka 1; jika web_traffic > 100000 maka 0; jika web_traffic = 0 maka -1.",
-        "safe_value_condition": "1 <= web_traffic <= 100000",
-        "suspicious_value_condition": "web_traffic > 100000",
-        "danger_value_condition": "web_traffic = 0",
+        "dataset_columns": ["brand_in_path"],
+        "transformation_type": "binary",
+        "transformation_rule": "Jika brand_in_path = 0 maka 1; jika brand_in_path = 1 maka -1.",
+        "safe_value_condition": "brand_in_path = 0",
+        "suspicious_value_condition": None,
+        "danger_value_condition": "brand_in_path = 1",
         "is_trainable": True,
-        "notes": "Web traffic diperlakukan sebagai ranking; nol menunjukkan ranking tidak tersedia.",
+        "notes": "Kolom brand_in_path dapat dihitung ulang dari path URL tanpa layanan traffic pihak ketiga.",
     },
     "F27": {
         "mapping_status": "direct",
-        "dataset_columns": ["page_rank"],
-        "transformation_type": "score_threshold",
-        "transformation_rule": "Jika page_rank >= 5 maka 1; jika 3 <= page_rank < 5 maka 0; jika page_rank < 3 maka -1.",
-        "safe_value_condition": "page_rank >= 5",
-        "suspicious_value_condition": "3 <= page_rank < 5",
-        "danger_value_condition": "page_rank < 3",
+        "dataset_columns": ["suspecious_tld"],
+        "transformation_type": "binary",
+        "transformation_rule": "Jika suspecious_tld = 0 maka 1; jika suspecious_tld = 1 maka -1.",
+        "safe_value_condition": "suspecious_tld = 0",
+        "suspicious_value_condition": None,
+        "danger_value_condition": "suspecious_tld = 1",
         "is_trainable": True,
-        "notes": "Dataset menyediakan page_rank pada skala 0 sampai 10; threshold memisahkan skor rendah, menengah, dan tinggi.",
+        "notes": "Nama kolom dataset mempertahankan ejaan sumber dan dapat dihitung ulang dari TLD hostname.",
     },
     "F28": {
         "mapping_status": "direct",
-        "dataset_columns": ["google_index"],
+        "dataset_columns": ["domain_in_title"],
         "transformation_type": "binary",
-        "transformation_rule": "Jika google_index = 1 (halaman terindeks Google) maka 1; jika google_index = 0 maka -1.",
-        "safe_value_condition": "google_index = 1",
+        "transformation_rule": "Jika domain_in_title = 1 maka 1; jika domain_in_title = 0 maka -1.",
+        "safe_value_condition": "domain_in_title = 1",
         "suspicious_value_condition": None,
-        "danger_value_condition": "google_index = 0",
+        "danger_value_condition": "domain_in_title = 0",
         "is_trainable": True,
-        "notes": "Sumber dataset menyatakan halaman yang tidak terindeks Google sebagai indikator phishing.",
+        "notes": "Kolom domain_in_title dapat dihitung dari title HTML dan hostname tanpa API indexing.",
     },
     "F29": {
         "mapping_status": "direct",
@@ -336,14 +336,14 @@ MAPPING_SPECS = {
     },
     "F30": {
         "mapping_status": "direct",
-        "dataset_columns": ["statistical_report"],
-        "transformation_type": "binary_indicator",
-        "transformation_rule": "Jika statistical_report = 0 maka 1; jika statistical_report > 0 maka -1.",
-        "safe_value_condition": "statistical_report = 0",
+        "dataset_columns": ["empty_title"],
+        "transformation_type": "binary",
+        "transformation_rule": "Jika empty_title = 0 maka 1; jika empty_title = 1 maka -1.",
+        "safe_value_condition": "empty_title = 0",
         "suspicious_value_condition": None,
-        "danger_value_condition": "statistical_report > 0",
+        "danger_value_condition": "empty_title = 1",
         "is_trainable": True,
-        "notes": "Nilai nonnol menunjukkan indikator laporan statistik/blacklist pada dataset.",
+        "notes": "Kolom empty_title dapat dihitung langsung setelah HTML berhasil diparsing.",
     },
 }
 
@@ -445,11 +445,11 @@ Dokumen ini memetakan kolom dataset asli ke fitur/gejala sistem pakar F01-F30 se
 - External required: {status_counts.get('external_required', 0)}
 - Unmapped: {status_counts.get('unmapped', 0)}
 
-F08, F12, dan F29 telah diselaraskan dengan kolom `tld_in_path`, `https_token`, dan `ratio_extHyperlinks`. Perubahan definisi knowledge base ini membuat ketiganya dapat ditransformasikan langsung dari dataset tanpa menggunakan nilai default.
+F08, F12, dan F29 tetap diselaraskan dengan kolom `tld_in_path`, `https_token`, dan `ratio_extHyperlinks`. F18, F26, F27, F28, dan F30 kini memakai `phish_hints`, `brand_in_path`, `suspecious_tld`, `domain_in_title`, dan `empty_title`, sehingga input manual dapat memperoleh bukti dari URL atau HTML tanpa mengandalkan traffic, ranking, indexing, atau blacklist pihak ketiga.
 
-Rule base terkait kini berjumlah 21 rule: R08 diperbarui untuk TLD in Path, R11 mempertahankan indikator HTTPS Token dengan penjelasan baru, dan R21 ditambahkan untuk External Hyperlink Ratio.
+Rule base terkait kini berjumlah 24 rule: R19 dan R20 menjelaskan Domain in Title serta Empty Title, sementara R22-R24 menambahkan indikator Phishing Hints, Brand in Path, dan Suspicious TLD.
 
-Rujukan definisi kandidat kolom: Hannousse & Yahiouche, *Web page phishing detection*, https://arxiv.org/abs/2010.12847.
+Rujukan: Hannousse & Yahiouche, *Towards Benchmark Datasets for Machine Learning Based Website Phishing Detection*, https://arxiv.org/abs/2010.12847; Aljofey et al., *An effective detection approach for phishing websites using URL and HTML features*, Scientific Reports 2022, https://pubmed.ncbi.nlm.nih.gov/35614133/; Shaukat et al., *BERT-Based Approaches to Identifying Malicious URLs*, Sensors 2023, https://doi.org/10.3390/s23208499.
 
 ## Tabel Mapping
 

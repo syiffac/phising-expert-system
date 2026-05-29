@@ -69,108 +69,108 @@
       "n_estimators": 200,
       "min_samples_split": 5,
       "min_samples_leaf": 1,
-      "max_features": "sqrt",
+      "max_features": "log2",
       "max_depth": 20
     },
-    "accuracy": 0.930884,
-    "precision": 0.940125,
-    "recall": 0.920385,
-    "f1_score": 0.93015,
+    "accuracy": 0.867017,
+    "precision": 0.880326,
+    "recall": 0.849519,
+    "f1_score": 0.864648,
     "confusion_matrix": [
       [
-        1076,
-        67
+        1011,
+        132
       ],
       [
-        91,
-        1052
+        172,
+        971
       ]
     ],
     "classification_report": {
       "0": {
-        "precision": 0.9220222793487575,
-        "recall": 0.9413823272090989,
-        "f1-score": 0.9316017316017317,
+        "precision": 0.8546069315300084,
+        "recall": 0.884514435695538,
+        "f1-score": 0.8693035253654342,
         "support": 1143.0
       },
       "1": {
-        "precision": 0.9401251117068812,
-        "recall": 0.9203849518810149,
-        "f1-score": 0.9301503094606542,
+        "precision": 0.8803263825929284,
+        "recall": 0.8495188101487314,
+        "f1-score": 0.8646482635796973,
         "support": 1143.0
       },
-      "accuracy": 0.9308836395450568,
+      "accuracy": 0.8670166229221348,
       "macro avg": {
-        "precision": 0.9310736955278194,
-        "recall": 0.9308836395450568,
-        "f1-score": 0.930876020531193,
+        "precision": 0.8674666570614684,
+        "recall": 0.8670166229221348,
+        "f1-score": 0.8669758944725657,
         "support": 2286.0
       },
       "weighted avg": {
-        "precision": 0.9310736955278194,
-        "recall": 0.9308836395450568,
-        "f1-score": 0.930876020531193,
+        "precision": 0.8674666570614685,
+        "recall": 0.8670166229221348,
+        "f1-score": 0.8669758944725658,
         "support": 2286.0
       }
     },
-    "cross_validation_mean": 0.935457,
-    "cross_validation_std": 0.007456
+    "cross_validation_mean": 0.863896,
+    "cross_validation_std": 0.008279
   },
   "xgboost": {
     "best_params": {
-      "subsample": 1.0,
+      "subsample": 0.9,
       "n_estimators": 500,
       "max_depth": 5,
       "learning_rate": 0.1,
-      "colsample_bytree": 0.9
+      "colsample_bytree": 1.0
     },
-    "accuracy": 0.924322,
-    "precision": 0.926186,
-    "recall": 0.922135,
-    "f1_score": 0.924156,
+    "accuracy": 0.862205,
+    "precision": 0.874322,
+    "recall": 0.846019,
+    "f1_score": 0.859938,
     "confusion_matrix": [
       [
-        1059,
-        84
+        1004,
+        139
       ],
       [
-        89,
-        1054
+        176,
+        967
       ]
     ],
     "classification_report": {
       "0": {
-        "precision": 0.9224738675958188,
-        "recall": 0.926509186351706,
-        "f1-score": 0.9244871235268441,
+        "precision": 0.8508474576271187,
+        "recall": 0.8783902012248469,
+        "f1-score": 0.8643994834266036,
         "support": 1143.0
       },
       "1": {
-        "precision": 0.9261862917398945,
-        "recall": 0.9221347331583553,
-        "f1-score": 0.9241560718982902,
+        "precision": 0.8743218806509946,
+        "recall": 0.8460192475940508,
+        "f1-score": 0.8599377501111605,
         "support": 1143.0
       },
-      "accuracy": 0.9243219597550306,
+      "accuracy": 0.8622047244094488,
       "macro avg": {
-        "precision": 0.9243300796678566,
-        "recall": 0.9243219597550306,
-        "f1-score": 0.9243215977125672,
+        "precision": 0.8625846691390566,
+        "recall": 0.8622047244094488,
+        "f1-score": 0.862168616768882,
         "support": 2286.0
       },
       "weighted avg": {
-        "precision": 0.9243300796678566,
-        "recall": 0.9243219597550306,
-        "f1-score": 0.924321597712567,
+        "precision": 0.8625846691390566,
+        "recall": 0.8622047244094488,
+        "f1-score": 0.862168616768882,
         "support": 2286.0
       }
     },
-    "cross_validation_mean": 0.934449,
-    "cross_validation_std": 0.006246
+    "cross_validation_mean": 0.862808,
+    "cross_validation_std": 0.005321
   },
   "best_model": {
     "name": "random_forest",
     "selection_basis": "Dipilih berdasarkan f1_score pada test set, kemudian accuracy sebagai pemecah seri; keputusan dibuat setelah evaluasi."
   },
-  "notes": "Model final dilatih menggunakan fitur F01-F30 yang valid berdasarkan mapping terbaru, tanpa nilai default asal isi."
+  "notes": "Model final dilatih menggunakan fitur F01-F30 yang valid berdasarkan mapping terbaru, termasuk revisi F18/F26/F27/F28/F30 untuk ekstraksi manual tanpa indikator eksternal lama, tanpa nilai default asal isi."
 }

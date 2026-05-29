@@ -23,7 +23,7 @@ features = [
     {"code": "F15", "name": "Links in Tags", "description": "Tag HTML memiliki banyak link eksternal yang mencurigakan.", "source": "Suwarno & Hardjianto (2024)"},
     {"code": "F16", "name": "SFH / Server Form Handler", "description": "Form action kosong, tidak jelas, atau mengarah ke domain berbeda.", "source": "Suwarno & Hardjianto (2024)"},
     {"code": "F17", "name": "Submitting to Email", "description": "Form mengirim data melalui email.", "source": "Suwarno & Hardjianto (2024)"},
-    {"code": "F18", "name": "Abnormal URL", "description": "Struktur URL tidak normal atau tidak sesuai dengan identitas domain.", "source": "Suwarno & Hardjianto (2024)"},
+    {"code": "F18", "name": "Phishing Hints", "description": "Mendeteksi kata-kata pemancing pada URL atau teks halaman seperti login, verify, secure, account, update, bank, dan password.", "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022); Shaukat et al. (2023)"},
     {"code": "F19", "name": "Redirect", "description": "Website memiliki jumlah redirect berlebihan.", "source": "Suwarno & Hardjianto (2024)"},
     {"code": "F20", "name": "On MouseOver", "description": "Terdapat manipulasi link ketika pointer diarahkan ke elemen tertentu.", "source": "Suwarno & Hardjianto (2024)"},
     {"code": "F21", "name": "Right Click Disabled", "description": "Klik kanan dinonaktifkan pada halaman website.", "source": "Suwarno & Hardjianto (2024)"},
@@ -31,11 +31,11 @@ features = [
     {"code": "F23", "name": "IFrame", "description": "Website menggunakan iframe tersembunyi atau mencurigakan.", "source": "Suwarno & Hardjianto (2024)"},
     {"code": "F24", "name": "Age of Domain", "description": "Umur domain terlalu baru.", "source": "Aljofey et al. (2022); Suwarno & Hardjianto (2024)"},
     {"code": "F25", "name": "DNS Record", "description": "DNS record tidak tersedia atau tidak valid.", "source": "Suwarno & Hardjianto (2024)"},
-    {"code": "F26", "name": "Web Traffic", "description": "Traffic website rendah atau tidak tersedia.", "source": "Suwarno & Hardjianto (2024)"},
-    {"code": "F27", "name": "Page Rank", "description": "Page rank rendah atau tidak tersedia.", "source": "Suwarno & Hardjianto (2024)"},
-    {"code": "F28", "name": "Google Index", "description": "Website tidak terindeks Google.", "source": "Suwarno & Hardjianto (2024)"},
+    {"code": "F26", "name": "Brand in Path", "description": "Mendeteksi nama brand pada bagian path URL yang dapat mengindikasikan impersonasi brand.", "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"},
+    {"code": "F27", "name": "Suspicious TLD", "description": "Mendeteksi top-level domain yang tergolong mencurigakan berdasarkan daftar suspicious TLD.", "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"},
+    {"code": "F28", "name": "Domain in Title", "description": "Mendeteksi kesesuaian domain utama dengan title halaman.", "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"},
     {"code": "F29", "name": "External Hyperlink Ratio", "description": "Rasio hyperlink eksternal yang tinggi menunjukkan halaman banyak mengarahkan pengguna ke domain lain.", "source": "Hannousse & Yahiouche (2021); Suwarno & Hardjianto (2024)"},
-    {"code": "F30", "name": "Statistical Report", "description": "Website masuk laporan atau blacklist phishing.", "source": "Suwarno & Hardjianto (2024)"},
+    {"code": "F30", "name": "Empty Title", "description": "Mendeteksi apakah halaman tidak memiliki title atau title kosong.", "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"},
 ]
 
 rules = [
@@ -57,9 +57,12 @@ rules = [
     {"code": "R16", "conditions": [{"feature": "F21", "operator": "==", "value": -1}], "conclusion": "suspicious", "severity": "medium", "explanation": "Klik kanan dinonaktifkan sehingga pengguna lebih sulit memeriksa elemen halaman.", "source": "Suwarno & Hardjianto (2024)"},
     {"code": "R17", "conditions": [{"feature": "F24", "operator": "==", "value": -1}], "conclusion": "phishing", "severity": "high", "explanation": "Umur domain terlalu baru sehingga tingkat kepercayaannya rendah.", "source": "Aljofey et al. (2022); Suwarno & Hardjianto (2024)"},
     {"code": "R18", "conditions": [{"feature": "F25", "operator": "==", "value": -1}], "conclusion": "phishing", "severity": "high", "explanation": "DNS record tidak tersedia atau tidak valid.", "source": "Suwarno & Hardjianto (2024)"},
-    {"code": "R19", "conditions": [{"feature": "F28", "operator": "==", "value": -1}], "conclusion": "suspicious", "severity": "medium", "explanation": "Website tidak terindeks Google sehingga perlu diperiksa lebih lanjut.", "source": "Suwarno & Hardjianto (2024)"},
-    {"code": "R20", "conditions": [{"feature": "F30", "operator": "==", "value": -1}], "conclusion": "phishing", "severity": "high", "explanation": "Website masuk laporan atau blacklist phishing.", "source": "Suwarno & Hardjianto (2024)"},
+    {"code": "R19", "conditions": [{"feature": "F28", "operator": "==", "value": -1}], "conclusion": "suspicious", "severity": "medium", "explanation": "Title halaman tidak menunjukkan kesesuaian dengan domain, sehingga identitas halaman perlu dicurigai.", "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"},
+    {"code": "R20", "conditions": [{"feature": "F30", "operator": "==", "value": -1}], "conclusion": "suspicious", "severity": "medium", "explanation": "Halaman tidak memiliki title atau title kosong, yang dapat menunjukkan kualitas halaman rendah atau pola halaman phishing.", "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"},
     {"code": "R21", "conditions": [{"feature": "F29", "operator": "==", "value": -1}], "conclusion": "suspicious", "severity": "medium", "explanation": "Rasio hyperlink eksternal yang tinggi menunjukkan bahwa halaman banyak mengarah ke domain luar, sehingga perlu dicurigai sebagai pola halaman phishing.", "source": "Hannousse & Yahiouche (2021); Suwarno & Hardjianto (2024)"},
+    {"code": "R22", "conditions": [{"feature": "F18", "operator": "==", "value": -1}], "conclusion": "suspicious", "severity": "medium", "explanation": "URL atau teks halaman mengandung banyak kata pemancing yang umum digunakan dalam phishing, seperti login, verify, secure, account, update, atau password.", "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022); Shaukat et al. (2023)"},
+    {"code": "R23", "conditions": [{"feature": "F26", "operator": "==", "value": -1}], "conclusion": "suspicious", "severity": "medium", "explanation": "Nama brand ditemukan pada bagian path URL, yang dapat mengindikasikan upaya impersonasi brand.", "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"},
+    {"code": "R24", "conditions": [{"feature": "F27", "operator": "==", "value": -1}], "conclusion": "suspicious", "severity": "medium", "explanation": "Domain menggunakan TLD yang tergolong mencurigakan sehingga perlu diwaspadai.", "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"},
 ]
 
 with open(KB_DIR / "features.json", "w", encoding="utf-8") as f:

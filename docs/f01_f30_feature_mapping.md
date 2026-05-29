@@ -15,16 +15,16 @@ Dokumen ini memetakan kolom dataset asli ke fitur/gejala sistem pakar F01-F30 se
 
 - Total fitur F01-F30: 30
 - Fitur trainable: 30
-- Direct: 29
-- Derived: 1
+- Direct: 30
+- Derived: 0
 - External required: 0
 - Unmapped: 0
 
-F08, F12, dan F29 telah diselaraskan dengan kolom `tld_in_path`, `https_token`, dan `ratio_extHyperlinks`. Perubahan definisi knowledge base ini membuat ketiganya dapat ditransformasikan langsung dari dataset tanpa menggunakan nilai default.
+F08, F12, dan F29 tetap diselaraskan dengan kolom `tld_in_path`, `https_token`, dan `ratio_extHyperlinks`. F18, F26, F27, F28, dan F30 kini memakai `phish_hints`, `brand_in_path`, `suspecious_tld`, `domain_in_title`, dan `empty_title`, sehingga input manual dapat memperoleh bukti dari URL atau HTML tanpa mengandalkan traffic, ranking, indexing, atau blacklist pihak ketiga.
 
-Rule base terkait kini berjumlah 21 rule: R08 diperbarui untuk TLD in Path, R11 mempertahankan indikator HTTPS Token dengan penjelasan baru, dan R21 ditambahkan untuk External Hyperlink Ratio.
+Rule base terkait kini berjumlah 24 rule: R19 dan R20 menjelaskan Domain in Title serta Empty Title, sementara R22-R24 menambahkan indikator Phishing Hints, Brand in Path, dan Suspicious TLD.
 
-Rujukan definisi kandidat kolom: Hannousse & Yahiouche, *Web page phishing detection*, https://arxiv.org/abs/2010.12847.
+Rujukan: Hannousse & Yahiouche, *Towards Benchmark Datasets for Machine Learning Based Website Phishing Detection*, https://arxiv.org/abs/2010.12847; Aljofey et al., *An effective detection approach for phishing websites using URL and HTML features*, Scientific Reports 2022, https://pubmed.ncbi.nlm.nih.gov/35614133/; Shaukat et al., *BERT-Based Approaches to Identifying Malicious URLs*, Sensors 2023, https://doi.org/10.3390/s23208499.
 
 ## Tabel Mapping
 
@@ -47,7 +47,7 @@ Rujukan definisi kandidat kolom: Hannousse & Yahiouche, *Web page phishing detec
 | F15 | Links in Tags | direct | links_in_tags | Jika links_in_tags > 81 maka 1; jika 17 <= links_in_tags <= 81 maka 0; jika links_in_tags < 17 maka -1. | Ya | Sumber dataset mendefinisikan fitur sebagai rasio link internal pada tag Link; rasio internal rendah lebih berbahaya. |
 | F16 | SFH / Server Form Handler | direct | sfh | Jika sfh = 1 maka -1; jika sfh = 0 maka 1. | Ya | Kolom sfh tersedia langsung, walaupun pada dataset saat ini nilai teramati hanya 0 sehingga daya diskriminasinya perlu dicatat. |
 | F17 | Submitting to Email | direct | submit_email | Jika submit_email = 1 maka -1; jika submit_email = 0 maka 1. | Ya | Kolom submit_email tersedia langsung, walaupun pada dataset saat ini nilai teramati hanya 0 sehingga daya diskriminasinya perlu dicatat. |
-| F18 | Abnormal URL | derived | abnormal_subdomain, random_domain | Jika abnormal_subdomain = 1 atau random_domain = 1 maka -1; jika keduanya = 0 maka 1. | Ya | Abnormal URL diturunkan dari indikator struktur subdomain abnormal atau domain acak yang tersedia pada dataset. |
+| F18 | Phishing Hints | direct | phish_hints | Jika phish_hints = 0 maka 1; jika phish_hints = 1 atau 2 maka 0; jika phish_hints > 2 maka -1. | Ya | Kolom phish_hints mengukur indikator kata pemancing yang dapat direproduksi dari URL dan teks HTML. |
 | F19 | Redirect | direct | nb_redirection | Jika nb_redirection <= 1 maka 1; jika 2 <= nb_redirection <= 3 maka 0; jika nb_redirection >= 4 maka -1. | Ya | Jumlah redirect tersedia langsung dan dapat dikategorikan berdasarkan tingkat berlebihan. |
 | F20 | On MouseOver | direct | onmouseover | Jika onmouseover = 1 maka -1; jika onmouseover = 0 maka 1. | Ya | Kolom langsung menunjukkan penggunaan event onmouseover yang relevan dengan manipulasi tampilan URL. |
 | F21 | Right Click Disabled | direct | right_clic | Jika right_clic = 1 maka -1; jika right_clic = 0 maka 1. | Ya | Nama kolom dataset menggunakan right_clic dan memetakan gejala klik kanan dinonaktifkan. |
@@ -55,8 +55,8 @@ Rujukan definisi kandidat kolom: Hannousse & Yahiouche, *Web page phishing detec
 | F23 | IFrame | direct | iframe | Jika iframe = 1 maka -1; jika iframe = 0 maka 1. | Ya | Kolom dataset langsung menunjukkan keberadaan iframe. |
 | F24 | Age of Domain | direct | domain_age | Jika domain_age >= 180 hari maka 1; jika 0 <= domain_age < 180 hari maka -1; jika domain_age < 0 maka 0 karena informasi tidak tersedia. | Ya | Umur domain tersedia dalam hari; nilai negatif tidak dipaksa aman dan diperlakukan sebagai tidak diketahui. |
 | F25 | DNS Record | direct | dns_record | Jika dns_record = 1 (domain memiliki DNS record) maka 1; jika dns_record = 0 maka -1. | Ya | Sumber dataset menyatakan DNS record yang hilang sebagai indikator phishing; mapping mempertahankan arti keberadaan record. |
-| F26 | Web Traffic | direct | web_traffic | Jika 1 <= web_traffic <= 100000 maka 1; jika web_traffic > 100000 maka 0; jika web_traffic = 0 maka -1. | Ya | Web traffic diperlakukan sebagai ranking; nol menunjukkan ranking tidak tersedia. |
-| F27 | Page Rank | direct | page_rank | Jika page_rank >= 5 maka 1; jika 3 <= page_rank < 5 maka 0; jika page_rank < 3 maka -1. | Ya | Dataset menyediakan page_rank pada skala 0 sampai 10; threshold memisahkan skor rendah, menengah, dan tinggi. |
-| F28 | Google Index | direct | google_index | Jika google_index = 1 (halaman terindeks Google) maka 1; jika google_index = 0 maka -1. | Ya | Sumber dataset menyatakan halaman yang tidak terindeks Google sebagai indikator phishing. |
+| F26 | Brand in Path | direct | brand_in_path | Jika brand_in_path = 0 maka 1; jika brand_in_path = 1 maka -1. | Ya | Kolom brand_in_path dapat dihitung ulang dari path URL tanpa layanan traffic pihak ketiga. |
+| F27 | Suspicious TLD | direct | suspecious_tld | Jika suspecious_tld = 0 maka 1; jika suspecious_tld = 1 maka -1. | Ya | Nama kolom dataset mempertahankan ejaan sumber dan dapat dihitung ulang dari TLD hostname. |
+| F28 | Domain in Title | direct | domain_in_title | Jika domain_in_title = 1 maka 1; jika domain_in_title = 0 maka -1. | Ya | Kolom domain_in_title dapat dihitung dari title HTML dan hostname tanpa API indexing. |
 | F29 | External Hyperlink Ratio | direct | ratio_extHyperlinks | Deteksi skala ratio_extHyperlinks terlebih dahulu. Jika nilai maksimum <= 1: nilai <= 0.30 maka 1, 0.30 < nilai <= 0.50 maka 0, dan nilai > 0.50 maka -1. Jika nilai maksimum > 1: nilai <= 30 maka 1, 30 < nilai <= 50 maka 0, dan nilai > 50 maka -1. | Ya | Kolom ratio_extHyperlinks tersedia langsung; dataset saat ini menggunakan skala 0 sampai 1 (nilai maksimum teramati 1.0). |
-| F30 | Statistical Report | direct | statistical_report | Jika statistical_report = 0 maka 1; jika statistical_report > 0 maka -1. | Ya | Nilai nonnol menunjukkan indikator laporan statistik/blacklist pada dataset. |
+| F30 | Empty Title | direct | empty_title | Jika empty_title = 0 maka 1; jika empty_title = 1 maka -1. | Ya | Kolom empty_title dapat dihitung langsung setelah HTML berhasil diparsing. |
