@@ -1,0 +1,5 @@
+{
+  "model_type": "xgboost",
+  "candidate": "augmented_robust_xgboost",
+  "feature_set": "augmented"
+}

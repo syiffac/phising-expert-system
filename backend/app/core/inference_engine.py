@@ -22,6 +22,7 @@ def is_rule_triggered(
     rule: dict,
     facts: dict,
     feature_status: dict | None = None,
+    feature_quality: dict | None = None,
 ) -> bool:
     conditions = rule.get("conditions", [])
 
@@ -30,6 +31,18 @@ def is_rule_triggered(
         operator = condition.get("operator")
         expected_value = condition.get("value")
 
+        if feature == "imputed_unknown_count":
+            # Calculate imputed_unknown_count
+            count = 0
+            if feature_quality is not None and "imputed_unknown" in feature_quality:
+                count = feature_quality["imputed_unknown"]
+            elif feature_status is not None:
+                count = sum(1 for v in feature_status.values() if v == "imputed_unknown")
+            
+            if not compare_value(count, operator, expected_value):
+                return False
+            continue
+
         actual_value = facts.get(feature)
 
         if actual_value is None:
@@ -37,7 +50,8 @@ def is_rule_triggered(
 
         if feature_status is not None:
             status = feature_status.get(feature)
-            if status == "imputed_unknown" and expected_value != 0:
+            if status == "imputed_unknown":
+                # imputed_unknown facts -> skip rule individual
                 return False
             if status not in {None, "available", "imputed_unknown"}:
                 return False
@@ -64,11 +78,12 @@ def forward_chaining(
     facts: dict,
     rules: list[dict],
     feature_status: dict | None = None,
+    feature_quality: dict | None = None,
 ) -> dict:
     triggered_rules = []
 
     for rule in rules:
-        if is_rule_triggered(rule, facts, feature_status):
+        if is_rule_triggered(rule, facts, feature_status, feature_quality):
             triggered_rules.append(rule)
 
     initial_status = determine_initial_status(triggered_rules)

@@ -133,6 +133,26 @@ FEATURE_SOURCES = {
     "F30": "html_parsing",
 }
 
+RAW_FEATURE_NAMES = [
+    "length_url", "length_hostname", "nb_dots", "nb_hyphens", "nb_at", "nb_qm",
+    "nb_and", "nb_or", "nb_eq", "nb_underscore", "nb_tilde", "nb_percent",
+    "nb_slash", "nb_star", "nb_colon", "nb_comma", "nb_semicolumn", "nb_dollar",
+    "nb_space", "nb_www", "nb_com", "nb_dslash", "http_in_path", "https_token",
+    "ratio_digits_url", "ratio_digits_host", "punycode", "port", "tld_in_path",
+    "tld_in_subdomain", "nb_subdomains", "prefix_suffix", "shortest_word_host",
+    "longest_words_raw", "longest_word_path", "phish_hints", "suspecious_tld",
+    "brand_in_path", "brand_in_subdomain",
+    
+    # HTML features
+    "nb_hyperlinks", "ratio_intHyperlinks", "ratio_extHyperlinks", "ratio_nullHyperlinks",
+    "nb_extCSS", "ratio_extRedirection", "ratio_extErrors", "login_form",
+    "external_favicon", "iframe", "popup_window", "safe_anchor", "empty_title",
+    "domain_in_title", "domain_with_copyright", "submit_email", "sfh", "onmouseover", "right_clic",
+    
+    # DNS, WHOIS / RDAP
+    "dns_record", "domain_registration_length", "domain_age"
+]
+
 
 def normalize_url(url: str) -> str:
     value = url.strip()
@@ -324,6 +344,8 @@ def _apply_html_features(
     status: dict[str, str],
     notes: list[str],
     url_hint_count: int,
+    ml_raw_features: dict[str, float | int],
+    ml_raw_feature_status: dict[str, str],
 ) -> None:
     soup = BeautifulSoup(html, "html.parser")
     text = html.lower()
@@ -359,6 +381,8 @@ def _apply_html_features(
     _set_fact(facts, status, "F13", _ratio_fact(media_ratio, 0.22, 0.61))
 
     anchor_refs = [anchor.get("href", "") for anchor in soup.find_all("a") if anchor.get("href")]
+    unsafe_ratio = 0.0
+    hyperlink_ratio = 0.0
     if anchor_refs:
         unsafe_anchors = sum(
             href.strip().lower().startswith(("#", "javascript:", "mailto:"))
@@ -418,22 +442,22 @@ def _apply_html_features(
     _set_fact(facts, status, "F16", -1 if suspicious_form else 1)
     _set_fact(facts, status, "F17", -1 if submits_email else 1)
     _set_fact(facts, status, "F19", 1 if redirect_count <= 1 else 0 if redirect_count <= 3 else -1)
-    _set_fact(
-        facts,
-        status,
-        "F20",
-        -1 if "onmouseover" in text and ("window.status" in text or "status=" in text) else 1,
-    )
-    _set_fact(
-        facts,
-        status,
-        "F21",
-        -1 if "oncontextmenu" in text or ("contextmenu" in text and "preventdefault" in text) else 1,
-    )
-    _set_fact(facts, status, "F22", -1 if re.search(r"\bwindow\.open\s*\(", text) else 1)
-    _set_fact(facts, status, "F23", -1 if soup.find("iframe") else 1)
+    
+    is_onmouseover = "onmouseover" in text and ("window.status" in text or "status=" in text)
+    _set_fact(facts, status, "F20", -1 if is_onmouseover else 1)
+    
+    is_right_clic = "oncontextmenu" in text or ("contextmenu" in text and "preventdefault" in text)
+    _set_fact(facts, status, "F21", -1 if is_right_clic else 1)
+    
+    is_popup_window = bool(re.search(r"\bwindow\.open\s*\(", text))
+    _set_fact(facts, status, "F22", -1 if is_popup_window else 1)
+    
+    is_iframe = bool(soup.find("iframe"))
+    _set_fact(facts, status, "F23", -1 if is_iframe else 1)
+    
     title_text = soup.title.get_text(" ", strip=True) if soup.title else ""
     _set_fact(facts, status, "F30", -1 if not title_text else 1)
+    
     domain = _registrable_domain(hostname).lower()
     domain_label = domain.split(".", 1)[0]
     title_lower = title_text.lower()
@@ -442,26 +466,76 @@ def _apply_html_features(
     )
     _set_fact(facts, status, "F28", 1 if title_matches_domain else -1)
 
+    # Compute raw HTML features
+    css_refs = [
+        link.get("href", "")
+        for link in soup.find_all("link")
+        if "stylesheet" in " ".join(link.get("rel", [])).lower()
+    ]
+    ext_css_count = sum(not _same_host(hostname, urlparse(urljoin(page_url, ref)).hostname) for ref in css_refs if ref)
+
+    has_login = False
+    for form in forms:
+        if form.find("input", type="password") or "login" in form.get("action", "").lower() or "signin" in form.get("action", "").lower():
+            has_login = True
+            break
+    login_form_val = 1 if has_login else 0
+    has_copyright = 1 if any(kw in visible_text.lower() for kw in ["copyright", "©", "copiright"]) else 0
+
+    for r_name, r_val in [
+        ("nb_hyperlinks", len(anchor_refs)),
+        ("ratio_extHyperlinks", hyperlink_ratio if hyperlink_ratio is not None else 0.0),
+        ("ratio_intHyperlinks", 1.0 - (hyperlink_ratio if hyperlink_ratio is not None else 0.0)),
+        ("ratio_nullHyperlinks", unsafe_ratio),
+        ("nb_extCSS", ext_css_count),
+        ("ratio_extRedirection", min(redirect_count / 10.0, 1.0)),
+        ("ratio_extErrors", 0.0),
+        ("login_form", login_form_val),
+        ("external_favicon", 1 if external_icon else 0),
+        ("iframe", 1 if is_iframe else 0),
+        ("popup_window", 1 if is_popup_window else 0),
+        ("safe_anchor", unsafe_ratio * 100),
+        ("empty_title", 1 if not title_text else 0),
+        ("domain_in_title", 1 if title_matches_domain else 0),
+        ("domain_with_copyright", has_copyright),
+        ("submit_email", 1 if submits_email else 0),
+        ("sfh", 1 if suspicious_form else 0),
+        ("onmouseover", 1 if is_onmouseover else 0),
+        ("right_clic", 1 if is_right_clic else 0),
+    ]:
+        ml_raw_features[r_name] = r_val
+        ml_raw_feature_status[r_name] = "available"
+
 
 def _apply_dns_feature(
     hostname: str,
     facts: dict[str, int | None],
     status: dict[str, str],
     notes: list[str],
+    ml_raw_features: dict[str, float | int],
+    ml_raw_feature_status: dict[str, str],
 ) -> None:
+    dns_val = 0
+    dns_status = "imputed_unknown"
     if not hostname or is_ip_address(hostname):
         notes.append("F25 DNS Record tidak tersedia untuk hostname kosong atau alamat IP.")
-        return
-    if dns is None:
+    elif dns is None:
         notes.append("F25 DNS Record tidak tersedia karena dnspython belum terpasang.")
-        return
-    try:
-        dns.resolver.resolve(hostname, "A", lifetime=3.0)
-        _set_fact(facts, status, "F25", 1)
-    except dns.resolver.NXDOMAIN:
-        _set_fact(facts, status, "F25", -1)
-    except (dns.resolver.NoAnswer, dns.resolver.NoNameservers, dns.exception.Timeout) as error:
-        notes.append(f"F25 DNS Record tidak tersedia: {error}.")
+    else:
+        try:
+            dns.resolver.resolve(hostname, "A", lifetime=3.0)
+            _set_fact(facts, status, "F25", 1)
+            dns_val = 1
+            dns_status = "available"
+        except dns.resolver.NXDOMAIN:
+            _set_fact(facts, status, "F25", -1)
+            dns_val = 0
+            dns_status = "available"
+        except (dns.resolver.NoAnswer, dns.resolver.NoNameservers, dns.exception.Timeout) as error:
+            notes.append(f"F25 DNS Record tidak tersedia: {error}.")
+
+    ml_raw_features["dns_record"] = dns_val
+    ml_raw_feature_status["dns_record"] = dns_status
 
 
 def _registrable_domain(hostname: str) -> str:
@@ -485,35 +559,64 @@ def _apply_rdap_features(
     facts: dict[str, int | None],
     status: dict[str, str],
     notes: list[str],
+    ml_raw_features: dict[str, float | int],
+    ml_raw_feature_status: dict[str, str],
 ) -> None:
+    reg_val = 0
+    age_val = 0
+    reg_status = "imputed_unknown"
+    age_status = "imputed_unknown"
+
     if not hostname or is_ip_address(hostname):
         notes.append("F09 dan F24 tidak tersedia untuk hostname kosong atau alamat IP.")
-        return
-    domain = _registrable_domain(hostname)
-    try:
-        response = httpx.get(
-            f"https://rdap.org/domain/{domain}",
-            timeout=5.0,
-            follow_redirects=True,
-            headers={"User-Agent": USER_AGENT},
-        )
-        response.raise_for_status()
-        events = response.json().get("events", [])
-    except (httpx.HTTPError, ValueError) as error:
-        notes.append(f"Data RDAP untuk F09/F24 tidak tersedia: {error}.")
-        return
-    registration = _parse_rdap_date(events, {"registration"})
-    expiration = _parse_rdap_date(events, {"expiration", "expiry"})
-    if registration is not None:
-        age_days = (datetime.now(timezone.utc) - registration).days
-        _set_fact(facts, status, "F24", 1 if age_days >= 180 else -1)
     else:
-        notes.append("F24 tidak tersedia karena tanggal registrasi RDAP tidak ditemukan.")
-    if registration is not None and expiration is not None:
-        registration_days = (expiration - registration).days
-        _set_fact(facts, status, "F09", 1 if registration_days > 365 else -1)
-    else:
-        notes.append("F09 tidak tersedia karena rentang registrasi RDAP tidak lengkap.")
+        domain = _registrable_domain(hostname)
+        try:
+            response = httpx.get(
+                f"https://rdap.org/domain/{domain}",
+                timeout=5.0,
+                follow_redirects=True,
+                headers={"User-Agent": USER_AGENT},
+            )
+            response.raise_for_status()
+            events = response.json().get("events", [])
+        except (httpx.HTTPError, ValueError) as error:
+            notes.append(f"Data RDAP untuk F09/F24 tidak tersedia: {error}.")
+            events = []
+
+        if events:
+            registration = _parse_rdap_date(events, {"registration"})
+            expiration = _parse_rdap_date(events, {"expiration", "expiry"})
+            if registration is not None:
+                age_days = (datetime.now(timezone.utc) - registration).days
+                _set_fact(facts, status, "F24", 1 if age_days >= 180 else -1)
+                age_val = age_days
+                age_status = "available"
+            else:
+                notes.append("F24 tidak tersedia karena tanggal registrasi RDAP tidak ditemukan.")
+
+            if registration is not None and expiration is not None:
+                registration_days = (expiration - registration).days
+                _set_fact(facts, status, "F09", 1 if registration_days > 365 else -1)
+                reg_val = registration_days
+                reg_status = "available"
+            else:
+                notes.append("F09 tidak tersedia karena rentang registrasi RDAP tidak lengkap.")
+
+    ml_raw_features["domain_registration_length"] = reg_val
+    ml_raw_feature_status["domain_registration_length"] = reg_status
+    ml_raw_features["domain_age"] = age_val
+    ml_raw_feature_status["domain_age"] = age_status
+
+
+def _impute_missing_raw_features(
+    ml_raw_features: dict[str, float | int],
+    ml_raw_feature_status: dict[str, str]
+) -> None:
+    for name in RAW_FEATURE_NAMES:
+        if ml_raw_feature_status[name] != "available":
+            ml_raw_features[name] = 0
+            ml_raw_feature_status[name] = "imputed_unknown"
 
 
 def extract_manual_features(url: str, enable_network: bool = True) -> dict[str, Any]:
@@ -524,34 +627,121 @@ def extract_manual_features(url: str, enable_network: bool = True) -> dict[str, 
     feature_status = {feature: "not_available" for feature in FEATURE_CODES}
     notes: list[str] = []
 
-    _set_fact(facts, feature_status, "F01", -1 if is_ip_address(hostname) else 1)
+    # Initialize raw features
+    ml_raw_features: dict[str, float | int] = {}
+    ml_raw_feature_status: dict[str, str] = {name: "not_available" for name in RAW_FEATURE_NAMES}
+
+    # URL String Facts and Raw Features
+    is_ip = is_ip_address(hostname)
+    _set_fact(facts, feature_status, "F01", -1 if is_ip else 1)
+    
     length = len(normalized_url)
     _set_fact(facts, feature_status, "F02", 1 if length < 54 else 0 if length <= 75 else -1)
-    _set_fact(facts, feature_status, "F03", -1 if hostname in SHORTENING_SERVICES else 1)
+    
+    is_short = hostname in SHORTENING_SERVICES
+    _set_fact(facts, feature_status, "F03", -1 if is_short else 1)
+    
     _set_fact(facts, feature_status, "F04", -1 if "@" in normalized_url else 1)
-    _set_fact(facts, feature_status, "F05", -1 if has_double_slash_redirect(normalized_url) else 1)
-    _set_fact(facts, feature_status, "F06", -1 if "-" in hostname else 1)
+    
+    is_dslash = has_double_slash_redirect(normalized_url)
+    _set_fact(facts, feature_status, "F05", -1 if is_dslash else 1)
+    
+    is_prefix_suffix = "-" in hostname
+    _set_fact(facts, feature_status, "F06", -1 if is_prefix_suffix else 1)
+    
     subdomains = count_subdomains(hostname)
     _set_fact(facts, feature_status, "F07", 1 if subdomains <= 1 else 0 if subdomains == 2 else -1)
-    _set_fact(facts, feature_status, "F08", -1 if has_tld_in_path(parsed.path) else 1)
+    
+    is_tld_in_path = has_tld_in_path(parsed.path)
+    _set_fact(facts, feature_status, "F08", -1 if is_tld_in_path else 1)
+    
+    port_val = 0
     try:
         port = parsed.port
         _set_fact(facts, feature_status, "F11", -1 if port and port not in {80, 443} else 1)
+        port_val = 1 if port and port not in {80, 443} else 0
     except ValueError:
         notes.append("F11 Port tidak tersedia karena format port URL tidak valid.")
+        port_val = 0
+        
     without_scheme = normalized_url.split("://", 1)[-1].lower()
     _set_fact(facts, feature_status, "F12", -1 if "https" in without_scheme else 1)
+    
     url_hint_count = _count_phishing_hints(normalized_url)
     _set_fact(facts, feature_status, "F18", _phishing_hint_fact(url_hint_count))
+    
     path_lower = parsed.path.lower()
-    brand_in_path = any(_contains_hint(path_lower, brand) for brand in BRAND_HINTS)
-    _set_fact(facts, feature_status, "F26", -1 if brand_in_path else 1)
-    if hostname and not is_ip_address(hostname) and "." in hostname:
+    is_brand_in_path = any(_contains_hint(path_lower, brand) for brand in BRAND_HINTS)
+    _set_fact(facts, feature_status, "F26", -1 if is_brand_in_path else 1)
+    
+    is_suspicious_tld_val = 0
+    if hostname and not is_ip and "." in hostname:
         tld = hostname.rstrip(".").rsplit(".", 1)[-1]
         _set_fact(facts, feature_status, "F27", -1 if tld in SUSPICIOUS_TLDS else 1)
+        is_suspicious_tld_val = 1 if tld in SUSPICIOUS_TLDS else 0
     else:
         notes.append("F27 Suspicious TLD tidak tersedia karena hostname tidak memiliki TLD.")
 
+    # Populate URL string raw features
+    subdomain_parts = hostname.removeprefix("www.").split(".")[:-2]
+    is_tld_in_sub = 1 if any(has_tld_in_path("." + part) for part in subdomain_parts) else 0
+    
+    host_parts = [w for w in re.split(r"[^a-zA-Z0-9]", hostname) if w and w.lower() != "www"]
+    shortest_word_host = min(len(w) for w in host_parts) if host_parts else 0
+    
+    url_parts = [w for w in re.split(r"[^a-zA-Z0-9]", normalized_url) if w]
+    longest_words_raw = max(len(w) for w in url_parts) if url_parts else 0
+    
+    path_parts = [w for w in re.split(r"[^a-zA-Z0-9]", parsed.path) if w]
+    longest_word_path = max(len(w) for w in path_parts) if path_parts else 0
+    
+    brand_in_sub = 1 if any(brand in subdomain_parts for brand in BRAND_HINTS) else 0
+
+    for name, val in [
+        ("length_url", length),
+        ("length_hostname", len(hostname)),
+        ("nb_dots", normalized_url.count(".")),
+        ("nb_hyphens", normalized_url.count("-")),
+        ("nb_at", normalized_url.count("@")),
+        ("nb_qm", normalized_url.count("?")),
+        ("nb_and", normalized_url.count("&")),
+        ("nb_or", normalized_url.count("|")),
+        ("nb_eq", normalized_url.count("=")),
+        ("nb_underscore", normalized_url.count("_")),
+        ("nb_tilde", normalized_url.count("~")),
+        ("nb_percent", normalized_url.count("%")),
+        ("nb_slash", normalized_url.count("/")),
+        ("nb_star", normalized_url.count("*")),
+        ("nb_colon", normalized_url.count(":")),
+        ("nb_comma", normalized_url.count(",")),
+        ("nb_semicolumn", normalized_url.count(";")),
+        ("nb_dollar", normalized_url.count("$")),
+        ("nb_space", normalized_url.count(" ")),
+        ("nb_www", 1 if "www" in hostname else 0),
+        ("nb_com", normalized_url.count(".com")),
+        ("nb_dslash", 1 if is_dslash else 0),
+        ("http_in_path", 1 if "http" in parsed.path.lower() else 0),
+        ("https_token", 1 if "https" in without_scheme else 0),
+        ("ratio_digits_url", sum(c.isdigit() for c in normalized_url) / length if length > 0 else 0.0),
+        ("ratio_digits_host", sum(c.isdigit() for c in hostname) / len(hostname) if hostname else 0.0),
+        ("punycode", 1 if hostname.startswith("xn--") else 0),
+        ("port", port_val),
+        ("tld_in_path", 1 if is_tld_in_path else 0),
+        ("tld_in_subdomain", is_tld_in_sub),
+        ("nb_subdomains", subdomains),
+        ("prefix_suffix", 1 if is_prefix_suffix else 0),
+        ("shortest_word_host", shortest_word_host),
+        ("longest_words_raw", longest_words_raw),
+        ("longest_word_path", longest_word_path),
+        ("phish_hints", url_hint_count),
+        ("suspecious_tld", is_suspicious_tld_val),
+        ("brand_in_path", 1 if is_brand_in_path else 0),
+        ("brand_in_subdomain", brand_in_sub),
+    ]:
+        ml_raw_features[name] = val
+        ml_raw_feature_status[name] = "available"
+
+    # Network-based Extraction
     if enable_network:
         html_result = _fetch_html(normalized_url, hostname, notes)
         if html_result is not None:
@@ -564,17 +754,31 @@ def extract_manual_features(url: str, enable_network: bool = True) -> dict[str, 
                 feature_status,
                 notes,
                 url_hint_count,
+                ml_raw_features,
+                ml_raw_feature_status,
             )
-        _apply_dns_feature(hostname, facts, feature_status, notes)
-        _apply_rdap_features(hostname, facts, feature_status, notes)
+        _apply_dns_feature(hostname, facts, feature_status, notes, ml_raw_features, ml_raw_feature_status)
+        _apply_rdap_features(hostname, facts, feature_status, notes, ml_raw_features, ml_raw_feature_status)
     else:
         notes.append("Ekstraksi jaringan dimatikan; fitur HTML, DNS, redirect, dan RDAP tidak dievaluasi.")
 
+    # Impute missing facts and raw features
     imputed_features = _apply_resilient_imputation(facts, feature_status, notes)
+    _impute_missing_raw_features(ml_raw_features, ml_raw_feature_status)
+
+    # Form facts_for_rules (contains only available, or imputed mapped as 0 but inference engine will check status)
+    # The prompt: "facts_for_rules Berisi hanya fitur yang statusnya available. Fitur imputed_unknown boleh tetap ada tetapi inference engine harus skip."
+    # Let's populate facts_for_rules as exact clone but keep F01-F30 keys
+    facts_for_rules = {k: (v if feature_status[k] == "available" else 0) for k, v in facts.items()}
+
+    # features_for_ml is exactly facts
+    features_for_ml = facts.copy()
+
     available_features = [
         feature for feature in FEATURE_CODES if feature_status[feature] == "available"
     ]
     imputed_count = len(imputed_features)
+    
     feature_quality = {
         "total_features": len(FEATURE_CODES),
         "available": len(available_features),
@@ -583,6 +787,20 @@ def extract_manual_features(url: str, enable_network: bool = True) -> dict[str, 
         "is_resilient_mode": True,
         "imputed_features": imputed_features,
     }
+
+    # Raw feature quality
+    available_raw = sum(1 for name in RAW_FEATURE_NAMES if ml_raw_feature_status[name] == "available")
+    imputed_raw = len(RAW_FEATURE_NAMES) - available_raw
+    imputed_raw_features = [name for name in RAW_FEATURE_NAMES if ml_raw_feature_status[name] != "available"]
+    
+    ml_raw_feature_quality = {
+        "total_features": len(RAW_FEATURE_NAMES),
+        "available": available_raw,
+        "imputed_unknown": imputed_raw,
+        "imputed_features": imputed_raw_features,
+        "is_resilient_mode": True
+    }
+
     return {
         "original_url": url,
         "normalized_url": normalized_url,
@@ -592,6 +810,14 @@ def extract_manual_features(url: str, enable_network: bool = True) -> dict[str, 
         "feature_sources": FEATURE_SOURCES,
         "evaluated_features": available_features,
         "feature_quality": feature_quality,
+        
+        # New split and raw features mapping
+        "facts_for_rules": facts_for_rules,
+        "features_for_ml": features_for_ml,
+        "ml_raw_features": ml_raw_features,
+        "ml_raw_feature_status": ml_raw_feature_status,
+        "ml_raw_feature_quality": ml_raw_feature_quality,
+        
         "feature_completeness": {
             "total_required": len(FEATURE_CODES),
             "available": len(available_features),

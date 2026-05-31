@@ -1,0 +1,1954 @@
+{
+  "symbolic_clean_random_forest": [
+    {
+      "feature": "F18",
+      "importance": 0.11938396
+    },
+    {
+      "feature": "F15",
+      "importance": 0.09597471
+    },
+    {
+      "feature": "F14",
+      "importance": 0.08947595
+    },
+    {
+      "feature": "F28",
+      "importance": 0.08391835
+    },
+    {
+      "feature": "F01",
+      "importance": 0.07870261
+    },
+    {
+      "feature": "F07",
+      "importance": 0.06586165
+    },
+    {
+      "feature": "F02",
+      "importance": 0.06500391
+    },
+    {
+      "feature": "F24",
+      "importance": 0.0487862
+    },
+    {
+      "feature": "F13",
+      "importance": 0.04844191
+    },
+    {
+      "feature": "F29",
+      "importance": 0.04810785
+    },
+    {
+      "feature": "F09",
+      "importance": 0.04384113
+    },
+    {
+      "feature": "F10",
+      "importance": 0.0307742
+    },
+    {
+      "feature": "F30",
+      "importance": 0.02838392
+    },
+    {
+      "feature": "F03",
+      "importance": 0.02776732
+    },
+    {
+      "feature": "F06",
+      "importance": 0.02735988
+    },
+    {
+      "feature": "F12",
+      "importance": 0.02624979
+    },
+    {
+      "feature": "F19",
+      "importance": 0.02013773
+    },
+    {
+      "feature": "F27",
+      "importance": 0.01118644
+    },
+    {
+      "feature": "F25",
+      "importance": 0.01117562
+    },
+    {
+      "feature": "F08",
+      "importance": 0.01053004
+    },
+    {
+      "feature": "F04",
+      "importance": 0.00947873
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00242318
+    },
+    {
+      "feature": "F05",
+      "importance": 0.00222704
+    },
+    {
+      "feature": "F26",
+      "importance": 0.0015359
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00109971
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00080527
+    },
+    {
+      "feature": "F11",
+      "importance": 0.0007835
+    },
+    {
+      "feature": "F20",
+      "importance": 0.00058349
+    },
+    {
+      "feature": "F16",
+      "importance": 0.0
+    },
+    {
+      "feature": "F17",
+      "importance": 0.0
+    }
+  ],
+  "symbolic_clean_xgboost": [
+    {
+      "feature": "F18",
+      "importance": 0.15841883
+    },
+    {
+      "feature": "F01",
+      "importance": 0.15749848
+    },
+    {
+      "feature": "F28",
+      "importance": 0.09962688
+    },
+    {
+      "feature": "F14",
+      "importance": 0.0548017
+    },
+    {
+      "feature": "F04",
+      "importance": 0.0525946
+    },
+    {
+      "feature": "F15",
+      "importance": 0.04376115
+    },
+    {
+      "feature": "F25",
+      "importance": 0.04142047
+    },
+    {
+      "feature": "F27",
+      "importance": 0.03801633
+    },
+    {
+      "feature": "F24",
+      "importance": 0.03793881
+    },
+    {
+      "feature": "F09",
+      "importance": 0.03047399
+    },
+    {
+      "feature": "F13",
+      "importance": 0.02792613
+    },
+    {
+      "feature": "F03",
+      "importance": 0.02786255
+    },
+    {
+      "feature": "F07",
+      "importance": 0.02621378
+    },
+    {
+      "feature": "F29",
+      "importance": 0.02425781
+    },
+    {
+      "feature": "F05",
+      "importance": 0.02255526
+    },
+    {
+      "feature": "F10",
+      "importance": 0.02021172
+    },
+    {
+      "feature": "F30",
+      "importance": 0.01824359
+    },
+    {
+      "feature": "F06",
+      "importance": 0.01651751
+    },
+    {
+      "feature": "F02",
+      "importance": 0.01643283
+    },
+    {
+      "feature": "F26",
+      "importance": 0.01524918
+    },
+    {
+      "feature": "F19",
+      "importance": 0.01469862
+    },
+    {
+      "feature": "F22",
+      "importance": 0.01242867
+    },
+    {
+      "feature": "F12",
+      "importance": 0.01206985
+    },
+    {
+      "feature": "F08",
+      "importance": 0.01092013
+    },
+    {
+      "feature": "F11",
+      "importance": 0.00595572
+    },
+    {
+      "feature": "F20",
+      "importance": 0.00540623
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00434031
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00415884
+    },
+    {
+      "feature": "F16",
+      "importance": 0.0
+    },
+    {
+      "feature": "F17",
+      "importance": 0.0
+    }
+  ],
+  "symbolic_robust_random_forest": [
+    {
+      "feature": "F18",
+      "importance": 0.11908383
+    },
+    {
+      "feature": "F15",
+      "importance": 0.08141446
+    },
+    {
+      "feature": "F28",
+      "importance": 0.08015058
+    },
+    {
+      "feature": "F01",
+      "importance": 0.07592194
+    },
+    {
+      "feature": "F14",
+      "importance": 0.07231487
+    },
+    {
+      "feature": "F07",
+      "importance": 0.06009792
+    },
+    {
+      "feature": "F02",
+      "importance": 0.05908563
+    },
+    {
+      "feature": "F24",
+      "importance": 0.04496457
+    },
+    {
+      "feature": "F09",
+      "importance": 0.04410642
+    },
+    {
+      "feature": "F29",
+      "importance": 0.04276321
+    },
+    {
+      "feature": "F13",
+      "importance": 0.04162582
+    },
+    {
+      "feature": "F30",
+      "importance": 0.03719733
+    },
+    {
+      "feature": "F10",
+      "importance": 0.03461575
+    },
+    {
+      "feature": "F06",
+      "importance": 0.02665136
+    },
+    {
+      "feature": "F03",
+      "importance": 0.02592576
+    },
+    {
+      "feature": "F12",
+      "importance": 0.02442466
+    },
+    {
+      "feature": "F25",
+      "importance": 0.01949509
+    },
+    {
+      "feature": "F19",
+      "importance": 0.01860269
+    },
+    {
+      "feature": "F27",
+      "importance": 0.01146233
+    },
+    {
+      "feature": "F22",
+      "importance": 0.01091788
+    },
+    {
+      "feature": "F04",
+      "importance": 0.00980683
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00978362
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00948835
+    },
+    {
+      "feature": "F08",
+      "importance": 0.0092493
+    },
+    {
+      "feature": "F20",
+      "importance": 0.0091553
+    },
+    {
+      "feature": "F17",
+      "importance": 0.00891458
+    },
+    {
+      "feature": "F16",
+      "importance": 0.00864351
+    },
+    {
+      "feature": "F05",
+      "importance": 0.002152
+    },
+    {
+      "feature": "F26",
+      "importance": 0.0012414
+    },
+    {
+      "feature": "F11",
+      "importance": 0.000743
+    }
+  ],
+  "symbolic_robust_xgboost": [
+    {
+      "feature": "F01",
+      "importance": 0.2673341
+    },
+    {
+      "feature": "F18",
+      "importance": 0.19148099
+    },
+    {
+      "feature": "F04",
+      "importance": 0.11457717
+    },
+    {
+      "feature": "F28",
+      "importance": 0.04228169
+    },
+    {
+      "feature": "F27",
+      "importance": 0.04160912
+    },
+    {
+      "feature": "F15",
+      "importance": 0.02800945
+    },
+    {
+      "feature": "F03",
+      "importance": 0.02765328
+    },
+    {
+      "feature": "F14",
+      "importance": 0.02423772
+    },
+    {
+      "feature": "F24",
+      "importance": 0.02291791
+    },
+    {
+      "feature": "F05",
+      "importance": 0.01921193
+    },
+    {
+      "feature": "F07",
+      "importance": 0.01766066
+    },
+    {
+      "feature": "F25",
+      "importance": 0.01543398
+    },
+    {
+      "feature": "F09",
+      "importance": 0.01508245
+    },
+    {
+      "feature": "F13",
+      "importance": 0.01464966
+    },
+    {
+      "feature": "F29",
+      "importance": 0.01393272
+    },
+    {
+      "feature": "F30",
+      "importance": 0.01365746
+    },
+    {
+      "feature": "F10",
+      "importance": 0.0131349
+    },
+    {
+      "feature": "F08",
+      "importance": 0.01301465
+    },
+    {
+      "feature": "F06",
+      "importance": 0.01294444
+    },
+    {
+      "feature": "F02",
+      "importance": 0.01269779
+    },
+    {
+      "feature": "F26",
+      "importance": 0.01232763
+    },
+    {
+      "feature": "F19",
+      "importance": 0.00969295
+    },
+    {
+      "feature": "F12",
+      "importance": 0.00954206
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00762669
+    },
+    {
+      "feature": "F16",
+      "importance": 0.00757119
+    },
+    {
+      "feature": "F20",
+      "importance": 0.00751239
+    },
+    {
+      "feature": "F17",
+      "importance": 0.00716131
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00714137
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00632825
+    },
+    {
+      "feature": "F11",
+      "importance": 0.0035741
+    }
+  ],
+  "augmented_clean_random_forest": [
+    {
+      "feature": "nb_hyperlinks",
+      "importance": 0.10553543
+    },
+    {
+      "feature": "nb_www",
+      "importance": 0.06146863
+    },
+    {
+      "feature": "domain_age",
+      "importance": 0.05791866
+    },
+    {
+      "feature": "ratio_extHyperlinks",
+      "importance": 0.05351359
+    },
+    {
+      "feature": "ratio_intHyperlinks",
+      "importance": 0.04239996
+    },
+    {
+      "feature": "longest_word_path",
+      "importance": 0.04226426
+    },
+    {
+      "feature": "safe_anchor",
+      "importance": 0.03997764
+    },
+    {
+      "feature": "phish_hints",
+      "importance": 0.03496163
+    },
+    {
+      "feature": "ratio_digits_url",
+      "importance": 0.03337414
+    },
+    {
+      "feature": "F18",
+      "importance": 0.03219344
+    },
+    {
+      "feature": "length_url",
+      "importance": 0.02877559
+    },
+    {
+      "feature": "longest_words_raw",
+      "importance": 0.02801663
+    },
+    {
+      "feature": "length_hostname",
+      "importance": 0.02784969
+    },
+    {
+      "feature": "ratio_extRedirection",
+      "importance": 0.02641414
+    },
+    {
+      "feature": "domain_registration_length",
+      "importance": 0.02598476
+    },
+    {
+      "feature": "shortest_word_host",
+      "importance": 0.0251848
+    },
+    {
+      "feature": "nb_slash",
+      "importance": 0.02051701
+    },
+    {
+      "feature": "F28",
+      "importance": 0.02029959
+    },
+    {
+      "feature": "nb_dots",
+      "importance": 0.01990539
+    },
+    {
+      "feature": "F15",
+      "importance": 0.01794635
+    },
+    {
+      "feature": "domain_in_title",
+      "importance": 0.01681376
+    },
+    {
+      "feature": "ratio_digits_host",
+      "importance": 0.01655104
+    },
+    {
+      "feature": "nb_hyphens",
+      "importance": 0.01567678
+    },
+    {
+      "feature": "domain_with_copyright",
+      "importance": 0.01424426
+    },
+    {
+      "feature": "ratio_extErrors",
+      "importance": 0.01327165
+    },
+    {
+      "feature": "F14",
+      "importance": 0.01320824
+    },
+    {
+      "feature": "F01",
+      "importance": 0.01257101
+    },
+    {
+      "feature": "nb_qm",
+      "importance": 0.00993041
+    },
+    {
+      "feature": "F24",
+      "importance": 0.00923383
+    },
+    {
+      "feature": "F29",
+      "importance": 0.00829141
+    },
+    {
+      "feature": "F07",
+      "importance": 0.00821102
+    },
+    {
+      "feature": "F02",
+      "importance": 0.00786595
+    },
+    {
+      "feature": "nb_subdomains",
+      "importance": 0.00750904
+    },
+    {
+      "feature": "nb_extCSS",
+      "importance": 0.00735038
+    },
+    {
+      "feature": "F09",
+      "importance": 0.00692419
+    },
+    {
+      "feature": "nb_eq",
+      "importance": 0.00665233
+    },
+    {
+      "feature": "F13",
+      "importance": 0.00564447
+    },
+    {
+      "feature": "F30",
+      "importance": 0.00539795
+    },
+    {
+      "feature": "nb_underscore",
+      "importance": 0.00521335
+    },
+    {
+      "feature": "empty_title",
+      "importance": 0.00501416
+    },
+    {
+      "feature": "F06",
+      "importance": 0.00479144
+    },
+    {
+      "feature": "prefix_suffix",
+      "importance": 0.00419027
+    },
+    {
+      "feature": "F03",
+      "importance": 0.00410299
+    },
+    {
+      "feature": "F10",
+      "importance": 0.0035744
+    },
+    {
+      "feature": "https_token",
+      "importance": 0.00350879
+    },
+    {
+      "feature": "external_favicon",
+      "importance": 0.00338256
+    },
+    {
+      "feature": "F12",
+      "importance": 0.00337707
+    },
+    {
+      "feature": "F19",
+      "importance": 0.00307288
+    },
+    {
+      "feature": "nb_and",
+      "importance": 0.00303163
+    },
+    {
+      "feature": "dns_record",
+      "importance": 0.00290545
+    },
+    {
+      "feature": "F25",
+      "importance": 0.0028638
+    },
+    {
+      "feature": "tld_in_subdomain",
+      "importance": 0.00265705
+    },
+    {
+      "feature": "nb_com",
+      "importance": 0.00229138
+    },
+    {
+      "feature": "login_form",
+      "importance": 0.00186529
+    },
+    {
+      "feature": "suspecious_tld",
+      "importance": 0.00166895
+    },
+    {
+      "feature": "F27",
+      "importance": 0.00158941
+    },
+    {
+      "feature": "nb_percent",
+      "importance": 0.0011254
+    },
+    {
+      "feature": "F08",
+      "importance": 0.00104595
+    },
+    {
+      "feature": "nb_space",
+      "importance": 0.00101414
+    },
+    {
+      "feature": "nb_at",
+      "importance": 0.00100049
+    },
+    {
+      "feature": "tld_in_path",
+      "importance": 0.00097016
+    },
+    {
+      "feature": "F04",
+      "importance": 0.00094021
+    },
+    {
+      "feature": "nb_semicolumn",
+      "importance": 0.00072332
+    },
+    {
+      "feature": "http_in_path",
+      "importance": 0.00054444
+    },
+    {
+      "feature": "nb_colon",
+      "importance": 0.00050558
+    },
+    {
+      "feature": "nb_tilde",
+      "importance": 0.00038694
+    },
+    {
+      "feature": "popup_window",
+      "importance": 0.00035729
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00032332
+    },
+    {
+      "feature": "brand_in_path",
+      "importance": 0.0002868
+    },
+    {
+      "feature": "F26",
+      "importance": 0.00023499
+    },
+    {
+      "feature": "right_clic",
+      "importance": 0.00019938
+    },
+    {
+      "feature": "brand_in_subdomain",
+      "importance": 0.00019659
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00019146
+    },
+    {
+      "feature": "F05",
+      "importance": 0.00016595
+    },
+    {
+      "feature": "nb_dslash",
+      "importance": 0.00015798
+    },
+    {
+      "feature": "F11",
+      "importance": 0.00013972
+    },
+    {
+      "feature": "port",
+      "importance": 0.00011575
+    },
+    {
+      "feature": "F23",
+      "importance": 0.0001084
+    },
+    {
+      "feature": "nb_comma",
+      "importance": 9.906e-05
+    },
+    {
+      "feature": "iframe",
+      "importance": 8.298e-05
+    },
+    {
+      "feature": "F20",
+      "importance": 5.048e-05
+    },
+    {
+      "feature": "onmouseover",
+      "importance": 3.683e-05
+    },
+    {
+      "feature": "punycode",
+      "importance": 2.782e-05
+    },
+    {
+      "feature": "nb_star",
+      "importance": 1.287e-05
+    },
+    {
+      "feature": "nb_dollar",
+      "importance": 5.77e-06
+    },
+    {
+      "feature": "F16",
+      "importance": 0.0
+    },
+    {
+      "feature": "F17",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_or",
+      "importance": 0.0
+    },
+    {
+      "feature": "ratio_nullHyperlinks",
+      "importance": 0.0
+    },
+    {
+      "feature": "submit_email",
+      "importance": 0.0
+    },
+    {
+      "feature": "sfh",
+      "importance": 0.0
+    }
+  ],
+  "augmented_clean_xgboost": [
+    {
+      "feature": "F18",
+      "importance": 0.09276129
+    },
+    {
+      "feature": "nb_www",
+      "importance": 0.08612555
+    },
+    {
+      "feature": "nb_hyperlinks",
+      "importance": 0.06018088
+    },
+    {
+      "feature": "F01",
+      "importance": 0.04250198
+    },
+    {
+      "feature": "empty_title",
+      "importance": 0.04140105
+    },
+    {
+      "feature": "dns_record",
+      "importance": 0.0407831
+    },
+    {
+      "feature": "F25",
+      "importance": 0.03866282
+    },
+    {
+      "feature": "phish_hints",
+      "importance": 0.03713514
+    },
+    {
+      "feature": "nb_dots",
+      "importance": 0.03289887
+    },
+    {
+      "feature": "F28",
+      "importance": 0.02674207
+    },
+    {
+      "feature": "F24",
+      "importance": 0.02656149
+    },
+    {
+      "feature": "ratio_digits_host",
+      "importance": 0.0231626
+    },
+    {
+      "feature": "nb_qm",
+      "importance": 0.02282963
+    },
+    {
+      "feature": "longest_word_path",
+      "importance": 0.02180237
+    },
+    {
+      "feature": "domain_in_title",
+      "importance": 0.02132357
+    },
+    {
+      "feature": "domain_age",
+      "importance": 0.0176256
+    },
+    {
+      "feature": "nb_hyphens",
+      "importance": 0.01639008
+    },
+    {
+      "feature": "ratio_extHyperlinks",
+      "importance": 0.01520691
+    },
+    {
+      "feature": "F30",
+      "importance": 0.0147446
+    },
+    {
+      "feature": "nb_subdomains",
+      "importance": 0.01361804
+    },
+    {
+      "feature": "domain_with_copyright",
+      "importance": 0.01303105
+    },
+    {
+      "feature": "safe_anchor",
+      "importance": 0.01225026
+    },
+    {
+      "feature": "nb_slash",
+      "importance": 0.01105151
+    },
+    {
+      "feature": "nb_underscore",
+      "importance": 0.01072072
+    },
+    {
+      "feature": "http_in_path",
+      "importance": 0.00984896
+    },
+    {
+      "feature": "ratio_digits_url",
+      "importance": 0.0097347
+    },
+    {
+      "feature": "F29",
+      "importance": 0.00829593
+    },
+    {
+      "feature": "tld_in_subdomain",
+      "importance": 0.00823223
+    },
+    {
+      "feature": "suspecious_tld",
+      "importance": 0.00822042
+    },
+    {
+      "feature": "F27",
+      "importance": 0.00797315
+    },
+    {
+      "feature": "F07",
+      "importance": 0.00789971
+    },
+    {
+      "feature": "nb_and",
+      "importance": 0.0078169
+    },
+    {
+      "feature": "login_form",
+      "importance": 0.00775907
+    },
+    {
+      "feature": "external_favicon",
+      "importance": 0.00760912
+    },
+    {
+      "feature": "https_token",
+      "importance": 0.00759642
+    },
+    {
+      "feature": "F19",
+      "importance": 0.00757473
+    },
+    {
+      "feature": "nb_at",
+      "importance": 0.00743356
+    },
+    {
+      "feature": "F09",
+      "importance": 0.00735947
+    },
+    {
+      "feature": "length_hostname",
+      "importance": 0.00726427
+    },
+    {
+      "feature": "ratio_extRedirection",
+      "importance": 0.00717423
+    },
+    {
+      "feature": "F06",
+      "importance": 0.00674204
+    },
+    {
+      "feature": "nb_eq",
+      "importance": 0.00655586
+    },
+    {
+      "feature": "length_url",
+      "importance": 0.00630161
+    },
+    {
+      "feature": "F15",
+      "importance": 0.00627832
+    },
+    {
+      "feature": "F10",
+      "importance": 0.00627202
+    },
+    {
+      "feature": "ratio_intHyperlinks",
+      "importance": 0.00614401
+    },
+    {
+      "feature": "longest_words_raw",
+      "importance": 0.0061141
+    },
+    {
+      "feature": "shortest_word_host",
+      "importance": 0.0057931
+    },
+    {
+      "feature": "F03",
+      "importance": 0.00575301
+    },
+    {
+      "feature": "F04",
+      "importance": 0.00565479
+    },
+    {
+      "feature": "nb_space",
+      "importance": 0.0055293
+    },
+    {
+      "feature": "ratio_extErrors",
+      "importance": 0.00535149
+    },
+    {
+      "feature": "prefix_suffix",
+      "importance": 0.00530839
+    },
+    {
+      "feature": "nb_semicolumn",
+      "importance": 0.00483501
+    },
+    {
+      "feature": "domain_registration_length",
+      "importance": 0.00480909
+    },
+    {
+      "feature": "F02",
+      "importance": 0.00461199
+    },
+    {
+      "feature": "nb_extCSS",
+      "importance": 0.00436944
+    },
+    {
+      "feature": "F14",
+      "importance": 0.00429873
+    },
+    {
+      "feature": "F12",
+      "importance": 0.00421569
+    },
+    {
+      "feature": "F11",
+      "importance": 0.00395822
+    },
+    {
+      "feature": "nb_com",
+      "importance": 0.0038856
+    },
+    {
+      "feature": "F13",
+      "importance": 0.00383054
+    },
+    {
+      "feature": "nb_percent",
+      "importance": 0.00347392
+    },
+    {
+      "feature": "F08",
+      "importance": 0.00326273
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00314076
+    },
+    {
+      "feature": "tld_in_path",
+      "importance": 0.00291094
+    },
+    {
+      "feature": "nb_colon",
+      "importance": 0.00271791
+    },
+    {
+      "feature": "F26",
+      "importance": 0.00057736
+    },
+    {
+      "feature": "F05",
+      "importance": 0.0
+    },
+    {
+      "feature": "F16",
+      "importance": 0.0
+    },
+    {
+      "feature": "F17",
+      "importance": 0.0
+    },
+    {
+      "feature": "F20",
+      "importance": 0.0
+    },
+    {
+      "feature": "F21",
+      "importance": 0.0
+    },
+    {
+      "feature": "F23",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_or",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_tilde",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_star",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_comma",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_dollar",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_dslash",
+      "importance": 0.0
+    },
+    {
+      "feature": "punycode",
+      "importance": 0.0
+    },
+    {
+      "feature": "port",
+      "importance": 0.0
+    },
+    {
+      "feature": "ratio_nullHyperlinks",
+      "importance": 0.0
+    },
+    {
+      "feature": "iframe",
+      "importance": 0.0
+    },
+    {
+      "feature": "popup_window",
+      "importance": 0.0
+    },
+    {
+      "feature": "brand_in_path",
+      "importance": 0.0
+    },
+    {
+      "feature": "brand_in_subdomain",
+      "importance": 0.0
+    },
+    {
+      "feature": "submit_email",
+      "importance": 0.0
+    },
+    {
+      "feature": "sfh",
+      "importance": 0.0
+    },
+    {
+      "feature": "onmouseover",
+      "importance": 0.0
+    },
+    {
+      "feature": "right_clic",
+      "importance": 0.0
+    }
+  ],
+  "augmented_robust_random_forest": [
+    {
+      "feature": "nb_hyperlinks",
+      "importance": 0.09865003
+    },
+    {
+      "feature": "nb_www",
+      "importance": 0.0662144
+    },
+    {
+      "feature": "domain_age",
+      "importance": 0.05088775
+    },
+    {
+      "feature": "longest_word_path",
+      "importance": 0.04321032
+    },
+    {
+      "feature": "ratio_extHyperlinks",
+      "importance": 0.04171816
+    },
+    {
+      "feature": "safe_anchor",
+      "importance": 0.03584254
+    },
+    {
+      "feature": "phish_hints",
+      "importance": 0.03517809
+    },
+    {
+      "feature": "F18",
+      "importance": 0.03513546
+    },
+    {
+      "feature": "ratio_intHyperlinks",
+      "importance": 0.03499913
+    },
+    {
+      "feature": "ratio_digits_url",
+      "importance": 0.03384032
+    },
+    {
+      "feature": "length_url",
+      "importance": 0.03014321
+    },
+    {
+      "feature": "length_hostname",
+      "importance": 0.03013896
+    },
+    {
+      "feature": "longest_words_raw",
+      "importance": 0.02990209
+    },
+    {
+      "feature": "shortest_word_host",
+      "importance": 0.02944484
+    },
+    {
+      "feature": "ratio_extRedirection",
+      "importance": 0.02621902
+    },
+    {
+      "feature": "domain_registration_length",
+      "importance": 0.02385742
+    },
+    {
+      "feature": "nb_slash",
+      "importance": 0.02218186
+    },
+    {
+      "feature": "nb_dots",
+      "importance": 0.02158257
+    },
+    {
+      "feature": "F28",
+      "importance": 0.02120276
+    },
+    {
+      "feature": "ratio_digits_host",
+      "importance": 0.01903333
+    },
+    {
+      "feature": "F15",
+      "importance": 0.01706681
+    },
+    {
+      "feature": "nb_hyphens",
+      "importance": 0.01694389
+    },
+    {
+      "feature": "ratio_extErrors",
+      "importance": 0.01443129
+    },
+    {
+      "feature": "F01",
+      "importance": 0.01443024
+    },
+    {
+      "feature": "F14",
+      "importance": 0.01320321
+    },
+    {
+      "feature": "domain_with_copyright",
+      "importance": 0.01281825
+    },
+    {
+      "feature": "domain_in_title",
+      "importance": 0.0119304
+    },
+    {
+      "feature": "nb_qm",
+      "importance": 0.0098741
+    },
+    {
+      "feature": "F29",
+      "importance": 0.00895639
+    },
+    {
+      "feature": "F07",
+      "importance": 0.00858511
+    },
+    {
+      "feature": "F24",
+      "importance": 0.00858423
+    },
+    {
+      "feature": "nb_subdomains",
+      "importance": 0.00819367
+    },
+    {
+      "feature": "F02",
+      "importance": 0.00815489
+    },
+    {
+      "feature": "F09",
+      "importance": 0.00793628
+    },
+    {
+      "feature": "nb_extCSS",
+      "importance": 0.0075898
+    },
+    {
+      "feature": "nb_eq",
+      "importance": 0.00754454
+    },
+    {
+      "feature": "F30",
+      "importance": 0.00671434
+    },
+    {
+      "feature": "F13",
+      "importance": 0.00617278
+    },
+    {
+      "feature": "nb_underscore",
+      "importance": 0.00569455
+    },
+    {
+      "feature": "empty_title",
+      "importance": 0.0050608
+    },
+    {
+      "feature": "prefix_suffix",
+      "importance": 0.00491817
+    },
+    {
+      "feature": "F10",
+      "importance": 0.00471611
+    },
+    {
+      "feature": "F06",
+      "importance": 0.00470582
+    },
+    {
+      "feature": "F25",
+      "importance": 0.00406843
+    },
+    {
+      "feature": "F03",
+      "importance": 0.00399765
+    },
+    {
+      "feature": "https_token",
+      "importance": 0.00388623
+    },
+    {
+      "feature": "F12",
+      "importance": 0.00379108
+    },
+    {
+      "feature": "external_favicon",
+      "importance": 0.0034379
+    },
+    {
+      "feature": "tld_in_subdomain",
+      "importance": 0.00323737
+    },
+    {
+      "feature": "nb_and",
+      "importance": 0.00309921
+    },
+    {
+      "feature": "F19",
+      "importance": 0.00279746
+    },
+    {
+      "feature": "nb_com",
+      "importance": 0.00244367
+    },
+    {
+      "feature": "dns_record",
+      "importance": 0.00220075
+    },
+    {
+      "feature": "suspecious_tld",
+      "importance": 0.00189849
+    },
+    {
+      "feature": "F27",
+      "importance": 0.00178365
+    },
+    {
+      "feature": "login_form",
+      "importance": 0.00173798
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00134185
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00130173
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00123266
+    },
+    {
+      "feature": "nb_percent",
+      "importance": 0.00121406
+    },
+    {
+      "feature": "F20",
+      "importance": 0.0012062
+    },
+    {
+      "feature": "F17",
+      "importance": 0.00117455
+    },
+    {
+      "feature": "tld_in_path",
+      "importance": 0.00114882
+    },
+    {
+      "feature": "F16",
+      "importance": 0.00112115
+    },
+    {
+      "feature": "F08",
+      "importance": 0.00107871
+    },
+    {
+      "feature": "nb_space",
+      "importance": 0.00096816
+    },
+    {
+      "feature": "F04",
+      "importance": 0.0009169
+    },
+    {
+      "feature": "nb_at",
+      "importance": 0.00083762
+    },
+    {
+      "feature": "nb_semicolumn",
+      "importance": 0.00077254
+    },
+    {
+      "feature": "http_in_path",
+      "importance": 0.00055911
+    },
+    {
+      "feature": "nb_colon",
+      "importance": 0.00055835
+    },
+    {
+      "feature": "nb_tilde",
+      "importance": 0.00042716
+    },
+    {
+      "feature": "popup_window",
+      "importance": 0.00032904
+    },
+    {
+      "feature": "brand_in_path",
+      "importance": 0.00025848
+    },
+    {
+      "feature": "F26",
+      "importance": 0.00025439
+    },
+    {
+      "feature": "right_clic",
+      "importance": 0.00021751
+    },
+    {
+      "feature": "F05",
+      "importance": 0.00019185
+    },
+    {
+      "feature": "F11",
+      "importance": 0.00017767
+    },
+    {
+      "feature": "nb_dslash",
+      "importance": 0.00017018
+    },
+    {
+      "feature": "brand_in_subdomain",
+      "importance": 0.00015584
+    },
+    {
+      "feature": "port",
+      "importance": 0.00014235
+    },
+    {
+      "feature": "nb_comma",
+      "importance": 0.00011193
+    },
+    {
+      "feature": "iframe",
+      "importance": 6.652e-05
+    },
+    {
+      "feature": "onmouseover",
+      "importance": 3.388e-05
+    },
+    {
+      "feature": "punycode",
+      "importance": 2.544e-05
+    },
+    {
+      "feature": "nb_dollar",
+      "importance": 1.159e-05
+    },
+    {
+      "feature": "nb_star",
+      "importance": 5.96e-06
+    },
+    {
+      "feature": "nb_or",
+      "importance": 0.0
+    },
+    {
+      "feature": "ratio_nullHyperlinks",
+      "importance": 0.0
+    },
+    {
+      "feature": "submit_email",
+      "importance": 0.0
+    },
+    {
+      "feature": "sfh",
+      "importance": 0.0
+    }
+  ],
+  "augmented_robust_xgboost": [
+    {
+      "feature": "F01",
+      "importance": 0.18740715
+    },
+    {
+      "feature": "F18",
+      "importance": 0.0978197
+    },
+    {
+      "feature": "nb_www",
+      "importance": 0.08669239
+    },
+    {
+      "feature": "phish_hints",
+      "importance": 0.04213537
+    },
+    {
+      "feature": "nb_hyperlinks",
+      "importance": 0.04189667
+    },
+    {
+      "feature": "F11",
+      "importance": 0.03680211
+    },
+    {
+      "feature": "nb_colon",
+      "importance": 0.02785163
+    },
+    {
+      "feature": "dns_record",
+      "importance": 0.0245832
+    },
+    {
+      "feature": "nb_dots",
+      "importance": 0.02128918
+    },
+    {
+      "feature": "F25",
+      "importance": 0.02035863
+    },
+    {
+      "feature": "F24",
+      "importance": 0.0181843
+    },
+    {
+      "feature": "ratio_digits_host",
+      "importance": 0.01666193
+    },
+    {
+      "feature": "nb_percent",
+      "importance": 0.01564195
+    },
+    {
+      "feature": "nb_hyphens",
+      "importance": 0.01483021
+    },
+    {
+      "feature": "nb_qm",
+      "importance": 0.01467574
+    },
+    {
+      "feature": "F28",
+      "importance": 0.01364089
+    },
+    {
+      "feature": "longest_word_path",
+      "importance": 0.01203755
+    },
+    {
+      "feature": "F04",
+      "importance": 0.01176364
+    },
+    {
+      "feature": "domain_age",
+      "importance": 0.01167432
+    },
+    {
+      "feature": "nb_underscore",
+      "importance": 0.01078972
+    },
+    {
+      "feature": "domain_with_copyright",
+      "importance": 0.01056003
+    },
+    {
+      "feature": "prefix_suffix",
+      "importance": 0.01024899
+    },
+    {
+      "feature": "F27",
+      "importance": 0.00915442
+    },
+    {
+      "feature": "nb_space",
+      "importance": 0.00908957
+    },
+    {
+      "feature": "popup_window",
+      "importance": 0.00830452
+    },
+    {
+      "feature": "login_form",
+      "importance": 0.0079938
+    },
+    {
+      "feature": "nb_slash",
+      "importance": 0.00796149
+    },
+    {
+      "feature": "tld_in_subdomain",
+      "importance": 0.0075853
+    },
+    {
+      "feature": "nb_at",
+      "importance": 0.00748173
+    },
+    {
+      "feature": "F06",
+      "importance": 0.00710108
+    },
+    {
+      "feature": "ratio_digits_url",
+      "importance": 0.00708963
+    },
+    {
+      "feature": "ratio_extHyperlinks",
+      "importance": 0.00684029
+    },
+    {
+      "feature": "empty_title",
+      "importance": 0.00683297
+    },
+    {
+      "feature": "F15",
+      "importance": 0.00674264
+    },
+    {
+      "feature": "suspecious_tld",
+      "importance": 0.00658891
+    },
+    {
+      "feature": "F03",
+      "importance": 0.00621874
+    },
+    {
+      "feature": "F07",
+      "importance": 0.00617952
+    },
+    {
+      "feature": "nb_eq",
+      "importance": 0.0061642
+    },
+    {
+      "feature": "safe_anchor",
+      "importance": 0.0057315
+    },
+    {
+      "feature": "nb_subdomains",
+      "importance": 0.00553449
+    },
+    {
+      "feature": "F02",
+      "importance": 0.00548023
+    },
+    {
+      "feature": "length_hostname",
+      "importance": 0.00501251
+    },
+    {
+      "feature": "https_token",
+      "importance": 0.00494122
+    },
+    {
+      "feature": "nb_com",
+      "importance": 0.00490693
+    },
+    {
+      "feature": "F21",
+      "importance": 0.00483646
+    },
+    {
+      "feature": "F19",
+      "importance": 0.00474793
+    },
+    {
+      "feature": "ratio_extRedirection",
+      "importance": 0.00463395
+    },
+    {
+      "feature": "ratio_extErrors",
+      "importance": 0.0044833
+    },
+    {
+      "feature": "longest_words_raw",
+      "importance": 0.00441004
+    },
+    {
+      "feature": "domain_in_title",
+      "importance": 0.00437947
+    },
+    {
+      "feature": "F30",
+      "importance": 0.00424112
+    },
+    {
+      "feature": "F14",
+      "importance": 0.00423057
+    },
+    {
+      "feature": "shortest_word_host",
+      "importance": 0.0042014
+    },
+    {
+      "feature": "nb_semicolumn",
+      "importance": 0.00418516
+    },
+    {
+      "feature": "F12",
+      "importance": 0.00411157
+    },
+    {
+      "feature": "nb_and",
+      "importance": 0.00407599
+    },
+    {
+      "feature": "nb_extCSS",
+      "importance": 0.00402937
+    },
+    {
+      "feature": "F09",
+      "importance": 0.00394135
+    },
+    {
+      "feature": "length_url",
+      "importance": 0.00388822
+    },
+    {
+      "feature": "F08",
+      "importance": 0.0035489
+    },
+    {
+      "feature": "ratio_intHyperlinks",
+      "importance": 0.00351245
+    },
+    {
+      "feature": "F10",
+      "importance": 0.00332735
+    },
+    {
+      "feature": "domain_registration_length",
+      "importance": 0.00326006
+    },
+    {
+      "feature": "F13",
+      "importance": 0.0031795
+    },
+    {
+      "feature": "external_favicon",
+      "importance": 0.00288246
+    },
+    {
+      "feature": "tld_in_path",
+      "importance": 0.00269034
+    },
+    {
+      "feature": "right_clic",
+      "importance": 0.002646
+    },
+    {
+      "feature": "F20",
+      "importance": 0.00250654
+    },
+    {
+      "feature": "F29",
+      "importance": 0.00243168
+    },
+    {
+      "feature": "F17",
+      "importance": 0.00239875
+    },
+    {
+      "feature": "F16",
+      "importance": 0.00233325
+    },
+    {
+      "feature": "F22",
+      "importance": 0.00231829
+    },
+    {
+      "feature": "http_in_path",
+      "importance": 0.00118063
+    },
+    {
+      "feature": "F23",
+      "importance": 0.00090685
+    },
+    {
+      "feature": "F05",
+      "importance": 0.0
+    },
+    {
+      "feature": "F26",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_or",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_tilde",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_star",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_comma",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_dollar",
+      "importance": 0.0
+    },
+    {
+      "feature": "nb_dslash",
+      "importance": 0.0
+    },
+    {
+      "feature": "punycode",
+      "importance": 0.0
+    },
+    {
+      "feature": "port",
+      "importance": 0.0
+    },
+    {
+      "feature": "ratio_nullHyperlinks",
+      "importance": 0.0
+    },
+    {
+      "feature": "iframe",
+      "importance": 0.0
+    },
+    {
+      "feature": "brand_in_path",
+      "importance": 0.0
+    },
+    {
+      "feature": "brand_in_subdomain",
+      "importance": 0.0
+    },
+    {
+      "feature": "submit_email",
+      "importance": 0.0
+    },
+    {
+      "feature": "sfh",
+      "importance": 0.0
+    },
+    {
+      "feature": "onmouseover",
+      "importance": 0.0
+    }
+  ]
+}

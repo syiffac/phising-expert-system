@@ -109,10 +109,23 @@ def get_model_evaluation_metrics() -> dict:
     dataset_metrics = load_json_file("dataset_metrics.json")
     final_metrics = load_json_file("final_metrics.json")
     resilient_metrics = load_json_file("resilient_metrics.json")
+    optimized_hybrid_metrics = load_json_file("optimized_hybrid_metrics.json")
+
+    optimized_hybrid_dict = None
+    if optimized_hybrid_metrics is not None:
+        optimized_hybrid_dict = {
+            "selected_runtime_model": "augmented_robust_xgboost",
+            "primary_model": "xgboost",
+            "comparison_model": "random_forest",
+            "soft_voting": "not_used_in_runtime",
+            "note": "Soft voting memperoleh composite score tertinggi secara keseluruhan, namun tidak digunakan sebagai runtime keputusan utama demi stabilitas performa. XGBoost dipilih sebagai runtime utama karena merupakan model individu terbaik.",
+            "metrics": optimized_hybrid_metrics
+        }
 
     return {
-        "baseline_f01_f30": baseline_metrics,
-        "dataset_87_features": dataset_metrics,
         "final_f01_f30": final_metrics,
         "resilient_f01_f30": resilient_metrics,
+        "optimized_hybrid": optimized_hybrid_dict,
+        "baseline_f01_f30": baseline_metrics,
+        "dataset_87_features": dataset_metrics,
     }

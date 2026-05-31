@@ -334,5 +334,20 @@
     "severity": "medium",
     "explanation": "Domain menggunakan TLD yang tergolong mencurigakan sehingga perlu diwaspadai.",
     "source": "Hannousse & Yahiouche (2021); Aljofey et al. (2022)"
+  },
+  {
+    "code": "RQ01",
+    "type": "quality_rule",
+    "conditions": [
+      {
+        "feature": "imputed_unknown_count",
+        "operator": ">=",
+        "value": 10
+      }
+    ],
+    "conclusion": "suspicious",
+    "severity": "medium",
+    "explanation": "Sebagian besar fitur gagal diekstraksi secara real-time. Sistem menandai URL sebagai perlu diwaspadai, tetapi fitur-fitur yang gagal tersebut tidak digunakan sebagai bukti phishing individual.",
+    "source": "System resilience policy"
   }
 ]

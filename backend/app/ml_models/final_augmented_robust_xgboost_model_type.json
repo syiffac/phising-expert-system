@@ -1,0 +1,8 @@
+{
+  "model_name": "augmented_robust_xgboost",
+  "algorithm": "xgboost",
+  "feature_set": "augmented",
+  "training_variant": "robust",
+  "runtime_role": "primary_ml_model",
+  "note": "XGBoost dipilih sebagai model runtime utama karena menjadi best individual model. Soft voting tidak digunakan pada runtime."
+}

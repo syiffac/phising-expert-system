@@ -1,0 +1,8 @@
+{
+  "model_name": "augmented_robust_random_forest",
+  "algorithm": "random_forest",
+  "feature_set": "augmented",
+  "training_variant": "robust",
+  "runtime_role": "comparison_model",
+  "note": "Random Forest digunakan sebagai pembanding terhadap XGBoost."
+}
