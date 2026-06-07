@@ -34,18 +34,21 @@ export default function HeroSection() {
     >
       <Reveal>
         <div className="relative z-10 max-w-[22rem] sm:max-w-3xl">
-          <div className="grid max-w-full gap-2 sm:flex sm:flex-wrap sm:gap-2.5">
+          <div
+            aria-label="Detection capabilities"
+            className="-mx-4 flex w-screen max-w-[calc(100vw-2rem)] flex-nowrap gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:w-[44rem] sm:max-w-none sm:overflow-visible sm:px-0 sm:pb-0 lg:w-[47rem] [&::-webkit-scrollbar]:hidden"
+          >
             {badges.map(({ icon: Icon, label }) => (
               <GlassCard
                 borderRadius={999}
-                className="inline-flex w-fit max-w-full items-center gap-2 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-300 sm:text-[11px]"
+                className="inline-flex shrink-0 items-center gap-2 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-300 sm:px-3.5 sm:text-[11px]"
                 glassIntensity="soft"
                 interactive={false}
                 key={label}
-                width="fit-content"
+                width="auto"
               >
                 <Icon className="h-3.5 w-3.5 text-cyan-300" />
-                <span className="truncate">{label}</span>
+                <span className="whitespace-nowrap">{label}</span>
               </GlassCard>
             ))}
           </div>

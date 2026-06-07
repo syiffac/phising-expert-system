@@ -90,6 +90,7 @@ export default function GlassSurface({
   const blueGradId = `blue-grad-${uniqueId}`;
 
   const [svgSupported, setSvgSupported] = useState(false);
+  const [backdropFilterSupported, setBackdropFilterSupported] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const feImageRef = useRef<SVGFEImageElement>(null);
@@ -181,15 +182,18 @@ export default function GlassSurface({
       return;
     }
 
-    const isWebkit =
-      /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-    const isFirefox = /Firefox/.test(navigator.userAgent);
-
-    if (isWebkit || isFirefox) {
-      return;
-    }
-
     const timeoutId = window.setTimeout(() => {
+      setBackdropFilterSupported(supportsBackdropFilter());
+
+      const isWebkit =
+        /Safari/.test(navigator.userAgent) &&
+        !/Chrome/.test(navigator.userAgent);
+      const isFirefox = /Firefox/.test(navigator.userAgent);
+
+      if (isWebkit || isFirefox) {
+        return;
+      }
+
       const div = document.createElement("div");
       div.style.backdropFilter = `url(#${filterId})`;
       setSvgSupported(div.style.backdropFilter !== "");
@@ -235,7 +239,7 @@ export default function GlassSurface({
           0 0 18px 4px rgba(255,255,255,0.06) inset,
           0 18px 60px rgba(2, 6, 23, 0.42)`,
       }
-    : supportsBackdropFilter()
+    : backdropFilterSupported
       ? {
           ...baseStyles,
           background: `rgba(15, 23, 42, ${Math.max(backgroundOpacity, 0.28)})`,

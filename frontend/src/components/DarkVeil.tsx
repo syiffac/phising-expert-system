@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { type CSSProperties, useEffect, useRef, useSyncExternalStore } from "react";
 import { Renderer, Program, Mesh, Triangle, Vec2 } from "ogl";
 import { cn } from "@/lib/cn";
 
@@ -86,6 +86,7 @@ type Props = {
   resolutionScale?: number;
   className?: string;
   canvasClassName?: string;
+  style?: CSSProperties;
 };
 
 const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
@@ -119,8 +120,10 @@ export default function DarkVeil({
   resolutionScale = 1,
   className,
   canvasClassName,
+  style,
 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const frameRef = useRef<number | null>(null);
   const prefersReducedMotion = useSyncExternalStore(
     subscribeToReducedMotion,
     getReducedMotionSnapshot,
@@ -136,7 +139,7 @@ export default function DarkVeil({
     }
 
     const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio, 2),
+      dpr: Math.max(0.25, Math.min(window.devicePixelRatio, 2) * resolutionScale),
       canvas,
     });
 
@@ -163,8 +166,11 @@ export default function DarkVeil({
       const w = parent.clientWidth;
       const h = parent.clientHeight;
 
-      renderer.setSize(w * resolutionScale, h * resolutionScale);
-      program.uniforms.uResolution.value.set(w * resolutionScale, h * resolutionScale);
+      renderer.setSize(w, h);
+      program.uniforms.uResolution.value.set(
+        gl.drawingBufferWidth,
+        gl.drawingBufferHeight
+      );
     };
 
     const resizeObserver = new ResizeObserver(resize);
@@ -172,11 +178,11 @@ export default function DarkVeil({
     resize();
 
     const start = performance.now();
-    let frame = 0;
     let isDestroyed = false;
+    let isPageVisible = document.visibilityState === "visible";
 
-    const loop = () => {
-      if (isDestroyed) {
+    const renderFrame = () => {
+      if (isDestroyed || !isPageVisible) {
         return;
       }
 
@@ -187,14 +193,41 @@ export default function DarkVeil({
       program.uniforms.uScanFreq.value = scanlineFrequency;
       program.uniforms.uWarp.value = warpAmount;
       renderer.render({ scene: mesh });
-      frame = requestAnimationFrame(loop);
+      frameRef.current = requestAnimationFrame(renderFrame);
     };
 
-    loop();
+    const startLoop = () => {
+      if (frameRef.current !== null || !isPageVisible || isDestroyed) {
+        return;
+      }
+
+      frameRef.current = requestAnimationFrame(renderFrame);
+    };
+
+    const stopLoop = () => {
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      isPageVisible = document.visibilityState === "visible";
+
+      if (isPageVisible) {
+        startLoop();
+      } else {
+        stopLoop();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    startLoop();
 
     return () => {
       isDestroyed = true;
-      cancelAnimationFrame(frame);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      stopLoop();
       resizeObserver.disconnect();
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
@@ -210,7 +243,7 @@ export default function DarkVeil({
   ]);
 
   return (
-    <div className={cn("h-full w-full overflow-hidden", className)}>
+    <div className={cn("h-full w-full overflow-hidden", className)} style={style}>
       {prefersReducedMotion ? (
         <div className="h-full w-full bg-[linear-gradient(120deg,rgba(34,211,238,0.18),transparent_34%,rgba(59,130,246,0.12)_58%,rgba(139,92,246,0.10))]" />
       ) : (
