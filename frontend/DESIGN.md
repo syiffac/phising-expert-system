@@ -106,6 +106,22 @@ Untuk menciptakan efek kedalaman 3D yang elegan, setiap panel transparan wajib m
 
 ---
 
+## 7A. Hero Illustration Integration Rules
+
+Hero illustration pada halaman utama wajib diperlakukan sebagai komposisi visual produk, bukan gambar poster yang ditempel di sisi kanan.
+
+* **Layering Wajib**: Komposisi hero visual memakai urutan `background accent -> LetterGlitch/texture halus -> ambient glow -> glass panel utama -> flow diagram -> floating glass mini cards`.
+* **Floating Visual Wrapper**: Ilustrasi utama harus dibungkus container `relative`, `overflow-hidden`, `rounded-3xl` atau `rounded-[32px]`, border `border-white/[0.08]`, translucent dark surface, dan shadow cyan/blue yang lembut.
+* **Visual Blending**: Gunakan ambient radial glow, soft vignette, mask/fade edge, grid halus, atau glass highlight agar tepi ilustrasi tidak terasa sebagai rectangle keras.
+* **Simplified Hero Illustration**: Hero visual utama wajib berupa komponen React/CSS/SVG yang menggambarkan alur deteksi hibrida secara sederhana: satu panel glass besar berisi flow node (URL Analysis → Forward Chaining → XGBoost → Final Result) dengan 2–4 mini floating cards pendukung. Dilarang menggunakan gambar bitmap padat (*poster-like*) yang terasa ramai.
+* **Mini Glass Cards**: Maksimal 4 mini cards di sekeliling ilustrasi. Kontennya harus relevan dengan sistem, misalnya `30/30 Expert Rules`, `XGBoost`, `91 ML Features`, atau `Real-time`. Jangan menambah widget berlebihan.
+* **Motion Hero**: Entrance visual boleh memakai `opacity 0 -> 1`, `y 24px -> 0`, `scale 0.96 -> 1`, durasi sekitar `0.9s`, dan easing premium seperti `power3.out`/`cubic-bezier(0.23, 1, 0.32, 1)`.
+* **Idle Motion**: Floating pada visual utama dan mini cards harus sangat halus, amplitude maksimal sekitar `6px`, durasi lambat `4s - 6s`, tidak sinkron total, dan wajib mati saat `prefers-reduced-motion: reduce`.
+* **No Hard Image Block**: Dilarang menampilkan hero illustration sebagai `<img>` polos tanpa wrapper, glow, mask/vignette, atau integrasi glassmorphism. Gunakan komponen React/CSS yang terintegrasi penuh dengan layout hero.
+* **Balance With Headline**: Visual kanan harus prominent di desktop tetapi tidak mengalahkan headline kiri. Pada mobile, visual boleh diperkecil atau sebagian aksen disederhanakan demi menjaga layout bersih.
+
+---
+
 ## 8. Letter Glitch Usage Rules
 
 Untuk mempertahankan kesan visual intelegensi siber yang premium dan bersih, penggunaan komponen `<LetterGlitch />` harus diatur dengan aturan ketat berikut:
@@ -140,6 +156,7 @@ Antarmuka PhishGuard harus responsif dan adaptif di seluruh rentang ukuran layar
 ### Aturan Kolom dan Grid:
 * **Desktop (>= 1024px)**:
   * **Hero Section**: Menggunakan layout 2 kolom seimbang (kiri: teks deskripsi & tombol tindakan, kanan: panel visual/glass dashboard).
+  * **Hero Stability**: Kolom hero wajib memakai track `minmax(0, ...)` atau batas lebar eksplisit agar badge, headline, dan panel preview tidak saling mendorong atau menumpuk.
   * **Result Dashboard**: Menggunakan tata letak grid modular multi-kolom (2 atau 3 kolom) untuk menyajikan panel deteksi, metrik, dan tabel fakta secara efisien.
   * **System Flow**: Alur kerja digambarkan secara horizontal dari kiri ke kanan dengan garis konektor visual yang dinamis.
 * **Tablet (>= 768px dan < 1024px)**:
@@ -148,8 +165,10 @@ Antarmuka PhishGuard harus responsif dan adaptif di seluruh rentang ukuran layar
   * **System Flow**: Langkah-langkah alur kerja diperbolehkan melipat (*wrap*) menjadi 2 baris teratur.
 * **Mobile (< 768px)**:
   * **Hero Section**: Wajib berubah menjadi layout 1 kolom vertikal tunggal.
+  * **Hero Badges & Headline**: Badge kemampuan boleh memakai scroll horizontal internal yang terisolasi, tetapi tidak boleh menyebabkan scrollbar halaman. Headline hero harus berupa teks/inline element yang valid, bukan elemen block seperti `<p>` di dalam `<h1>`.
   * **Navigation Bar**: Navbar dilarang keras memaksa semua menu tampil horizontal. Wajib menyembunyikan navigasi sekunder atau menggunakan menu lipat (*hamburger menu*).
   * **Result Dashboard**: Tata letak wajib diatur penuh dalam 1 kolom vertikal agar data tidak berdesakan.
+  * **History Page**: Riwayat deteksi wajib memakai app shell visual yang sama dengan halaman utama (dark navy background, floating navbar, glass panels) dan list kartu responsif dengan URL `break-all` agar domain panjang tidak menabrak kontainer.
   * **Facts Table**: Tabel fakta F01-F30 yang lebar harus dikonversi menjadi baris kartu ringkas (*compact grid/list*) atau diberi pembungkus scroll horizontal internal yang terisolasi dengan rapi.
   * **Visual Cleanliness**: Padding kartu glassmorphic dikurangi (misal dari `p-6` menjadi `p-4`) untuk menghemat ruang vertikal, namun tetap menjaga ruang antar elemen (*line-height* dan *gap*) agar teks tidak menumpuk.
   * **CTA & Inputs**: Kolom input URL dan tombol aksi utama wajib melebar penuh (*full-width*) agar mudah ditekan oleh ibu jari.
@@ -235,11 +254,12 @@ Setiap komponen visual di dalam antarmuka PhishGuard harus memiliki antarmuka (i
 
 ### A. GlassCard
 Komponen dasar pembungkus panel glassmorphic.
-* **Props Minimal**: `children: ReactNode`, `className?: string`, `borderRadius?: number`, `glow?: boolean`, `interactive?: boolean`, `glassIntensity?: "soft" | "medium" | "strong"`, `width?: number | string`
+* **Props Minimal**: `children: ReactNode`, `className?: string`, `borderRadius?: number`, `glow?: boolean`, `reactBits?: boolean`, `interactive?: boolean`, `glassIntensity?: "soft" | "medium" | "strong"`, `width?: number | string`
 * **Varian Visual**:
   * `soft`: Opasitas latar belakang rendah (`0.16`), efek blur standar, cocok untuk kartu dekoratif pendukung di area padat.
   * `medium` (default): Opasitas latar belakang sedang (`0.20`), efek blur seimbang untuk kartu utama.
   * `strong`: Opasitas tinggi (`0.24`), efek blur maksimal (`18px`) untuk panel kritis atau modal dialog agar kontras teks tetap optimal.
+* **React Bits Filter**: Properti `reactBits` hanya boleh digunakan pada navbar/brand shell yang jumlah elemennya kecil. Jangan aktifkan SVG displacement React Bits pada card list, history rows, dashboard result, atau hero preview karena dapat menurunkan performa scroll.
 * **Interaksi**: Harus memiliki micro-translation ke atas (`hover:-translate-y-1`) dan peningkatan intensitas border glow jika parameter `interactive` bernilai true.
 
 ### B. StatusBadge
@@ -333,3 +353,60 @@ Untuk menjamin kenyamanan navigasi dan performa render konstan **60fps** tanpa l
 * **Lenis Discipline**: Sistem kinetik *smooth scroll* dikelola terpadu oleh pustaka `Lenis` melalui [SmoothScrollProvider](file:///c:/laragon/www/phishing-expert-system/frontend/src/components/motion/SmoothScrollProvider.tsx).
 * **No Conflicting Scroll Handlers**: Dilarang keras memasang event listener scroll manual di window, event monitoring wheel ganda, atau pustaka penjelajah berat seperti GSAP ScrollTrigger secara bersamaan karena berpotensi merusak sinkronisasi frame render browser dan memicu stuttering visual.
 
+### D. SVG Glass Filter Scope
+* **React Bits GlassSurface**: Filter SVG displacement asli React Bits hanya boleh aktif secara opt-in untuk navbar atau brand mark (`reactBits`). Permukaan konten besar harus memakai glassmorphism CSS biasa dengan `backdrop-filter: blur(...)`, border tipis, dan shadow ringan.
+* **Scrollable Lists**: Halaman dengan banyak record seperti History wajib menghindari SVG displacement per-row. Gunakan `GlassCard` default agar scroll tetap responsif.
+
+---
+
+## 16. Welcome Loading Screen Rules
+
+Welcome loading screen adalah overlay sambutan yang tampil saat pertama kali user membuka aplikasi dalam satu sesi browser.
+
+### Tujuan
+* Memberikan kesan premium dan profesional sebelum konten utama muncul.
+* Menampilkan brand PhishGuard dengan logo yang sudah ada.
+* Memvisualisasikan proses *system initialization* secara futuristik.
+
+### Aturan Desain
+* **Style**: Wajib mengikuti tema *Futuristic Glassmorphism Cyber Intelligence Dashboard*.
+* **Background**: Dark navy gradient (`#07111F` → `#0a1628` → `#07111F`) dengan subtle radial cyan glow.
+* **Logo**: Gunakan `icon.png` yang sudah ada tanpa mengubah, mewarnai ulang, memotong, atau menambah filter apapun.
+* **Glassmorphism**: Container logo memakai pola glass yang konsisten (`bg-slate-900/60 backdrop-blur-xl border border-white/[0.08]`).
+* **Grid Overlay**: Bokeh grid halus dengan opacity sangat rendah (`0.03`) untuk tekstur cyber.
+
+### Initialization Steps
+Teks inisialisasi harus relevan dengan sistem dan tampil berurutan:
+1. `Initializing Expert System`
+2. `Loading F01–F30 Knowledge Base`
+3. `Preparing Forward Chaining Engine`
+4. `Loading XGBoost Runtime Model`
+5. `Checking Feature Extraction Pipeline`
+6. `System Ready`
+
+### Motion Rules
+* **Logo Reveal**: `opacity 0 → 1`, `scale 0.92 → 1`, durasi `0.8s`, easing `cubic-bezier(0.23, 1, 0.32, 1)`.
+* **Brand Text**: `y 12px → 0`, `opacity 0 → 1`, delay `0.3s` setelah logo.
+* **Progress Bar**: Gradient cyan→blue→violet, glow pada leading edge, bergerak linear dari `0%` ke `100%`.
+* **Step Text**: Fade in/out halus antar step, durasi `0.2s`.
+* **Exit Transition**: `opacity 1 → 0`, sedikit `scale 1.02`, `blur 8px`, durasi `0.4s`.
+* **Reduced Motion**: Seluruh animasi harus menggunakan transition sederhana tanpa scale/blur saat `prefers-reduced-motion: reduce` aktif.
+
+### Durasi & Behavior
+* **Durasi Total**: Maksimal `2.5 detik` (default `2.4s` + exit `0.4s`).
+* **Session Storage**: Gunakan `sessionStorage` key `phishguard-welcome-seen` agar loader hanya muncul sekali per sesi browser.
+* **Tidak Memblokir**: Loader tidak menghentikan render konten utama di belakang overlay.
+* **Tidak Mengganggu Detect Form**: Loader tidak memengaruhi loading state form deteksi URL.
+* **Fallback**: Jika `sessionStorage` tidak tersedia, loader tetap berjalan tanpa error.
+
+### Komponen
+* File: `frontend/src/components/welcome/WelcomeLoader.tsx`
+* Integrasi: `frontend/src/app/page.tsx`
+* Library Animasi: `motion/react` (Framer Motion) dengan `AnimatePresence` untuk exit.
+
+### Larangan
+* Jangan menggunakan glitch full-screen berlebihan.
+* Jangan menunggu response backend.
+* Jangan menambahkan musik atau suara.
+* Jangan menggunakan elemen crypto, robot 3D, atau neon berlebihan.
+* Jangan membuat loader muncul ulang setiap navigasi internal.

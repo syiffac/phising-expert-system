@@ -10,6 +10,7 @@ interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
   borderRadius?: number;
   height?: number | string;
   glow?: boolean;
+  reactBits?: boolean;
   interactive?: boolean;
   glassIntensity?: "soft" | "medium" | "strong";
   width?: number | string;
@@ -21,6 +22,7 @@ export default function GlassCard({
   borderRadius = 24,
   height,
   glow = false,
+  reactBits = false,
   interactive = true,
   glassIntensity = "medium",
   style,
@@ -31,11 +33,11 @@ export default function GlassCard({
     soft: {
       backgroundOpacity: 0.16,
       blur: 12,
-      borderWidth: 0.06,
+      borderWidth: 0.07,
       brightness: 56,
       displace: 0.25,
-      distortionScale: -110,
-      opacity: 0.82,
+      distortionScale: -150,
+      opacity: 0.86,
       saturation: 1.35,
     },
     medium: {
@@ -75,6 +77,7 @@ export default function GlassCard({
         className
       )}
       height={height}
+      enableSvgFilter={reactBits}
       style={style}
       width={width}
       {...glassProps}

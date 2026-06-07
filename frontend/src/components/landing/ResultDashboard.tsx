@@ -15,9 +15,16 @@ import TriggeredRules from "@/components/landing/TriggeredRules";
 import GlassCard from "@/components/ui-custom/GlassCard";
 import ProgressBar from "@/components/ui-custom/ProgressBar";
 import StatusBadge from "@/components/ui-custom/StatusBadge";
-import type { DetectResponse } from "@/types/detect";
+import type {
+  DetectResponse,
+  EvaluationData,
+  KnowledgeFeature,
+  RuntimeModelMetrics,
+} from "@/types/detect";
 
 interface ResultDashboardProps {
+  evaluationData?: EvaluationData | null;
+  featureCatalog?: KnowledgeFeature[];
   result: DetectResponse;
 }
 
@@ -31,6 +38,57 @@ function formatConfidence(value: number | null | undefined) {
 
 function normalizeStatus(status: string | undefined) {
   return (status || "unknown").trim().toLowerCase();
+}
+
+function formatModelName(value: string | undefined) {
+  if (!value) {
+    return "-";
+  }
+
+  return value
+    .replace("augmented", "Augmented")
+    .replace("symbolic", "Symbolic")
+    .replace("robust", "Robust")
+    .replace("clean", "Clean")
+    .replace("xgboost", "XGBoost")
+    .replace("random_forest", "Random Forest")
+    .replace(/_/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function ModelEvaluationStrip({
+  metrics,
+}: {
+  metrics?: RuntimeModelMetrics;
+}) {
+  if (!metrics) {
+    return null;
+  }
+
+  const robust = metrics.robust_test;
+
+  return (
+    <div className="mt-4 grid gap-2 sm:grid-cols-3">
+      {[
+        ["Robust Accuracy", robust.accuracy],
+        ["Robust F1", robust.f1_score],
+        ["Phishing Recall", robust.phishing_recall ?? robust.recall],
+      ].map(([label, value]) => (
+        <div
+          className="rounded-xl border border-white/[0.08] bg-slate-950/35 p-3"
+          key={label as string}
+        >
+          <p className="font-mono text-[9px] font-bold uppercase tracking-wider text-slate-500">
+            {label}
+          </p>
+          <p className="mt-1 font-mono text-sm font-black text-slate-100">
+            {formatConfidence(value as number)}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function statusCopy(status: string | undefined) {
@@ -79,17 +137,32 @@ const cardLabel = "font-mono text-[11px] font-bold uppercase tracking-widest tex
 const cardValue = "mt-1 break-words text-sm font-semibold text-slate-100";
 
 const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
-  function ResultDashboard({ result }, ref) {
+  function ResultDashboard(
+    { evaluationData, featureCatalog = [], result },
+    ref
+  ) {
     const facts = result.facts ?? {};
     const featureStatus = result.feature_status ?? {};
     const featureSources = result.feature_sources ?? {};
     const featureQuality = result.feature_quality;
     const expertSystem = result.expert_system;
     const machineLearning = result.machine_learning;
+    const evaluationModels =
+      evaluationData?.optimized_hybrid?.metrics.models ?? {};
+    const primaryModelKey =
+      machineLearning?.primary_model?.name ||
+      evaluationData?.optimized_hybrid?.selected_runtime_model ||
+      "augmented_robust_xgboost";
+    const comparisonModelKey =
+      machineLearning?.comparison_model?.name || "augmented_robust_random_forest";
+    const primaryMetrics = evaluationModels[primaryModelKey];
+    const comparisonMetrics = evaluationModels[comparisonModelKey];
     const triggeredRules = expertSystem?.triggered_rules ?? [];
     const status = statusCopy(result.final_result);
     const mlFeatureTotal = machineLearning?.feature_set?.total_features ?? 91;
     const mlFeatureType = machineLearning?.feature_set?.type ?? "augmented";
+    const mlFeatureQuality =
+      machineLearning?.feature_quality || featureQuality;
 
     return (
       <section
@@ -242,14 +315,18 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                           PRIMARY MODEL
                         </p>
                         <h4 className="mt-2 text-base font-black text-slate-50">
-                          XGBoost
+                          {formatModelName(machineLearning.primary_model?.name)}
                         </h4>
+                        <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-200/80">
+                          {machineLearning.primary_model?.algorithm || "xgboost"}
+                        </p>
                       </div>
                       <StatusBadge status={machineLearning.primary_model?.prediction} />
                     </div>
                     <p className="mt-4 font-mono text-2xl font-black text-cyan-100">
                       {formatConfidence(machineLearning.primary_model?.confidence)}
                     </p>
+                    <ModelEvaluationStrip metrics={primaryMetrics} />
                   </GlassCard>
 
                   <GlassCard
@@ -264,14 +341,25 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                           COMPARISON ONLY
                         </p>
                         <h4 className="mt-2 text-base font-black text-slate-50">
-                          Random Forest
+                          {formatModelName(machineLearning.comparison_model?.name)}
                         </h4>
+                        <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          {machineLearning.comparison_model?.algorithm ||
+                            "random_forest"}
+                        </p>
                       </div>
-                      <StatusBadge status={machineLearning.comparison_model?.prediction} />
+                      {machineLearning.comparison_model?.available === false ? (
+                        <StatusBadge status="unknown" />
+                      ) : (
+                        <StatusBadge
+                          status={machineLearning.comparison_model?.prediction}
+                        />
+                      )}
                     </div>
                     <p className="mt-4 font-mono text-xl font-black text-slate-200">
                       {formatConfidence(machineLearning.comparison_model?.confidence)}
                     </p>
+                    <ModelEvaluationStrip metrics={comparisonMetrics} />
                   </GlassCard>
                 </div>
               ) : (
@@ -308,20 +396,20 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                 <Database className="h-5 w-5 text-cyan-300" />
               </div>
 
-              {featureQuality ? (
+              {mlFeatureQuality ? (
                 <div className="grid gap-5">
                   <ProgressBar
-                    imputedCount={featureQuality.imputed_unknown}
+                    imputedCount={mlFeatureQuality.imputed_unknown}
                     label="Available expert features"
-                    max={featureQuality.total_features}
-                    value={featureQuality.available}
+                    max={mlFeatureQuality.total_features}
+                    value={mlFeatureQuality.available}
                   />
 
                   <div className="grid gap-3 sm:grid-cols-3">
                     <GlassCard borderRadius={20} className="p-4" glassIntensity="soft" interactive={false}>
                       <p className={cardLabel}>Total Features</p>
                       <p className="mt-1 font-mono text-2xl font-black text-slate-50">
-                        {featureQuality.total_features}
+                        {mlFeatureQuality.total_features}
                       </p>
                     </GlassCard>
                     <GlassCard
@@ -332,7 +420,7 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                     >
                       <p className={cardLabel}>Available</p>
                       <p className="mt-1 font-mono text-2xl font-black text-emerald-200">
-                        {featureQuality.available}
+                        {mlFeatureQuality.available}
                       </p>
                     </GlassCard>
                     <GlassCard
@@ -343,12 +431,12 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                     >
                       <p className={cardLabel}>Imputed Unknown</p>
                       <p className="mt-1 font-mono text-2xl font-black text-sky-200">
-                        {featureQuality.imputed_unknown}
+                        {mlFeatureQuality.imputed_unknown}
                       </p>
                     </GlassCard>
                   </div>
 
-                  {featureQuality.imputed_unknown > 0 && (
+                  {mlFeatureQuality.imputed_unknown > 0 && (
                     <GlassCard
                       borderRadius={20}
                       className="border-amber-500/25 bg-amber-500/10 p-4 text-sm leading-7 text-amber-100"
@@ -363,8 +451,8 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                   <GlassCard borderRadius={20} className="p-4" glassIntensity="soft" interactive={false}>
                     <p className={cardLabel}>Imputed Features</p>
                     <p className={cardValue}>
-                      {featureQuality.imputed_features.length > 0
-                        ? featureQuality.imputed_features.join(", ")
+                      {mlFeatureQuality.imputed_features.length > 0
+                        ? mlFeatureQuality.imputed_features.join(", ")
                         : "None"}
                     </p>
                     <p className="mt-3 font-mono text-xs text-slate-500">
@@ -388,6 +476,7 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
           <Reveal delay={0.12}>
             <FactsGrid
               facts={facts}
+              featureCatalog={featureCatalog}
               featureSources={featureSources}
               featureStatus={featureStatus}
             />

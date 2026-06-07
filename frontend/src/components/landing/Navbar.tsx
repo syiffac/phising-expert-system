@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
@@ -9,12 +10,19 @@ import brandIcon from "@/app/icon.png";
 import GlassCard from "@/components/ui-custom/GlassCard";
 
 const navItems = [
-  { label: "Analyze", href: "#analyze" },
+  { label: "Analyze", href: "/#analyze" },
   { label: "History", href: "/history" },
   { label: "Evaluation", href: "/evaluation" },
   { label: "Knowledge Base", href: "/knowledge-base" },
-  { label: "About", href: "/about" },
 ];
+
+function isActiveNavItem(pathname: string, href: string) {
+  if (href === "/#analyze") {
+    return pathname === "/";
+  }
+
+  return pathname === href;
+}
 
 function BrandMark() {
   return (
@@ -24,6 +32,7 @@ function BrandMark() {
         className="px-2.5 py-1.5 shadow-cyan-950/20"
         glassIntensity="strong"
         interactive={false}
+        reactBits
         width="auto"
       >
         <Link
@@ -73,7 +82,7 @@ function MobileMenuButton({
   );
 }
 
-function DesktopNav() {
+function DesktopNav({ pathname }: { pathname: string }) {
   return (
     <div className="fixed left-1/2 top-6 z-50 hidden -translate-x-1/2 lg:block">
       <GlassCard
@@ -81,12 +90,21 @@ function DesktopNav() {
         className="px-5 py-2.5 shadow-cyan-950/20"
         glassIntensity="strong"
         interactive={false}
+        reactBits
         width="auto"
       >
         <nav aria-label="Primary navigation" className="flex items-center gap-1">
           {navItems.map((item) => (
             <Link
-              className="whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-semibold text-slate-300 transition duration-200 hover:bg-white/[0.06] hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70"
+              aria-current={
+                isActiveNavItem(pathname, item.href) ? "page" : undefined
+              }
+              className={cn(
+                "whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70",
+                isActiveNavItem(pathname, item.href)
+                  ? "bg-cyan-300/15 text-cyan-100 shadow-[inset_0_0_0_1px_rgba(103,232,249,0.20)]"
+                  : "text-slate-300 hover:bg-white/[0.06] hover:text-cyan-200"
+              )}
               href={item.href}
               key={item.href}
             >
@@ -102,9 +120,11 @@ function DesktopNav() {
 function MobileNavPanel({
   isOpen,
   onClose,
+  pathname,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  pathname: string;
 }) {
   return (
     <GlassCard
@@ -117,13 +137,22 @@ function MobileNavPanel({
       )}
       glassIntensity="strong"
       interactive={false}
+      reactBits
       style={{ left: "1rem", right: "1rem", top: "5.25rem" }}
     >
       <nav aria-label="Mobile navigation">
         <div className="flex flex-col gap-1">
           {navItems.map((item) => (
             <Link
-              className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/[0.06] hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70"
+              aria-current={
+                isActiveNavItem(pathname, item.href) ? "page" : undefined
+              }
+              className={cn(
+                "rounded-xl px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70",
+                isActiveNavItem(pathname, item.href)
+                  ? "bg-cyan-300/15 text-cyan-100"
+                  : "text-slate-200 hover:bg-white/[0.06] hover:text-cyan-200"
+              )}
               href={item.href}
               key={item.href}
               onClick={onClose}
@@ -139,6 +168,7 @@ function MobileNavPanel({
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <>
@@ -147,8 +177,12 @@ export default function Navbar() {
         isOpen={isOpen}
         onToggle={() => setIsOpen((value) => !value)}
       />
-      <MobileNavPanel isOpen={isOpen} onClose={() => setIsOpen(false)} />
-      <DesktopNav />
+      <MobileNavPanel
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        pathname={pathname}
+      />
+      <DesktopNav pathname={pathname} />
     </>
   );
 }

@@ -1,49 +1,24 @@
 import GlassCard from "@/components/ui-custom/GlassCard";
 import FeatureValueBadge from "@/components/ui-custom/FeatureValueBadge";
-import type { Facts, FeatureSources, FeatureStatus } from "@/types/detect";
+import type {
+  Facts,
+  FeatureSources,
+  FeatureStatus,
+  KnowledgeFeature,
+} from "@/types/detect";
 
 interface FactsGridProps {
   facts: Facts;
+  featureCatalog?: KnowledgeFeature[];
   featureSources: FeatureSources;
   featureStatus: FeatureStatus;
 }
 
-const featureNames = [
-  "Have IP Address",
-  "URL Length",
-  "Shortening Service",
-  "Having @ Symbol",
-  "Double Slash Redirecting",
-  "Prefix-Suffix",
-  "Having Subdomain",
-  "SSL Final State",
-  "Domain Registration Length",
-  "Favicon",
-  "Port",
-  "HTTPS Token",
-  "Request URL",
-  "URL of Anchor",
-  "Links in Tags",
-  "SFH / Server Form Handler",
-  "Submitting to Email",
-  "Abnormal URL",
-  "Redirect",
-  "On MouseOver",
-  "Right Click Disabled",
-  "Pop-Up Window",
-  "IFrame",
-  "Age of Domain",
-  "DNS Record",
-  "Web Traffic",
-  "Page Rank",
-  "Google Index",
-  "Links Pointing to Page",
-  "Statistical Report",
-];
-
-const featureCodes = featureNames.map((name, index) => ({
+const fallbackFeatureCodes = Array.from({ length: 30 }, (_, index) => ({
   code: `F${String(index + 1).padStart(2, "0")}`,
-  name,
+  description: "Feature metadata is unavailable from backend.",
+  name: `Feature ${String(index + 1).padStart(2, "0")}`,
+  source: "runtime extraction",
 }));
 
 function describeValue(value: number | undefined) {
@@ -61,9 +36,15 @@ function describeValue(value: number | undefined) {
 
 export default function FactsGrid({
   facts,
+  featureCatalog = [],
   featureSources,
   featureStatus,
 }: FactsGridProps) {
+  const featureCodes =
+    featureCatalog.length > 0
+      ? featureCatalog
+      : fallbackFeatureCodes;
+
   return (
     <GlassCard className="p-5 sm:p-6" interactive={false}>
       <div className="mb-5 flex flex-col gap-3 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
@@ -82,16 +63,16 @@ export default function FactsGrid({
           interactive={false}
           width="fit-content"
         >
-          30 facts
+          {featureCodes.length} facts
         </GlassCard>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {featureCodes.map(({ code, name }) => {
+        {featureCodes.map(({ code, description, name, source: catalogSource }) => {
           const value = facts[code];
           const status =
             featureStatus[code] || (value === undefined ? "unknown" : "available");
-          const source = featureSources[code] || "runtime extraction";
+          const source = featureSources[code] || catalogSource || "runtime extraction";
 
           return (
             <GlassCard
@@ -115,6 +96,9 @@ export default function FactsGrid({
               <div className="border-t border-white/10 pt-3">
                 <p className="text-xs font-semibold capitalize text-slate-400">
                   {describeValue(value)}
+                </p>
+                <p className="mt-2 line-clamp-3 text-xs leading-5 text-slate-500">
+                  {description}
                 </p>
                 <p className="mt-2 break-words font-mono text-[11px] leading-5 text-slate-600">
                   {status} | {source}

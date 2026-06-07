@@ -1,10 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  ArrowLeft,
+  Clock3,
+  Cpu,
+  Database,
+  ExternalLink,
+  History,
+  ListChecks,
+  SearchX,
+  ShieldCheck,
+} from "lucide-react";
+import DarkVeilBackground from "@/components/visual/DarkVeilBackground";
+import Navbar from "@/components/landing/Navbar";
+import GlassCard from "@/components/ui-custom/GlassCard";
+import StatusBadge from "@/components/ui-custom/StatusBadge";
+import { cn } from "@/lib/cn";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  "http://127.0.0.1:8000";
 
 type HistoryItem = {
   id: number;
@@ -20,6 +38,10 @@ type HistoryItem = {
   xgb_prediction: string | null;
   xgb_confidence: number | null;
   created_at: string | null;
+};
+
+type HistoryResponse = {
+  data?: HistoryItem[];
 };
 
 function formatConfidence(value: number | null | undefined) {
@@ -41,16 +63,118 @@ function formatDate(value: string | null) {
   });
 }
 
-function statusClass(status: string) {
-  if (status === "phishing") {
-    return "border-red-500/30 bg-red-500/10 text-red-200";
+function normalizeStatus(status: string) {
+  const lowered = status.toLowerCase();
+
+  if (lowered.includes("phishing")) {
+    return "phishing";
   }
 
-  if (status === "suspicious") {
-    return "border-yellow-500/30 bg-yellow-500/10 text-yellow-200";
+  if (lowered.includes("suspicious")) {
+    return "suspicious";
   }
 
-  return "border-emerald-500/30 bg-emerald-500/10 text-emerald-200";
+  if (lowered.includes("legitimate")) {
+    return "legitimate";
+  }
+
+  return "unknown";
+}
+
+function countFacts(facts: Record<string, number> | null) {
+  return facts ? Object.keys(facts).length : 0;
+}
+
+function statusTone(status: string) {
+  const normalized = normalizeStatus(status);
+
+  if (normalized === "phishing") {
+    return "text-rose-200";
+  }
+
+  if (normalized === "suspicious") {
+    return "text-amber-200";
+  }
+
+  if (normalized === "legitimate") {
+    return "text-emerald-200";
+  }
+
+  return "text-sky-200";
+}
+
+function MetricTile({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="min-w-0 rounded-2xl border border-white/[0.08] bg-slate-950/35 p-4">
+      <div className="flex items-center gap-2 text-slate-400">
+        {icon}
+        <p className="text-xs font-bold uppercase tracking-wider">{label}</p>
+      </div>
+      <p className="mt-3 truncate font-mono text-xl font-black text-slate-100">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function ModelStrip({
+  label,
+  prediction,
+  confidence,
+  icon,
+}: {
+  label: string;
+  prediction: string | null;
+  confidence: number | null;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div className="min-w-0 rounded-2xl border border-white/[0.08] bg-slate-950/30 p-4">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="text-cyan-300">{icon}</span>
+          <p className="truncate text-xs font-bold uppercase tracking-wider text-slate-400">
+            {label}
+          </p>
+        </div>
+        <p className="shrink-0 font-mono text-xs font-black text-cyan-200">
+          {formatConfidence(confidence)}
+        </p>
+      </div>
+      <p
+        className={cn(
+          "mt-3 truncate text-sm font-bold capitalize",
+          statusTone(prediction || "unknown")
+        )}
+      >
+        {prediction || "-"}
+      </p>
+    </div>
+  );
+}
+
+function LoadingRows() {
+  return (
+    <div className="mt-8 grid gap-4">
+      {[0, 1, 2].map((item) => (
+        <GlassCard
+          className="h-44 animate-pulse p-5"
+          interactive={false}
+          key={item}
+        >
+          <div className="h-full rounded-2xl bg-white/[0.04]" />
+        </GlassCard>
+      ))}
+    </div>
+  );
 }
 
 export default function HistoryPage() {
@@ -64,11 +188,11 @@ export default function HistoryPage() {
         const response = await fetch(`${API_BASE_URL}/api/history/?limit=20`);
 
         if (!response.ok) {
-          throw new Error("Gagal mengambil data riwayat.");
+          throw new Error("Failed to fetch detection history.");
         }
 
-        const result = await response.json();
-        setHistories(result.data || []);
+        const result = (await response.json()) as HistoryResponse;
+        setHistories(Array.isArray(result.data) ? result.data : []);
       } catch {
         setErrorMessage(
           "Backend belum aktif atau terjadi kesalahan saat mengambil riwayat deteksi."
@@ -81,121 +205,204 @@ export default function HistoryPage() {
     fetchHistory();
   }, []);
 
+  const summary = useMemo(() => {
+    const phishing = histories.filter(
+      (item) => normalizeStatus(item.final_result) === "phishing"
+    ).length;
+    const legitimate = histories.filter(
+      (item) => normalizeStatus(item.final_result) === "legitimate"
+    ).length;
+    const suspicious = histories.filter(
+      (item) => normalizeStatus(item.final_result) === "suspicious"
+    ).length;
+
+    return { legitimate, phishing, suspicious, total: histories.length };
+  }, [histories]);
+
   return (
-    <main className="min-h-screen bg-slate-950 px-6 py-10 text-slate-100">
-      <section className="mx-auto max-w-6xl">
-        <Link href="/" className="text-sm text-cyan-300 hover:underline">
-          ← Kembali ke Deteksi
-        </Link>
+    <main className="relative min-h-screen overflow-x-hidden bg-[#07111F] text-slate-100 selection:bg-cyan-300/25 selection:text-cyan-50">
+      <DarkVeilBackground />
+      <div className="relative z-10">
+        <Navbar />
 
-        <div className="mt-6">
-          <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-cyan-300">
-            Detection History
-          </p>
-
-          <h1 className="text-4xl font-bold">Riwayat Deteksi</h1>
-
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-400">
-            Data pada halaman ini diambil dari tabel{" "}
-            <span className="font-medium text-slate-300">
-              detection_histories
-            </span>{" "}
-            di Supabase PostgreSQL. Riwayat ini menyimpan hasil inferensi sistem
-            pakar, prediksi machine learning, dan hasil akhir deteksi.
-          </p>
-        </div>
-
-        {loading && (
-          <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900 p-6 text-sm text-slate-400">
-            Memuat data riwayat...
-          </div>
-        )}
-
-        {!loading && errorMessage && (
-          <div className="mt-8 rounded-2xl border border-red-500/30 bg-red-500/10 p-6 text-sm text-red-200">
-            {errorMessage}
-          </div>
-        )}
-
-        {!loading && !errorMessage && histories.length === 0 && (
-          <div className="mt-8 rounded-2xl border border-dashed border-slate-700 p-8 text-sm text-slate-400">
-            Belum ada riwayat deteksi. Coba analisis URL terlebih dahulu pada
-            halaman utama.
-          </div>
-        )}
-
-        {!loading && !errorMessage && histories.length > 0 && (
-          <div className="mt-8 space-y-4">
-            {histories.map((item) => (
-              <div
-                key={item.id}
-                className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl"
+        <section className="mx-auto w-full max-w-7xl px-4 pb-16 pt-32 sm:px-6 md:px-8 md:pb-24 md:pt-36">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="min-w-0">
+              <Link
+                className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-sm font-bold text-cyan-200 transition hover:border-cyan-300/30 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70"
+                href="/"
               >
-                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                  <div>
-                    <p className="break-all text-sm font-medium text-slate-100">
-                      {item.url}
-                    </p>
+                <ArrowLeft className="h-4 w-4" />
+                Kembali ke Deteksi
+              </Link>
 
-                    <p className="mt-1 text-sm text-slate-500">
-                      Hostname: {item.hostname || "-"}
-                    </p>
+              <p className="mt-8 font-mono text-xs font-black uppercase tracking-[0.28em] text-cyan-300">
+                Detection History
+              </p>
+              <h1 className="mt-4 max-w-4xl text-3xl font-black leading-tight tracking-tight text-slate-50 sm:text-4xl md:text-5xl">
+                Riwayat analisis URL dan keputusan hibrida
+              </h1>
+              <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
+                Pantau hasil inferensi sistem pakar, model XGBoost utama, dan
+                Random Forest pembanding dalam satu arsip ringkas.
+              </p>
+            </div>
 
-                    <p className="mt-1 text-xs text-slate-600">
-                      Waktu: {formatDate(item.created_at)}
-                    </p>
-                  </div>
-
-                  <span
-                    className={`w-fit rounded-full border px-4 py-2 text-xs font-semibold capitalize ${statusClass(
-                      item.final_result
-                    )}`}
-                  >
-                    {item.final_result}
-                  </span>
-                </div>
-
-                <div className="mt-5 grid gap-3 text-sm md:grid-cols-3">
-                  <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                    <p className="text-slate-500">Expert System</p>
-                    <p className="mt-1 font-semibold capitalize text-slate-100">
-                      {item.expert_status}
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                    <p className="text-slate-500">Random Forest</p>
-                    <p className="mt-1 font-semibold capitalize text-slate-100">
-                      {item.rf_prediction || "-"}
-                    </p>
-                    <p className="mt-1 text-slate-500">
-                      Confidence: {formatConfidence(item.rf_confidence)}
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                    <p className="text-slate-500">XGBoost</p>
-                    <p className="mt-1 font-semibold capitalize text-slate-100">
-                      {item.xgb_prediction || "-"}
-                    </p>
-                    <p className="mt-1 text-slate-500">
-                      Confidence: {formatConfidence(item.xgb_confidence)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-4 rounded-xl border border-slate-800 bg-slate-950 p-4">
-                  <p className="text-sm text-slate-500">Final Result</p>
-                  <p className="mt-1 text-sm capitalize text-slate-200">
-                    Sistem menyimpulkan URL ini sebagai{" "}
-                    <span className="font-semibold">{item.final_result}</span>.
+            <GlassCard
+              borderRadius={24}
+              className="w-full p-4 lg:w-[22rem]"
+              glassIntensity="soft"
+              interactive={false}
+            >
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-cyan-300/20 bg-cyan-300/10 text-cyan-200">
+                  <History className="h-5 w-5" />
+                </span>
+                <div className="min-w-0">
+                  <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-400">
+                    Latest Records
+                  </p>
+                  <p className="mt-1 truncate text-sm font-semibold text-slate-200">
+                    Limit 20 detection events
                   </p>
                 </div>
               </div>
-            ))}
+            </GlassCard>
           </div>
-        )}
-      </section>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <MetricTile
+              icon={<ListChecks className="h-4 w-4" />}
+              label="Total"
+              value={summary.total.toString()}
+            />
+            <MetricTile
+              icon={<ShieldCheck className="h-4 w-4 text-emerald-300" />}
+              label="Legitimate"
+              value={summary.legitimate.toString()}
+            />
+            <MetricTile
+              icon={<SearchX className="h-4 w-4 text-amber-300" />}
+              label="Suspicious"
+              value={summary.suspicious.toString()}
+            />
+            <MetricTile
+              icon={<ExternalLink className="h-4 w-4 text-rose-300" />}
+              label="Phishing"
+              value={summary.phishing.toString()}
+            />
+          </div>
+
+          {loading && <LoadingRows />}
+
+          {!loading && errorMessage && (
+            <GlassCard
+              className="mt-8 p-6"
+              glassIntensity="strong"
+              interactive={false}
+            >
+              <p className="text-sm font-semibold text-rose-200">
+                {errorMessage}
+              </p>
+            </GlassCard>
+          )}
+
+          {!loading && !errorMessage && histories.length === 0 && (
+            <GlassCard
+              className="mt-8 p-8 text-center"
+              glassIntensity="strong"
+              interactive={false}
+            >
+              <SearchX className="mx-auto h-8 w-8 text-cyan-300" />
+              <p className="mt-4 text-base font-bold text-slate-100">
+                Belum ada riwayat deteksi
+              </p>
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-400">
+                Jalankan analisis URL dari halaman utama, lalu hasilnya akan
+                muncul di arsip ini.
+              </p>
+            </GlassCard>
+          )}
+
+          {!loading && !errorMessage && histories.length > 0 && (
+            <div className="mt-8 grid gap-4">
+              {histories.map((item) => (
+                <GlassCard
+                  className="p-4 sm:p-5"
+                  interactive={false}
+                  key={item.id}
+                >
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <StatusBadge status={normalizeStatus(item.final_result)} />
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] font-bold text-slate-400">
+                          <Clock3 className="h-3 w-3" />
+                          {formatDate(item.created_at)}
+                        </span>
+                      </div>
+
+                      <p className="mt-4 break-all text-sm font-bold leading-6 text-slate-100 sm:text-base">
+                        {item.url}
+                      </p>
+                      <p className="mt-2 break-all font-mono text-xs text-slate-500">
+                        {item.hostname || item.normalized_url || "-"}
+                      </p>
+                    </div>
+
+                    <div className="grid shrink-0 grid-cols-2 gap-2 text-right sm:grid-cols-3 lg:w-[23rem]">
+                      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-3">
+                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          Facts
+                        </p>
+                        <p className="mt-1 font-mono text-lg font-black text-cyan-200">
+                          {countFacts(item.facts)}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-3">
+                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          Rules
+                        </p>
+                        <p className="mt-1 font-mono text-lg font-black text-violet-200">
+                          {item.triggered_rules?.length || 0}
+                        </p>
+                      </div>
+                      <div className="col-span-2 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-3 sm:col-span-1">
+                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          Expert
+                        </p>
+                        <p
+                          className={cn(
+                            "mt-1 truncate text-sm font-black capitalize",
+                            statusTone(item.expert_status)
+                          )}
+                        >
+                          {item.expert_status || "-"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 grid gap-3 md:grid-cols-2">
+                    <ModelStrip
+                      confidence={item.xgb_confidence}
+                      icon={<Cpu className="h-4 w-4" />}
+                      label="XGBoost Primary"
+                      prediction={item.xgb_prediction}
+                    />
+                    <ModelStrip
+                      confidence={item.rf_confidence}
+                      icon={<Database className="h-4 w-4" />}
+                      label="Random Forest Comparison"
+                      prediction={item.rf_prediction}
+                    />
+                  </div>
+                </GlassCard>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
     </main>
   );
 }

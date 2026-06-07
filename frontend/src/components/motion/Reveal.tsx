@@ -8,6 +8,7 @@ interface RevealProps {
   className?: string;
   delay?: number;
   once?: boolean;
+  observe?: boolean;
 }
 
 export default function Reveal({
@@ -15,18 +16,21 @@ export default function Reveal({
   className = "",
   delay = 0,
   once = true,
+  observe = true,
 }: RevealProps) {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!observe) return;
+
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
     if (prefersReducedMotion) {
-      setIsVisible(true);
-      return;
+      const frameId = window.requestAnimationFrame(() => setIsVisible(true));
+      return () => window.cancelAnimationFrame(frameId);
     }
 
     const observer = new IntersectionObserver(
@@ -55,7 +59,7 @@ export default function Reveal({
         observer.unobserve(element);
       }
     };
-  }, [once]);
+  }, [once, observe]);
 
   return (
     <div

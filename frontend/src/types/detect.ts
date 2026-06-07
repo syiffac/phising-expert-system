@@ -45,6 +45,45 @@ export interface MachineLearningResult {
     type: string;
     total_features: number;
   };
+  feature_quality?: FeatureQuality;
+}
+
+export interface KnowledgeFeature {
+  code: string;
+  name: string;
+  description: string;
+  source: string;
+}
+
+export interface RuntimeMetricBlock {
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1_score: number;
+  phishing_recall?: number;
+  confusion_matrix?: number[][];
+}
+
+export interface RuntimeModelMetrics {
+  clean_test: RuntimeMetricBlock;
+  robust_test: RuntimeMetricBlock;
+  stability_gap: number;
+  composite_score: number;
+}
+
+export interface OptimizedHybridEvaluation {
+  selected_runtime_model: string;
+  primary_model: string;
+  comparison_model: string;
+  soft_voting: string;
+  note: string;
+  metrics: {
+    models: Record<string, RuntimeModelMetrics>;
+  };
+}
+
+export interface EvaluationData {
+  optimized_hybrid?: OptimizedHybridEvaluation | null;
 }
 
 export interface DetectResponse {

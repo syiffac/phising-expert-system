@@ -27,12 +27,12 @@ export default function SmoothScroll({ children }) {
 
       const lenis = new Lenis({
         anchors: true,
-        duration: 1.05,
+        duration: 0.78,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         gestureOrientation: "vertical",
         orientation: "vertical",
         smoothWheel: true,
-        wheelMultiplier: 0.95,
+        wheelMultiplier: 1.08,
       });
 
       lenisRef.current = lenis;

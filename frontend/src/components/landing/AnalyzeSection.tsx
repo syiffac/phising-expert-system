@@ -8,6 +8,7 @@ interface AnalyzeSectionProps {
   loading: boolean;
   onInputChange: (value: string) => void;
   onSubmit: () => void;
+  observeReady?: boolean;
 }
 
 const technicalBadges = [
@@ -23,6 +24,7 @@ export default function AnalyzeSection({
   loading,
   onInputChange,
   onSubmit,
+  observeReady = true,
 }: AnalyzeSectionProps) {
   return (
     <section
@@ -30,7 +32,7 @@ export default function AnalyzeSection({
       id="analyze"
     >
       <div className="mx-auto max-w-5xl">
-        <Reveal>
+        <Reveal observe={observeReady}>
           <div className="mb-8 text-center">
             <p className="font-mono text-xs font-bold uppercase tracking-widest text-cyan-300">
               Runtime mode: Optimized Hybrid XGBoost
@@ -45,7 +47,7 @@ export default function AnalyzeSection({
           </div>
         </Reveal>
 
-        <Reveal delay={0.08}>
+        <Reveal delay={0.08} observe={observeReady}>
           <GlassCard className="p-4 sm:p-6 md:p-8" glow interactive={false}>
             <form
               className="grid gap-4 lg:grid-cols-[1fr_auto]"

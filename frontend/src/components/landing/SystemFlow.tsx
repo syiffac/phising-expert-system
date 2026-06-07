@@ -37,11 +37,15 @@ const steps = [
   },
 ];
 
-export default function SystemFlow() {
+interface SystemFlowProps {
+  observeReady?: boolean;
+}
+
+export default function SystemFlow({ observeReady = true }: SystemFlowProps) {
   return (
     <section className="px-4 py-16 sm:px-6 md:px-8 md:py-20">
       <div className="mx-auto max-w-7xl">
-        <Reveal>
+        <Reveal observe={observeReady}>
           <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
             <div>
               <p className="font-mono text-xs font-bold uppercase tracking-widest text-cyan-300">
@@ -60,7 +64,7 @@ export default function SystemFlow() {
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {steps.map(({ detail, icon: Icon, label }, index) => (
-            <Reveal delay={index * 0.06} key={label}>
+            <Reveal delay={index * 0.06} key={label} observe={observeReady}>
               <div className="relative h-full">
                 {index < steps.length - 1 && (
                   <div className="pointer-events-none absolute left-[calc(100%-8px)] top-1/2 z-20 hidden w-8 -translate-y-1/2 items-center justify-center text-cyan-300/50 lg:flex">

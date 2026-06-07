@@ -1,7 +1,7 @@
 "use client";
 
 import { type CSSProperties, useEffect, useRef, useSyncExternalStore } from "react";
-import { Renderer, Program, Mesh, Triangle, Vec2 } from "ogl";
+import { Renderer, Program, Mesh, Transform, Triangle, Vec2 } from "ogl";
 import { cn } from "@/lib/cn";
 
 const vertex = `
@@ -124,6 +124,7 @@ export default function DarkVeil({
 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<number | null>(null);
+  const inViewportRef = useRef(true);
   const prefersReducedMotion = useSyncExternalStore(
     subscribeToReducedMotion,
     getReducedMotionSnapshot,
@@ -160,7 +161,9 @@ export default function DarkVeil({
       },
     });
 
+    const scene = new Transform();
     const mesh = new Mesh(gl, { geometry, program });
+    mesh.setParent(scene);
 
     const resize = () => {
       const w = parent.clientWidth;
@@ -180,24 +183,46 @@ export default function DarkVeil({
     const start = performance.now();
     let isDestroyed = false;
     let isPageVisible = document.visibilityState === "visible";
+    let lastRenderTime = 0;
+    const scrollRenderInterval = 32;
 
     const renderFrame = () => {
-      if (isDestroyed || !isPageVisible) {
+      if (isDestroyed || !isPageVisible || !inViewportRef.current) {
         return;
       }
 
-      program.uniforms.uTime.value = ((performance.now() - start) / 1000) * speed;
-      program.uniforms.uHueShift.value = hueShift;
-      program.uniforms.uNoise.value = noiseIntensity;
-      program.uniforms.uScan.value = scanlineIntensity;
-      program.uniforms.uScanFreq.value = scanlineFrequency;
-      program.uniforms.uWarp.value = warpAmount;
-      renderer.render({ scene: mesh });
+      const scrollInProgress =
+        document.documentElement.classList.contains("lenis-scrolling");
+      const now = performance.now();
+      const shouldRender =
+        !scrollInProgress || now - lastRenderTime >= scrollRenderInterval;
+
+      if (shouldRender) {
+        program.uniforms.uTime.value = ((now - start) / 1000) * speed;
+        program.uniforms.uHueShift.value = hueShift;
+        program.uniforms.uNoise.value = noiseIntensity;
+        program.uniforms.uScan.value = scanlineIntensity;
+        program.uniforms.uScanFreq.value = scanlineFrequency;
+        program.uniforms.uWarp.value = warpAmount;
+        try {
+          renderer.render({ scene });
+        } catch {
+          // WebGL context lost or renderer destroyed during race condition
+          return;
+        }
+        lastRenderTime = now;
+      }
+
       frameRef.current = requestAnimationFrame(renderFrame);
     };
 
     const startLoop = () => {
-      if (frameRef.current !== null || !isPageVisible || isDestroyed) {
+      if (
+        frameRef.current !== null ||
+        !isPageVisible ||
+        !inViewportRef.current ||
+        isDestroyed
+      ) {
         return;
       }
 
@@ -211,6 +236,19 @@ export default function DarkVeil({
       }
     };
 
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        inViewportRef.current = entry.isIntersecting;
+
+        if (entry.isIntersecting) {
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      },
+      { threshold: 0.01 }
+    );
+
     const handleVisibilityChange = () => {
       isPageVisible = document.visibilityState === "visible";
 
@@ -221,11 +259,13 @@ export default function DarkVeil({
       }
     };
 
+    intersectionObserver.observe(parent);
     document.addEventListener("visibilitychange", handleVisibilityChange);
     startLoop();
 
     return () => {
       isDestroyed = true;
+      intersectionObserver.disconnect();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       stopLoop();
       resizeObserver.disconnect();

@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import AnalyzeSection from "@/components/landing/AnalyzeSection";
 import DarkVeilBackground from "@/components/visual/DarkVeilBackground";
 import HeroSection from "@/components/landing/HeroSection";
@@ -8,7 +9,16 @@ import Navbar from "@/components/landing/Navbar";
 import ProblemCards from "@/components/landing/ProblemCards";
 import ResultDashboard from "@/components/landing/ResultDashboard";
 import SystemFlow from "@/components/landing/SystemFlow";
-import type { DetectResponse } from "@/types/detect";
+import type {
+  DetectResponse,
+  EvaluationData,
+  KnowledgeFeature,
+} from "@/types/detect";
+
+const WelcomeLoader = dynamic(
+  () => import("@/components/welcome/WelcomeLoader"),
+  { ssr: false }
+);
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
@@ -39,9 +49,43 @@ async function parseBackendError(response: Response) {
 export default function Home() {
   const [inputUrl, setInputUrl] = useState("");
   const [result, setResult] = useState<DetectResponse | null>(null);
+  const [features, setFeatures] = useState<KnowledgeFeature[]>([]);
+  const [evaluationData, setEvaluationData] = useState<EvaluationData | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loaderDone, setLoaderDone] = useState(false);
   const resultRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    async function loadRuntimeContext() {
+      try {
+        const [featuresResponse, evaluationResponse] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/features/`),
+          fetch(`${API_BASE_URL}/api/evaluation/`),
+        ]);
+
+        if (featuresResponse.ok) {
+          const payload = (await featuresResponse.json()) as {
+            data?: KnowledgeFeature[];
+          };
+          setFeatures(Array.isArray(payload.data) ? payload.data : []);
+        }
+
+        if (evaluationResponse.ok) {
+          const payload = (await evaluationResponse.json()) as {
+            data?: EvaluationData;
+          };
+          setEvaluationData(payload.data || null);
+        }
+      } catch {
+        // Detection still works without auxiliary display metadata.
+      }
+    }
+
+    loadRuntimeContext();
+  }, []);
 
   async function handleSubmit() {
     const trimmedUrl = inputUrl.trim();
@@ -108,12 +152,13 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#07111F] text-slate-100 selection:bg-cyan-300/25 selection:text-cyan-50">
+      <WelcomeLoader onComplete={() => setLoaderDone(true)} />
       <DarkVeilBackground />
       <div className="relative z-10">
         <Navbar />
-        <HeroSection />
-        <ProblemCards />
-        <SystemFlow />
+        <HeroSection observeReady={loaderDone} />
+        <ProblemCards observeReady={loaderDone} />
+        <SystemFlow observeReady={loaderDone} />
         <AnalyzeSection
           errorMessage={errorMessage}
           inputUrl={inputUrl}
@@ -126,7 +171,14 @@ export default function Home() {
           }}
           onSubmit={handleSubmit}
         />
-        {result && <ResultDashboard ref={resultRef} result={result} />}
+        {result && (
+          <ResultDashboard
+            evaluationData={evaluationData}
+            featureCatalog={features}
+            ref={resultRef}
+            result={result}
+          />
+        )}
       </div>
     </main>
   );

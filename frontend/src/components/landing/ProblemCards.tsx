@@ -23,11 +23,17 @@ const cards = [
   },
 ];
 
-export default function ProblemCards() {
+interface ProblemCardsProps {
+  observeReady?: boolean;
+}
+
+export default function ProblemCards({
+  observeReady = true,
+}: ProblemCardsProps) {
   return (
     <section className="border-y border-white/10 bg-transparent px-4 py-16 sm:px-6 md:px-8 md:py-20">
       <div className="mx-auto max-w-7xl">
-        <Reveal>
+        <Reveal observe={observeReady}>
           <div className="mb-10 max-w-3xl">
             <p className="font-mono text-xs font-bold uppercase tracking-widest text-cyan-300">
               Phishing Intelligence
@@ -44,7 +50,7 @@ export default function ProblemCards() {
 
         <div className="grid gap-5 md:grid-cols-3">
           {cards.map(({ body, icon: Icon, title, tone }, index) => (
-            <Reveal delay={index * 0.08} key={title}>
+            <Reveal delay={index * 0.08} key={title} observe={observeReady}>
               <GlassCard className="h-full p-6">
                 <div className="flex h-full flex-col">
                   <span className="mb-7 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
