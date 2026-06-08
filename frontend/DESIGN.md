@@ -106,19 +106,28 @@ Untuk menciptakan efek kedalaman 3D yang elegan, setiap panel transparan wajib m
 
 ---
 
-## 7A. Hero Illustration Integration Rules
+### Hero Composition Rules
+* Hero visual must support the headline, not dominate it.
+* Use a distinctive central cybersecurity core with shield/check motif.
+* Use orbit rings, 3 labeled nodes, one result capsule, and maximum 3 supporting chips.
+* Keep the visual futuristic, clean, and interactive.
+* Avoid repeatedly using the same large dashboard panel composition.
+* Hero illustration should be visually memorable but not cluttered.
+* Prioritize clarity, hierarchy, and spacing over visual complexity.
+* Navbar must not overlap hero content — preserve top spacing.
 
-Hero illustration pada halaman utama wajib diperlakukan sebagai komposisi visual produk, bukan gambar poster yang ditempel di sisi kanan.
-
-* **Layering Wajib**: Komposisi hero visual memakai urutan `background accent -> LetterGlitch/texture halus -> ambient glow -> glass panel utama -> flow diagram -> floating glass mini cards`.
-* **Floating Visual Wrapper**: Ilustrasi utama harus dibungkus container `relative`, `overflow-hidden`, `rounded-3xl` atau `rounded-[32px]`, border `border-white/[0.08]`, translucent dark surface, dan shadow cyan/blue yang lembut.
-* **Visual Blending**: Gunakan ambient radial glow, soft vignette, mask/fade edge, grid halus, atau glass highlight agar tepi ilustrasi tidak terasa sebagai rectangle keras.
-* **Simplified Hero Illustration**: Hero visual utama wajib berupa komponen React/CSS/SVG yang menggambarkan alur deteksi hibrida secara sederhana: satu panel glass besar berisi flow node (URL Analysis → Forward Chaining → XGBoost → Final Result) dengan 2–4 mini floating cards pendukung. Dilarang menggunakan gambar bitmap padat (*poster-like*) yang terasa ramai.
-* **Mini Glass Cards**: Maksimal 4 mini cards di sekeliling ilustrasi. Kontennya harus relevan dengan sistem, misalnya `30/30 Expert Rules`, `XGBoost`, `91 ML Features`, atau `Real-time`. Jangan menambah widget berlebihan.
-* **Motion Hero**: Entrance visual boleh memakai `opacity 0 -> 1`, `y 24px -> 0`, `scale 0.96 -> 1`, durasi sekitar `0.9s`, dan easing premium seperti `power3.out`/`cubic-bezier(0.23, 1, 0.32, 1)`.
-* **Idle Motion**: Floating pada visual utama dan mini cards harus sangat halus, amplitude maksimal sekitar `6px`, durasi lambat `4s - 6s`, tidak sinkron total, dan wajib mati saat `prefers-reduced-motion: reduce`.
-* **No Hard Image Block**: Dilarang menampilkan hero illustration sebagai `<img>` polos tanpa wrapper, glow, mask/vignette, atau integrasi glassmorphism. Gunakan komponen React/CSS yang terintegrasi penuh dengan layout hero.
-* **Balance With Headline**: Visual kanan harus prominent di desktop tetapi tidak mengalahkan headline kiri. Pada mobile, visual boleh diperkecil atau sebagian aksen disederhanakan demi menjaga layout bersih.
+### Technical Rules
+* **Hero Illustration Direction**: Hero illustration menggunakan orbital intelligence core — central shield orb, 3 orbit rings, 3 flow nodes, 1 result capsule, 2 metric chips, 1 threat accent.
+* **Layering**: `ambient bokeh glow -> thin glass plate -> SVG orbital system -> shield core -> nodes + lines -> result capsule -> floating chips`.
+* **Shield**: ShieldCheck icon dari lucide-react dalam glass orb dengan glow pulse dan double halo ring.
+* **3D Depth**: Mouse parallax interaktif dengan `perspective(1200px)`, max rotate 3-4deg, translate 6px. Desktop only. Lerp smoothing via requestAnimationFrame.
+* **Orbit Rings**: 3 SVG circles dengan dashed stroke, berputar 20-24s linear infinite. Counter-clockwise ring untuk variasi.
+* **Data Flow Lines**: SVG path tipis (`strokeWidth 1-1.2`) dengan dash animation menghubungkan core → nodes → result. Gradient cyan→violet→teal.
+* **Glass Plate**: `rounded-[32px]`, `bg-cyan-950/[0.08]`, `backdrop-blur-md`. Tidak terlalu solid. Subtle grid texture.
+* **Metric Chips**: Hanya 2 chip kecil di luar panel: `30/30 Features` (kanan atas) dan `91 ML Features` (kiri bawah). Jangan tambah Accuracy/Latency.
+* **Motion**: Orbit ring 20-24s. Core glow pulse 4.5s. Node float 5.4s amplitude 4px. Data line dash 3.2-4.2s. Particle drift 8s. Entrance 0.9s ease-out. Reduced motion: disable semua loop.
+* **No Hard Image Block**: Dilarang menampilkan hero illustration sebagai `<img>` polos.
+* **Balance With Headline**: Visual kanan supporting, bukan mendominasi. Mobile: scale down, hide chips, disable parallax.
 
 ---
 

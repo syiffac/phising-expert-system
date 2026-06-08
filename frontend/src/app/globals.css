@@ -189,204 +189,421 @@ html {
   will-change: opacity, transform;
 }
 
-/* ═══════════ HERO ILLUSTRATION ANIMATIONS ═══════════ */
+/* ═══════════ HEXAGONAL CYBER CORE ANIMATIONS ═══════════ */
 
-/* Orbital ring — clockwise slow rotation */
-@keyframes hero-orbit-spin {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to   { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* Orbital ring — counter-clockwise */
-@keyframes hero-orbit-spin-reverse {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to   { transform: translate(-50%, -50%) rotate(-360deg); }
-}
-
-.hero-orbit-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: hero-orbit-spin 28s linear infinite;
-  will-change: transform;
-}
-
-.hero-orbit-ring-reverse {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: hero-orbit-spin-reverse 22s linear infinite;
-  will-change: transform;
-}
-
-/* Shield glow pulse */
-@keyframes hero-shield-glow-pulse {
-  0%, 100% { opacity: 0.5; transform: scale(1.4); }
-  50%      { opacity: 0.8; transform: scale(1.6); }
-}
-
-.hero-shield-glow {
-  animation: hero-shield-glow-pulse 5s ease-in-out infinite;
-  will-change: opacity, transform;
-}
-
-/* Shield SVG entrance */
-@keyframes hero-shield-draw {
-  from { opacity: 0; transform: scale(0.9); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-.hero-shield-svg {
-  animation: hero-shield-draw 800ms var(--ease-out-strong) 300ms both;
-}
-
-/* Hex stroke dash animation */
-@keyframes hero-hex-dash {
-  to { stroke-dashoffset: 0; }
-}
-
-.hero-hex-outer {
-  stroke-dasharray: 400;
-  stroke-dashoffset: 400;
-  animation: hero-hex-dash 1.8s cubic-bezier(0.23, 1, 0.32, 1) 0.5s forwards;
-}
-
-.hero-hex-inner {
-  stroke-dasharray: 320;
-  stroke-dashoffset: 320;
-  animation: hero-hex-dash 1.6s cubic-bezier(0.23, 1, 0.32, 1) 0.8s forwards;
-}
-
-/* Checkmark draw-in */
-.hero-check-path {
-  stroke-dasharray: 60;
-  stroke-dashoffset: 60;
-  animation: hero-hex-dash 0.8s cubic-bezier(0.23, 1, 0.32, 1) 1.6s forwards;
-}
-
-/* Pulse ring expanding */
-@keyframes hero-pulse-expand {
-  0%   { transform: scale(1); opacity: 0.4; }
-  100% { transform: scale(1.8); opacity: 0; }
-}
-
-.hero-pulse-ring {
-  animation: hero-pulse-expand 3s ease-out infinite;
-  will-change: transform, opacity;
-}
-
-/* Scanning line sweep */
-@keyframes hero-scan-sweep {
-  0%   { top: 0%; opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-
-.hero-scan-line {
-  animation: hero-scan-sweep 4.5s ease-in-out infinite;
-  will-change: top, opacity;
-}
-
-/* Connection arc dash-in */
-@keyframes hero-arc-draw {
-  to { stroke-dashoffset: 0; }
-}
-
-.hero-arc-path {
-  stroke-dashoffset: 200;
-  animation: hero-arc-draw 1.2s cubic-bezier(0.23, 1, 0.32, 1) 1s forwards;
-}
-
-/* Ambient particle float */
-@keyframes hero-particle-drift {
-  0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.4; }
-  25%      { transform: translate3d(3px, -4px, 0); opacity: 0.7; }
-  50%      { transform: translate3d(-2px, -6px, 0); opacity: 0.5; }
-  75%      { transform: translate3d(4px, -2px, 0); opacity: 0.6; }
-}
-
-.hero-particle {
-  animation: hero-particle-drift 8s ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
-.hero-particle:nth-child(2) { animation-delay: -2s; animation-duration: 9s; }
-.hero-particle:nth-child(3) { animation-delay: -4s; animation-duration: 7.5s; }
-.hero-particle:nth-child(4) { animation-delay: -1s; animation-duration: 10s; }
-.hero-particle:nth-child(5) { animation-delay: -3s; animation-duration: 8.5s; }
-
-/* Flow node entrance */
-@keyframes hero-node-enter {
-  from { opacity: 0; transform: translate3d(0, 12px, 0) scale(0.95); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-}
-
-.hero-flow-node {
-  opacity: 0;
-  animation: hero-node-enter 650ms var(--ease-out-strong) both;
-}
-
-.hero-flow-node:nth-child(1) { animation-delay: 400ms; }
-.hero-flow-node:nth-child(2) { animation-delay: 560ms; }
-.hero-flow-node:nth-child(3) { animation-delay: 720ms; }
-
-.hero-node-final {
-  opacity: 0;
-  animation: hero-node-enter 650ms var(--ease-out-strong) 900ms both;
-}
-
-/* Floating mini cards */
-@keyframes hero-mini-float-a {
+/* ─── Glass Slab Float ─── */
+@keyframes cyber-slab-float {
   0%, 100% { transform: translate3d(0, 0, 0); }
-  50%      { transform: translate3d(2px, -6px, 0); }
+  50%      { transform: translate3d(0, -5px, 0); }
 }
 
-@keyframes hero-mini-float-b {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50%      { transform: translate3d(-3px, -5px, 0); }
-}
-
-@keyframes hero-mini-float-c {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50%      { transform: translate3d(2px, -4px, 0); }
-}
-
-.hero-mini-card-a {
-  opacity: 0;
-  animation: hero-mini-float-a 5.6s ease-in-out 1s infinite,
-             hero-node-enter 600ms var(--ease-out-strong) 1s both;
+.cyber-slab {
+  animation: cyber-slab-float 7.5s ease-in-out infinite;
   will-change: transform;
 }
 
-.hero-mini-card-b {
-  opacity: 0;
-  animation: hero-mini-float-b 6.1s ease-in-out 1.2s infinite,
-             hero-node-enter 600ms var(--ease-out-strong) 1.2s both;
-  will-change: transform;
-}
-
-.hero-mini-card-c {
-  opacity: 0;
-  animation: hero-mini-float-c 5.9s ease-in-out 1.4s infinite,
-             hero-node-enter 600ms var(--ease-out-strong) 1.4s both;
-  will-change: transform;
-}
-
-/* Panel float */
-@keyframes hero-panel-float {
+/* ─── Hex Core Breathe ─── */
+@keyframes cyber-hex-breathe {
   0%, 100% { transform: translate3d(0, 0, 0); }
   50%      { transform: translate3d(0, -4px, 0); }
 }
 
-.hero-illustration-panel {
-  animation: hero-panel-float 6.5s ease-in-out infinite;
+.cyber-hex-breathe {
+  animation: cyber-hex-breathe 5.5s ease-in-out infinite;
   will-change: transform;
 }
 
-/* ═══════════ END HERO ILLUSTRATION ═══════════ */
+/* ─── Hex Glow Pulse ─── */
+@keyframes cyber-hex-glow-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1.2); }
+  50%      { opacity: 0.7; transform: scale(1.45); }
+}
+
+.cyber-hex-glow {
+  animation: cyber-hex-glow-pulse 5s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+/* ─── Scan Ring Rotation ─── */
+@keyframes cyber-scan-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.cyber-scan-ring {
+  transform-origin: center;
+  animation: cyber-scan-spin 22s linear infinite;
+  will-change: transform;
+}
+
+.cyber-scan-ring-rev {
+  transform-origin: center;
+  animation: cyber-scan-spin 18s linear infinite reverse;
+  will-change: transform;
+}
+
+/* ─── Hex Stroke Dash ─── */
+@keyframes cyber-hex-dash {
+  to { stroke-dashoffset: 0; }
+}
+
+.cyber-hex-stroke {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: cyber-hex-dash 2s cubic-bezier(0.23, 1, 0.32, 1) 0.3s forwards;
+}
+
+.cyber-hex-stroke-inner {
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: cyber-hex-dash 1.8s cubic-bezier(0.23, 1, 0.32, 1) 0.6s forwards;
+}
+
+/* ─── Hex Node Pulse ─── */
+@keyframes cyber-hex-node-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%      { opacity: 0.8; transform: scale(1.4); }
+}
+
+.cyber-hex-node {
+  animation: cyber-hex-node-pulse 3.8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+/* ─── Orbit Hex Rotation ─── */
+@keyframes cyber-orbit-hex-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.cyber-orbit-hex {
+  transform-origin: 260px 180px;
+  animation: cyber-orbit-hex-spin 30s linear infinite;
+  will-change: transform;
+}
+
+.cyber-orbit-hex-rev {
+  transform-origin: 260px 175px;
+  animation: cyber-orbit-hex-spin 24s linear infinite reverse;
+  will-change: transform;
+}
+
+/* ─── Link Line Flow ─── */
+@keyframes cyber-link-dash {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -32; }
+}
+
+.cyber-link-line {
+  stroke-dasharray: 6 10;
+  filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.22));
+}
+
+.cyber-link-flow {
+  animation: cyber-link-dash 3.6s linear infinite;
+  will-change: stroke-dashoffset;
+}
+
+.cyber-link-flow-b {
+  animation: cyber-link-dash 4s linear -0.7s infinite;
+  will-change: stroke-dashoffset;
+}
+
+.cyber-link-flow-c {
+  animation: cyber-link-dash 3s linear -1.3s infinite;
+  will-change: stroke-dashoffset;
+}
+
+/* ─── Pulse Dot ─── */
+@keyframes cyber-pulse-glow {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.4); }
+}
+
+.cyber-pulse-dot {
+  animation: cyber-pulse-glow 3.4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+/* ─── Data Particle Glow ─── */
+.cyber-data-particle {
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* ─── Module Float ─── */
+@keyframes cyber-module-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -4px, 0); }
+}
+
+.cyber-module-float {
+  animation: cyber-module-float 5.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+.cyber-module:nth-child(1) .cyber-module-float { animation-delay: 0s; }
+.cyber-module:nth-child(2) .cyber-module-float { animation-delay: -1.7s; }
+.cyber-module:nth-child(3) .cyber-module-float { animation-delay: -3.4s; }
+
+/* ─── Module Entrance ─── */
+@keyframes cyber-module-enter {
+  from { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.93); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+.cyber-module {
+  opacity: 0;
+  animation: cyber-module-enter 620ms var(--ease-out-strong) both;
+}
+
+.cyber-module:nth-child(1) { animation-delay: 420ms; }
+.cyber-module:nth-child(2) { animation-delay: 570ms; }
+.cyber-module:nth-child(3) { animation-delay: 720ms; }
+
+/* ─── Output Capsule Entrance ─── */
+@keyframes cyber-output-rise {
+  from { opacity: 0; transform: translate3d(0, 8px, 0) scale(0.95); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+.cyber-output-enter {
+  opacity: 0;
+  animation: cyber-output-rise 650ms var(--ease-out-strong) 880ms both;
+}
+
+/* ─── Badge Float ─── */
+@keyframes cyber-badge-float-a {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(3px, -5px, 0); }
+}
+
+@keyframes cyber-badge-float-b {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(-3px, -4px, 0); }
+}
+
+.cyber-badge-a .cyber-badge-float {
+  animation: cyber-badge-float-a 5.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+.cyber-badge-b .cyber-badge-float {
+  animation: cyber-badge-float-b 6.3s ease-in-out -1.3s infinite;
+  will-change: transform;
+}
+
+/* ─── Badge Entrance ─── */
+@keyframes cyber-badge-enter {
+  from { opacity: 0; transform: translate3d(0, 8px, 0) scale(0.94); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+.cyber-badge {
+  opacity: 0;
+  animation: cyber-badge-enter 520ms var(--ease-out-strong) both;
+}
+
+.cyber-badge-a { animation-delay: 1.05s; }
+.cyber-badge-b { animation-delay: 1.25s; }
+
+/* ─── Threat Marker ─── */
+@keyframes cyber-threat-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(2px, -3px, 0); }
+}
+
+@keyframes cyber-threat-enter {
+  from { opacity: 0; transform: translate3d(0, 6px, 0) scale(0.93); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+.cyber-threat {
+  opacity: 0;
+  animation: cyber-threat-enter 480ms var(--ease-out-strong) 1.4s both;
+}
+
+.cyber-threat-float {
+  animation: cyber-threat-drift 5s ease-in-out 1.4s infinite;
+  will-change: transform;
+}
+
+/* ─── Ambient Particles ─── */
+@keyframes cyber-particle-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.3; }
+  25%      { transform: translate3d(2px, -4px, 0); opacity: 0.55; }
+  50%      { transform: translate3d(-2px, -6px, 0); opacity: 0.4; }
+  75%      { transform: translate3d(3px, -2px, 0); opacity: 0.5; }
+}
+
+.cyber-particle {
+  animation: cyber-particle-drift 8.5s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.cyber-particle:nth-child(2) { animation-delay: -1.3s; animation-duration: 9.5s; }
+.cyber-particle:nth-child(3) { animation-delay: -2.8s; animation-duration: 7.8s; }
+.cyber-particle:nth-child(4) { animation-delay: -0.6s; animation-duration: 10.5s; }
+.cyber-particle:nth-child(5) { animation-delay: -2s; animation-duration: 8.8s; }
+.cyber-particle:nth-child(6) { animation-delay: -3.5s; animation-duration: 10s; }
+.cyber-particle:nth-child(7) { animation-delay: -0.8s; animation-duration: 7.2s; }
+.cyber-particle:nth-child(8) { animation-delay: -4.2s; animation-duration: 9.2s; }
+
+/* ─── Ambient Glow Drift ─── */
+@keyframes cyber-glow-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: 1; }
+  50%      { transform: translate3d(4px, -5px, 0); opacity: 0.7; }
+}
+
+.cyber-glow-a { animation: cyber-glow-drift 13s ease-in-out infinite; }
+.cyber-glow-b { animation: cyber-glow-drift 15s ease-in-out -3.5s infinite; }
+.cyber-glow-c { animation: cyber-glow-drift 11s ease-in-out -6.5s infinite; }
+
+/* ═══════════ HERO ILLUSTRATION ═══════════ */
+
+@keyframes hero-fuzzy-canvas-reveal {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.hero-fuzzy-wrapper {
+  display: block;
+  line-height: 1.08;
+  max-width: 100%;
+  position: relative;
+}
+
+.hero-fuzzy-reserve {
+  color: transparent;
+  display: inline-block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-fuzzy-canvas-layer {
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.hero-fuzzy-canvas {
+  animation: hero-fuzzy-canvas-reveal 520ms var(--ease-out-strong) both;
+  display: block;
+  height: auto;
+  margin-left: -32px;
+  max-width: calc(100% + 64px);
+  pointer-events: auto;
+  will-change: opacity, filter;
+}
+
+/* ─── Float (naik-turun halus) ─── */
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.hero-float {
+  animation: heroFloat 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ─── Card hover glow boost ─── */
+.hero-card {
+  transition: filter 0.5s ease;
+}
+
+.hero-interactive-shell:hover .hero-card {
+  filter: drop-shadow(0 0 80px rgba(34, 211, 238, 0.30));
+}
+
+/* ─── Core Pulse Glow ─── */
+@keyframes heroCorePulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.92); }
+  50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+.hero-core-pulse {
+  animation: heroCorePulse 4.5s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+/* ─── Orbit Ring Rotation ─── */
+@keyframes heroOrbitSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hero-orbit-ring {
+  transform-origin: 170px 170px;
+  animation: heroOrbitSpin 22s linear infinite;
+  will-change: transform;
+}
+
+.hero-orbit-ring-rev {
+  transform-origin: 170px 170px;
+  animation: heroOrbitSpin 28s linear infinite reverse;
+  will-change: transform;
+}
+
+/* ─── Data Flow (stroke dash) ─── */
+@keyframes heroDataFlow {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -30; }
+}
+
+.hero-data-flow {
+  stroke-dasharray: 8 14;
+  animation: heroDataFlow 3.5s linear infinite;
+  will-change: stroke-dashoffset;
+  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.25));
+}
+
+.hero-data-flow-b {
+  animation-duration: 3s;
+  animation-delay: -0.8s;
+}
+
+.hero-data-flow-c {
+  animation-duration: 4s;
+  animation-delay: -1.5s;
+}
+
+/* ─── Scanline Sweep ─── */
+@keyframes heroScanline {
+  0% { top: -8%; opacity: 0; }
+  10% { opacity: 0.6; }
+  88% { opacity: 0.6; }
+  100% { top: 108%; opacity: 0; }
+}
+
+.hero-scanline {
+  animation: heroScanline 5.5s ease-in-out 1.5s infinite;
+  will-change: top, opacity;
+}
+
+/* ─── Sparkle ─── */
+@keyframes heroSparkle {
+  0%, 100% { opacity: 0; transform: scale(0.2); }
+  10% { opacity: 1; transform: scale(1.4); }
+  25% { opacity: 0.6; transform: scale(1); }
+  45% { opacity: 0; transform: scale(0.2); }
+}
+
+.hero-sparkle {
+  animation: heroSparkle 4s ease-in-out infinite;
+  will-change: opacity, transform;
+}
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -431,40 +648,26 @@ html.lenis, html.lenis body {
   .hero-card-float-b,
   .hero-card-float-c,
   .hero-visual-glow,
+  .hero-float,
+  .hero-core-pulse,
   .hero-orbit-ring,
-  .hero-orbit-ring-reverse,
-  .hero-shield-glow,
-  .hero-shield-svg,
-  .hero-hex-outer,
-  .hero-hex-inner,
-  .hero-check-path,
-  .hero-pulse-ring,
-  .hero-scan-line,
-  .hero-arc-path,
-  .hero-particle,
-  .hero-flow-node,
-  .hero-node-final,
-  .hero-mini-card-a,
-  .hero-mini-card-b,
-  .hero-mini-card-c,
-  .hero-illustration-panel {
+  .hero-orbit-ring-rev,
+  .hero-data-flow,
+  .hero-scanline,
+  .hero-sparkle {
     animation: none !important;
     opacity: 1 !important;
-    transform: translate(-50%, -50%) !important;
-    will-change: auto;
+    will-change: auto !important;
   }
 
-  .hero-flow-node,
-  .hero-node-final,
-  .hero-mini-card-a,
-  .hero-mini-card-b,
-  .hero-mini-card-c {
+  .hero-float,
+  .hero-orbit-ring,
+  .hero-orbit-ring-rev,
+  .hero-card {
     transform: none !important;
   }
 
-  .hero-hex-outer,
-  .hero-hex-inner,
-  .hero-check-path {
+  .hero-data-flow {
     stroke-dashoffset: 0 !important;
   }
 
