@@ -18,7 +18,7 @@ export default function StatusBadge({ status, className }: StatusBadgeProps) {
     classes = "border-amber-500/25 bg-amber-500/10 text-amber-300";
     label = "Suspicious";
   } else if (normalized === "phishing" || normalized === "danger") {
-    classes = "border-rose-500/25 bg-rose-500/10 text-rose-300";
+    classes = "border-red-500/35 bg-red-500/10 text-red-300";
     label = "Phishing";
   } else if (normalized === "imputed_unknown" || normalized === "unknown") {
     classes = "border-sky-500/25 bg-sky-500/10 text-sky-300";

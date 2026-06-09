@@ -6,28 +6,23 @@ Quality gate belum terpenuhi, sehingga model resilient tidak diterapkan ke backe
 
 ## Model Terbaik Sementara
 
-- Nama: soft_voting_ensemble
-- Clean accuracy: 0.868329
-- Clean precision: 0.879964
-- Clean recall: 0.853018
-- Clean F1-score: 0.866282
-- Robust accuracy: 0.862205
-- Robust precision: 0.882625
-- Robust recall: 0.835521
-- Robust F1-score: 0.858427
-- Stability gap: 0.007855
-- Phishing recall clean/robust: 0.853018 / 0.835521
+- Nama: robust_xgboost
+- Clean accuracy: 0.8666
+- Clean F1-score: 0.8645
+- Robust accuracy: 0.8622
+- Robust F1-score: 0.8547
+- Stability gap: 0.0098
 
 ## Optimasi yang Dicoba
 
 | Threshold Profile | Failure Rate | Best Model | Clean F1 | Robust F1 | Composite | Gate |
 |---|---:|---|---:|---:|---:|---|
 | baseline | 0.15 | robust_random_forest | 0.8678 | 0.8289 | 0.7596 | False |
-| f18_b | 0.05 | soft_voting_ensemble | 0.8663 | 0.8584 | 0.7753 | False |
+| f18_b | 0.05 | robust_xgboost | 0.8645 | 0.8547 | 0.7727 | False |
 | f29_b | 0.1 | robust_random_forest | 0.8683 | 0.8472 | 0.7699 | False |
 | f18_b+f29_b | 0.15 | robust_random_forest | 0.8654 | 0.8344 | 0.7618 | False |
 
-Optimasi mencakup threshold F18 opsi B, threshold F29 opsi B, failure rate mild/moderate/strong, dan ensemble soft voting. `n_iter` tetap 8 agar training realistis di perangkat pengembangan.
+Optimasi mencakup threshold F18 opsi B, threshold F29 opsi B, dan failure rate mild/moderate/strong. `n_iter` tetap 8 agar training realistis di perangkat pengembangan.
 
 ## Feature Importance
 

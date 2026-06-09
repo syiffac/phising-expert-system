@@ -9,7 +9,7 @@ interface TriggeredRulesProps {
 
 export default function TriggeredRules({ rules }: TriggeredRulesProps) {
   return (
-    <GlassCard className="p-5 sm:p-6" interactive={false}>
+    <GlassCard className="p-5 after:opacity-10 sm:p-6" glassIntensity="strong" interactive={false}>
       <div className="mb-5 flex flex-col gap-3 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="font-mono text-xs font-bold uppercase tracking-widest text-cyan-300">
@@ -31,23 +31,15 @@ export default function TriggeredRules({ rules }: TriggeredRulesProps) {
       </div>
 
       {rules.length === 0 ? (
-        <GlassCard
-          borderRadius={20}
-          className="flex items-start gap-3 border-emerald-500/20 bg-emerald-500/10 p-4 text-sm leading-6 text-emerald-100"
-          glassIntensity="soft"
-          interactive={false}
-        >
+        <div className="flex items-start gap-3 rounded-2xl border border-emerald-400/25 bg-emerald-400/10 p-4 text-sm leading-6 text-emerald-100">
           <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
           <p>No expert rules triggered.</p>
-        </GlassCard>
+        </div>
       ) : (
         <div className="grid gap-3">
           {rules.map((rule, index) => (
-            <GlassCard
-              borderRadius={20}
-              className="p-4"
-              glassIntensity="soft"
-              interactive
+            <article
+              className="rounded-2xl border border-white/[0.12] bg-slate-900/65 p-4 shadow-lg shadow-slate-950/10 transition-colors duration-150 hover:bg-slate-800/60"
               key={`${rule.code || "rule"}-${index}`}
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -59,7 +51,7 @@ export default function TriggeredRules({ rules }: TriggeredRulesProps) {
                     <p className="font-mono text-sm font-black text-cyan-200">
                       {rule.code || `R${index + 1}`}
                     </p>
-                    <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
                       Severity: {rule.severity || "not provided"}
                     </p>
                   </div>
@@ -74,11 +66,11 @@ export default function TriggeredRules({ rules }: TriggeredRulesProps) {
               )}
 
               {rule.source && (
-                <p className="mt-3 break-words font-mono text-[11px] leading-5 text-slate-500">
+                <p className="mt-3 break-words font-mono text-[11px] leading-5 text-slate-400">
                   Source: {rule.source}
                 </p>
               )}
-            </GlassCard>
+            </article>
           ))}
         </div>
       )}

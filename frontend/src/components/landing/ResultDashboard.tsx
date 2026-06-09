@@ -69,17 +69,17 @@ function ModelEvaluationStrip({
   const robust = metrics.robust_test;
 
   return (
-    <div className="mt-4 grid gap-2 sm:grid-cols-3">
+    <div className="mt-4 grid gap-2 sm:grid-cols-3 sm:auto-rows-fr">
       {[
         ["Robust Accuracy", robust.accuracy],
         ["Robust F1", robust.f1_score],
         ["Phishing Recall", robust.phishing_recall ?? robust.recall],
       ].map(([label, value]) => (
         <div
-          className="rounded-xl border border-white/[0.08] bg-slate-950/35 p-3"
+          className="flex h-full flex-col rounded-xl border border-white/[0.08] bg-slate-950/35 p-3"
           key={label as string}
         >
-          <p className="font-mono text-[9px] font-bold uppercase tracking-wider text-slate-500">
+          <p className="font-mono text-[9px] font-bold uppercase tracking-wider text-slate-400">
             {label}
           </p>
           <p className="mt-1 font-mono text-sm font-black text-slate-100">
@@ -96,11 +96,11 @@ function statusCopy(status: string | undefined) {
 
   if (normalized === "phishing") {
     return {
-      accent: "text-rose-200",
-      border: "border-rose-500/25",
-      icon: <ShieldAlert className="h-8 w-8 text-rose-200" />,
+      accent: "text-red-200",
+      border: "border-red-500/30",
+      icon: <ShieldAlert className="h-8 w-8 text-red-200" />,
       message: "High-risk phishing indicators were found. Do not submit credentials.",
-      panel: "bg-rose-500/10",
+      panel: "bg-red-500/10",
     };
   }
 
@@ -133,7 +133,7 @@ function statusCopy(status: string | undefined) {
   };
 }
 
-const cardLabel = "font-mono text-[11px] font-bold uppercase tracking-widest text-slate-500";
+const cardLabel = "font-mono text-[11px] font-bold uppercase tracking-widest text-slate-400";
 const cardValue = "mt-1 break-words text-sm font-semibold text-slate-100";
 
 const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
@@ -180,7 +180,7 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                 Result Dashboard
               </h2>
             </div>
-            <div className="flex flex-wrap gap-2 text-xs text-slate-400">
+            <div className="flex flex-wrap gap-2 text-xs text-slate-300">
               <GlassCard
                 borderRadius={999}
                 className="inline-flex items-center gap-2 px-3 py-1.5"
@@ -204,8 +204,8 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
           </div>
         </Reveal>
 
-        <div className="grid gap-5 lg:grid-cols-[1.05fr_1fr]">
-          <Reveal>
+        <div className="grid gap-5 lg:grid-cols-2 lg:auto-rows-fr">
+          <Reveal className="h-full">
             <GlassCard
               className={`${status.border} ${status.panel} h-full p-5 sm:p-6`}
               glow
@@ -232,12 +232,7 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
 
               <p className="mt-5 text-sm leading-7 text-slate-200">{status.message}</p>
 
-              <GlassCard
-                borderRadius={20}
-                className="mt-6 grid gap-3 p-4"
-                glassIntensity="soft"
-                interactive={false}
-              >
+              <div className="mt-6 grid gap-3 rounded-[20px] border border-white/[0.12] bg-slate-900/60 p-4 shadow-inner shadow-slate-950/30">
                 <div>
                   <p className={cardLabel}>Normalized URL</p>
                   <p className={cardValue}>{result.normalized_url || result.url || "-"}</p>
@@ -246,11 +241,11 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                   <p className={cardLabel}>Hostname</p>
                   <p className={cardValue}>{result.hostname || "-"}</p>
                 </div>
-              </GlassCard>
+              </div>
             </GlassCard>
           </Reveal>
 
-          <Reveal delay={0.08}>
+          <Reveal className="h-full" delay={0.08}>
             <GlassCard className="h-full p-5 sm:p-6" interactive={false}>
               <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/10 pb-4">
                 <div>
@@ -262,34 +257,34 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                 <GitBranch className="h-5 w-5 text-cyan-300" />
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                <GlassCard borderRadius={20} className="p-4" glassIntensity="soft" interactive={false}>
+              <div className="grid gap-3 sm:grid-cols-2 sm:auto-rows-fr">
+                <div className="h-full rounded-[20px] border border-white/[0.12] bg-slate-900/60 p-4 shadow-inner shadow-slate-950/30">
                   <p className={cardLabel}>Method</p>
                   <p className={cardValue}>Forward Chaining</p>
-                </GlassCard>
-                <GlassCard borderRadius={20} className="p-4" glassIntensity="soft" interactive={false}>
+                </div>
+                <div className="h-full rounded-[20px] border border-white/[0.12] bg-slate-900/60 p-4 shadow-inner shadow-slate-950/30">
                   <p className={cardLabel}>Initial Status</p>
                   <div className="mt-2">
                     <StatusBadge status={expertSystem?.initial_status} />
                   </div>
-                </GlassCard>
-                <GlassCard borderRadius={20} className="p-4" glassIntensity="soft" interactive={false}>
+                </div>
+                <div className="h-full rounded-[20px] border border-white/[0.12] bg-slate-900/60 p-4 shadow-inner shadow-slate-950/30">
                   <p className={cardLabel}>Triggered Rules Count</p>
                   <p className="mt-1 font-mono text-2xl font-black text-cyan-200">
                     {expertSystem?.total_triggered_rules ?? triggeredRules.length}
                   </p>
-                </GlassCard>
-                <GlassCard borderRadius={20} className="p-4" glassIntensity="soft" interactive={false}>
+                </div>
+                <div className="h-full rounded-[20px] border border-white/[0.12] bg-slate-900/60 p-4 shadow-inner shadow-slate-950/30">
                   <p className={cardLabel}>Knowledge Base</p>
                   <p className={cardValue}>F01-F30</p>
-                </GlassCard>
+                </div>
               </div>
             </GlassCard>
           </Reveal>
         </div>
 
-        <div className="mt-5 grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
-          <Reveal delay={0.1}>
+        <div className="mt-5 grid gap-5 lg:grid-cols-2 lg:auto-rows-fr">
+          <Reveal className="h-full" delay={0.1}>
             <GlassCard className="h-full p-5 sm:p-6" interactive={false}>
               <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/10 pb-4">
                 <div>
@@ -317,7 +312,7 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                         <h4 className="mt-2 text-base font-black text-slate-50">
                           {formatModelName(machineLearning.primary_model?.name)}
                         </h4>
-                        <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-200/80">
+                        <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-300">
                           {machineLearning.primary_model?.algorithm || "xgboost"}
                         </p>
                       </div>
@@ -337,13 +332,13 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                   >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div>
-                        <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-500">
+                        <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-400">
                           COMPARISON ONLY
                         </p>
                         <h4 className="mt-2 text-base font-black text-slate-50">
                           {formatModelName(machineLearning.comparison_model?.name)}
                         </h4>
-                        <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                        <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
                           {machineLearning.comparison_model?.algorithm ||
                             "random_forest"}
                         </p>
@@ -373,18 +368,20 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                 </GlassCard>
               )}
 
+              {machineLearning?.note && (
               <GlassCard
                 borderRadius={20}
-                className="mt-5 p-3 text-xs leading-6 text-slate-400"
+                className="mt-5 p-3 text-xs leading-6 text-slate-300"
                 glassIntensity="soft"
                 interactive={false}
               >
-                Soft voting is not used in runtime.
+                <p>{machineLearning.note}</p>
               </GlassCard>
+              )}
             </GlassCard>
           </Reveal>
 
-          <Reveal delay={0.16}>
+          <Reveal className="h-full" delay={0.16}>
             <GlassCard className="h-full p-5 sm:p-6" interactive={false}>
               <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/10 pb-4">
                 <div>
@@ -405,35 +402,25 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                     value={mlFeatureQuality.available}
                   />
 
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <GlassCard borderRadius={20} className="p-4" glassIntensity="soft" interactive={false}>
+                  <div className="grid gap-3 sm:grid-cols-3 sm:auto-rows-fr">
+                    <div className="h-full rounded-[20px] border border-white/[0.12] bg-slate-900/60 p-4 shadow-inner shadow-slate-950/30">
                       <p className={cardLabel}>Total Features</p>
                       <p className="mt-1 font-mono text-2xl font-black text-slate-50">
                         {mlFeatureQuality.total_features}
                       </p>
-                    </GlassCard>
-                    <GlassCard
-                      borderRadius={20}
-                      className="border-emerald-500/20 bg-emerald-500/10 p-4"
-                      glassIntensity="soft"
-                      interactive={false}
-                    >
+                    </div>
+                    <div className="h-full rounded-[20px] border border-emerald-500/25 bg-emerald-500/10 p-4 shadow-inner shadow-slate-950/30">
                       <p className={cardLabel}>Available</p>
                       <p className="mt-1 font-mono text-2xl font-black text-emerald-200">
                         {mlFeatureQuality.available}
                       </p>
-                    </GlassCard>
-                    <GlassCard
-                      borderRadius={20}
-                      className="border-sky-500/20 bg-sky-500/10 p-4"
-                      glassIntensity="soft"
-                      interactive={false}
-                    >
+                    </div>
+                    <div className="h-full rounded-[20px] border border-sky-500/25 bg-sky-500/10 p-4 shadow-inner shadow-slate-950/30">
                       <p className={cardLabel}>Imputed Unknown</p>
                       <p className="mt-1 font-mono text-2xl font-black text-sky-200">
                         {mlFeatureQuality.imputed_unknown}
                       </p>
-                    </GlassCard>
+                    </div>
                   </div>
 
                   {mlFeatureQuality.imputed_unknown > 0 && (
@@ -448,20 +435,25 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
                     </GlassCard>
                   )}
 
-                  <GlassCard borderRadius={20} className="p-4" glassIntensity="soft" interactive={false}>
+                  <div className="rounded-[20px] border border-white/[0.12] bg-slate-900/60 p-4 shadow-inner shadow-slate-950/30">
                     <p className={cardLabel}>Imputed Features</p>
                     <p className={cardValue}>
                       {mlFeatureQuality.imputed_features.length > 0
                         ? mlFeatureQuality.imputed_features.join(", ")
                         : "None"}
                     </p>
-                    <p className="mt-3 font-mono text-xs text-slate-500">
+                    <p className="mt-3 font-mono text-xs text-slate-400">
                       ML feature set: {mlFeatureTotal} {mlFeatureType} features
                     </p>
-                  </GlassCard>
+                    {mlFeatureQuality.is_resilient_mode && (
+                      <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-sky-500/20 bg-sky-500/10 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-sky-300">
+                        Resilient extraction active
+                      </p>
+                    )}
+                  </div>
                 </div>
               ) : (
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-slate-300">
                   Feature quality was not returned by the backend.
                 </p>
               )}
@@ -486,7 +478,7 @@ const ResultDashboard = React.forwardRef<HTMLElement, ResultDashboardProps>(
         {result.note && (
           <Reveal delay={0.14}>
             <GlassCard
-              className="mt-5 p-4 text-sm leading-7 text-slate-400"
+              className="mt-5 p-4 text-sm leading-7 text-slate-300"
               glassIntensity="soft"
               interactive={false}
             >

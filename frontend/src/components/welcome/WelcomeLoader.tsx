@@ -9,7 +9,7 @@ const SESSION_KEY = "phishguard-welcome-seen";
 
 const INIT_STEPS = [
   "Initializing Expert System",
-  "Loading F01\u2013F30 Knowledge Base",
+  "Loading F01–F30 Knowledge Base",
   "Preparing Forward Chaining Engine",
   "Loading XGBoost Runtime Model",
   "Checking Feature Extraction Pipeline",

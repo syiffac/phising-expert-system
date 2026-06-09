@@ -67,7 +67,7 @@ export default function AnalyzeSection({
                   <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
                   <input
                     autoComplete="url"
-                    className="h-14 w-full rounded-2xl border border-white/10 bg-slate-950/70 pl-12 pr-4 text-sm text-slate-50 outline-none transition duration-200 placeholder:text-slate-600 focus:border-cyan-300/50 focus:ring-4 focus:ring-cyan-400/10"
+                    className="h-14 w-full rounded-2xl border border-white/10 bg-slate-950/70 pl-12 pr-4 text-sm text-slate-50 outline-none transition duration-200 placeholder:text-slate-500 focus:border-cyan-300/50 focus:ring-4 focus:ring-cyan-400/10"
                     id="detect-url-input"
                     onChange={(event) => onInputChange(event.target.value)}
                     placeholder="https://example.com/login"
@@ -99,11 +99,11 @@ export default function AnalyzeSection({
             {errorMessage && (
               <GlassCard
                 borderRadius={20}
-                className="mt-5 flex items-start gap-3 border-rose-500/25 bg-rose-500/10 p-4 text-sm leading-6 text-rose-100"
+                className="mt-5 flex items-start gap-3 border-red-500/35 bg-red-500/10 p-4 text-sm leading-6 text-red-100"
                 glassIntensity="soft"
                 interactive={false}
               >
-                <AlertOctagon className="mt-0.5 h-5 w-5 shrink-0 text-rose-300" />
+                <AlertOctagon className="mt-0.5 h-5 w-5 shrink-0 text-red-300" />
                 <p>{errorMessage}</p>
               </GlassCard>
             )}

@@ -13,8 +13,8 @@ import {
   ShieldCheck,
   Sigma,
 } from "lucide-react";
-import DarkVeilBackground from "@/components/visual/DarkVeilBackground";
 import Navbar from "@/components/landing/Navbar";
+import InferencePolicySection from "@/components/knowledge-base/InferencePolicySection";
 import GlassCard from "@/components/ui-custom/GlassCard";
 import { cn } from "@/lib/cn";
 
@@ -55,7 +55,7 @@ function conclusionClasses(conclusion: string) {
   const normalized = conclusion.toLowerCase();
 
   if (normalized === "phishing") {
-    return "border-rose-400/25 bg-rose-400/10 text-rose-200";
+    return "border-red-400/35 bg-red-500/10 text-red-200";
   }
 
   if (normalized === "suspicious") {
@@ -69,7 +69,7 @@ function severityClasses(severity: string) {
   const normalized = severity.toLowerCase();
 
   if (normalized === "high") {
-    return "border-rose-400/25 bg-rose-400/10 text-rose-200";
+    return "border-red-400/35 bg-red-500/10 text-red-200";
   }
 
   if (normalized === "medium") {
@@ -124,7 +124,7 @@ function StatTile({
   }[tone];
 
   return (
-    <div className="min-w-0 rounded-2xl border border-white/[0.08] bg-slate-950/35 p-4">
+    <div className="flex h-full min-w-0 flex-col rounded-2xl border border-white/[0.08] bg-slate-950/35 p-4">
       <div className="flex items-center gap-3">
         <span
           className={cn(
@@ -135,7 +135,7 @@ function StatTile({
           {icon}
         </span>
         <div className="min-w-0">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
             {label}
           </p>
           <p className="mt-1 truncate font-mono text-xl font-black text-slate-100">
@@ -143,7 +143,7 @@ function StatTile({
           </p>
         </div>
       </div>
-      {detail && <p className="mt-3 text-xs leading-5 text-slate-400">{detail}</p>}
+      {detail && <p className="mt-3 flex-1 text-xs leading-5 text-slate-300">{detail}</p>}
     </div>
   );
 }
@@ -189,7 +189,7 @@ export default function KnowledgeBasePage() {
         setRules(Array.isArray(rulesResult.data) ? rulesResult.data : []);
       } catch {
         setErrorMessage(
-          "Backend belum aktif atau terjadi kesalahan saat mengambil knowledge base."
+          "Backend API is not reachable. Please start FastAPI server on port 8000."
         );
       } finally {
         setLoading(false);
@@ -252,8 +252,7 @@ export default function KnowledgeBasePage() {
   }, [rules]);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#07111F] text-slate-100 selection:bg-cyan-300/25 selection:text-cyan-50">
-      <DarkVeilBackground />
+    <main className="relative min-h-screen overflow-x-hidden text-slate-100 selection:bg-cyan-300/25 selection:text-cyan-50">
       <div className="relative z-10">
         <Navbar />
 
@@ -291,7 +290,7 @@ export default function KnowledgeBasePage() {
                   <BookOpenCheck className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-400">
+                  <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-300">
                     Expert-first layer
                   </p>
                   <p className="mt-1 truncate text-sm font-semibold text-slate-200">
@@ -310,7 +309,7 @@ export default function KnowledgeBasePage() {
               glassIntensity="strong"
               interactive={false}
             >
-              <p className="text-sm font-semibold text-rose-200">
+              <p className="text-sm font-semibold text-red-200">
                 {errorMessage}
               </p>
             </GlassCard>
@@ -318,7 +317,7 @@ export default function KnowledgeBasePage() {
 
           {!loading && !errorMessage && (
             <>
-              <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-fr">
                 <StatTile
                   detail="Symbolic facts used by expert system and ML alignment"
                   icon={<Database className="h-4 w-4" />}
@@ -353,7 +352,7 @@ export default function KnowledgeBasePage() {
                   <label className="relative block">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                     <input
-                      className="h-12 w-full rounded-2xl border border-white/[0.08] bg-slate-950/50 pl-10 pr-4 text-sm font-semibold text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-cyan-300/40 focus:ring-2 focus:ring-cyan-300/20"
+                      className="h-12 w-full rounded-2xl border border-white/[0.08] bg-slate-950/50 pl-10 pr-4 text-sm font-semibold text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-cyan-300/40 focus:ring-2 focus:ring-cyan-300/20"
                       onChange={(event) => setQuery(event.target.value)}
                       placeholder="Cari fitur, rule, sumber, atau kode..."
                       type="search"
@@ -377,7 +376,7 @@ export default function KnowledgeBasePage() {
                 </div>
               </GlassCard>
 
-              <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(24rem,0.85fr)]">
+              <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(24rem,0.85fr)] xl:auto-rows-fr">
                 <GlassCard className="p-5 sm:p-6" interactive={false}>
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
@@ -388,15 +387,15 @@ export default function KnowledgeBasePage() {
                         F01-F30 symbolic facts
                       </h2>
                     </div>
-                    <p className="font-mono text-xs font-bold text-slate-500">
+                    <p className="font-mono text-xs font-bold text-slate-400">
                       {filteredFeatures.length}/{features.length} shown
                     </p>
                   </div>
 
-                  <div className="mt-5 grid gap-3">
+                  <div className="mt-5 grid gap-3 sm:auto-rows-fr">
                     {filteredFeatures.map((feature) => (
                       <div
-                        className="rounded-2xl border border-white/[0.08] bg-slate-950/30 p-4"
+                        className="flex h-full flex-col rounded-2xl border border-white/[0.08] bg-slate-950/30 p-4"
                         key={feature.code}
                       >
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -409,15 +408,15 @@ export default function KnowledgeBasePage() {
                                 {feature.name}
                               </h3>
                             </div>
-                            <p className="mt-3 text-sm leading-6 text-slate-400">
+                            <p className="mt-3 text-sm leading-6 text-slate-300">
                               {feature.description}
                             </p>
                           </div>
-                          <span className="shrink-0 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          <span className="shrink-0 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
                             Fact
                           </span>
                         </div>
-                        <p className="mt-3 break-words font-mono text-[11px] leading-5 text-slate-500">
+                        <p className="mt-3 break-words font-mono text-[11px] leading-5 text-slate-400">
                           {feature.source}
                         </p>
                       </div>
@@ -435,15 +434,15 @@ export default function KnowledgeBasePage() {
                         Forward chaining rules
                       </h2>
                     </div>
-                    <p className="font-mono text-xs font-bold text-slate-500">
+                    <p className="font-mono text-xs font-bold text-slate-400">
                       {filteredRules.length}/{rules.length} shown
                     </p>
                   </div>
 
-                  <div className="mt-5 grid gap-3">
+                  <div className="mt-5 grid gap-3 sm:auto-rows-fr">
                     {filteredRules.map((rule) => (
                       <div
-                        className="rounded-2xl border border-white/[0.08] bg-slate-950/30 p-4"
+                        className="flex h-full flex-col rounded-2xl border border-white/[0.08] bg-slate-950/30 p-4"
                         key={rule.code}
                       >
                         <div className="flex flex-wrap items-center gap-2">
@@ -484,10 +483,10 @@ export default function KnowledgeBasePage() {
                           ))}
                         </div>
 
-                        <p className="mt-4 text-sm leading-6 text-slate-400">
+                        <p className="mt-4 text-sm leading-6 text-slate-300">
                           {rule.explanation}
                         </p>
-                        <p className="mt-3 break-words font-mono text-[11px] leading-5 text-slate-500">
+                        <p className="mt-3 break-words font-mono text-[11px] leading-5 text-slate-400">
                           {rule.source}
                         </p>
                       </div>
@@ -495,6 +494,8 @@ export default function KnowledgeBasePage() {
                   </div>
                 </GlassCard>
               </div>
+
+              <InferencePolicySection />
             </>
           )}
         </section>

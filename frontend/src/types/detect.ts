@@ -75,7 +75,6 @@ export interface OptimizedHybridEvaluation {
   selected_runtime_model: string;
   primary_model: string;
   comparison_model: string;
-  soft_voting: string;
   note: string;
   metrics: {
     models: Record<string, RuntimeModelMetrics>;

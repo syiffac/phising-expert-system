@@ -114,7 +114,7 @@ export default function HeroSection({
           </h1>
 
           {/* Subtitle */}
-          <p className="mt-5 max-w-[34rem] text-sm leading-7 text-slate-400 sm:text-base md:mt-6 md:text-lg md:leading-8">
+          <p className="mt-5 max-w-[34rem] text-sm leading-7 text-slate-300 sm:text-base md:mt-6 md:text-lg md:leading-8">
             Analyze suspicious URLs using forward chaining expert rules and
             optimized XGBoost machine learning.
           </p>
@@ -143,7 +143,7 @@ export default function HeroSection({
               <p className="font-mono text-lg font-black text-cyan-200 sm:text-xl">
                 F01-F30
               </p>
-              <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 sm:text-xs">
+              <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400 sm:text-xs">
                 Knowledge Base
               </p>
             </div>
@@ -151,7 +151,7 @@ export default function HeroSection({
               <p className="font-mono text-lg font-black text-teal-200 sm:text-xl">
                 91
               </p>
-              <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 sm:text-xs">
+              <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400 sm:text-xs">
                 ML Features
               </p>
             </div>
@@ -159,7 +159,7 @@ export default function HeroSection({
               <p className="font-mono text-lg font-black text-blue-200 sm:text-xl">
                 Hybrid
               </p>
-              <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 sm:text-xs">
+              <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400 sm:text-xs">
                 XGBoost Runtime
               </p>
             </div>

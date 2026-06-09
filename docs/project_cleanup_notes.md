@@ -42,5 +42,5 @@ Setelah proses reorganisasi folder dan pembersihan cache (`__pycache__` & `.pyc`
 * **Manual Feature Extractor (`test_manual_feature_extractor.py --network`)**: Sukses memperoleh 30/30 fitur available untuk URL reachable (`google.com`, `example.com`) dan gracefully mendegradasi ke resilient mode dengan 16 `imputed_unknown` untuk URL dummy.
 * **Integrasi Runtime (`validate_xgboost_runtime_integration.py`)**: Sukses memuat model utama XGBoost dan model pembanding Random Forest serta memprediksi dengan benar dengan kriteria asersi terpenuhi.
 * **Live API Endpoint (`test_api_endpoints.py`)**:
-  * **GET `/api/evaluation/`**: Sukses mengembalikan status "augmented_robust_xgboost" sebagai selected runtime model dan menegaskan Soft Voting tidak digunakan di runtime.
+  * **GET `/api/evaluation/`**: Sukses mengembalikan status "augmented_robust_xgboost" sebagai selected runtime model.
   * **POST `/api/detect/`**: Berhasil mengembalikan keputusan terpadu dengan analysis_mode `manual_url_optimized_hybrid_xgboost`, menampilkan `feature_quality`, `expert_system`, `machine_learning`, dan `final_result`.

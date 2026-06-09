@@ -111,8 +111,8 @@ const supportsSVGFilters = (filterId: string) => {
 
 export default function GlassSurface({
   children,
-  width = "auto",
-  height = "auto",
+  width,
+  height,
   borderRadius = 20,
   borderWidth = 0.07,
   brightness = 50,
@@ -281,8 +281,18 @@ export default function GlassSurface({
 
   const baseStyles: CSSVariables = {
     ...style,
-    width: typeof width === "number" ? `${width}px` : width,
-    height: typeof height === "number" ? `${height}px` : height,
+    width:
+      width === undefined
+        ? undefined
+        : typeof width === "number"
+          ? `${width}px`
+          : width,
+    height:
+      height === undefined
+        ? undefined
+        : typeof height === "number"
+          ? `${height}px`
+          : height,
     borderRadius: `${borderRadius}px`,
     "--glass-frost": backgroundOpacity,
     "--glass-saturation": saturation,

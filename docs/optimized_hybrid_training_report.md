@@ -29,7 +29,6 @@ Pelatihan mengevaluasi 4 Skenario utama secara ketat:
 | augmented_clean_xgboost | 0.9589 | 0.9591 | 0.9414 | 0.9422 | 0.0169 | 0.8539 |
 | augmented_robust_random_forest | 0.9510 | 0.9507 | 0.9449 | 0.9449 | 0.0058 | 0.8524 |
 | augmented_robust_xgboost | 0.9571 | 0.9574 | 0.9510 | 0.9514 | 0.0059 | 0.8584 |
-| optional_soft_voting | 0.9584 | 0.9585 | 0.9514 | 0.9517 | 0.0068 | 0.8589 |
 
 
 *Composite Score dihitung menggunakan rumus: `(0.45 * Clean F1) + (0.45 * Robust F1) - (0.10 * Stability Gap)`.*
@@ -49,7 +48,6 @@ Pelatihan mengevaluasi 4 Skenario utama secara ketat:
   - **Clean F1**: ~95.07%
   - **Robust F1**: ~94.49%
   - **Alasan Pemilihan**: Digunakan sebagai model pembanding independen untuk mengevaluasi konsistensi prediksi ML secara empiris.
-- **Status Soft Voting Ensemble**: Tidak digunakan di runtime deteksi saat ini demi meminimalkan overhead komputasi dan kompleksitas. Model ini disimpan sebagai referensi eksperimen.
 
 ## 6. Analisis Feature Importance
 Fitur paling berpengaruh pada model terbaik:

@@ -48,18 +48,18 @@ export default function ProblemCards({
           </div>
         </Reveal>
 
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-3 md:auto-rows-fr">
           {cards.map(({ body, icon: Icon, title, tone }, index) => (
             <Reveal delay={index * 0.08} key={title} observe={observeReady}>
               <GlassCard className="h-full p-6">
                 <div className="flex h-full flex-col">
-                  <span className="mb-7 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
+                  <span className="mb-7 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
                     <Icon className={`h-5 w-5 ${tone}`} />
                   </span>
                   <h3 className="text-lg font-bold tracking-tight text-slate-50">
                     {title}
                   </h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-400">{body}</p>
+                  <p className="mt-3 flex-1 text-sm leading-7 text-slate-400">{body}</p>
                 </div>
               </GlassCard>
             </Reveal>

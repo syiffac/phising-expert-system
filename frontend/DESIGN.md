@@ -20,7 +20,7 @@ Dokumen ini adalah pedoman desain antarmuka utama (*single source of truth*) unt
 * **COLOR OVERLOAD**: Hindari penggunaan warna neon hijau cyber-hacker yang berlebihan atau gradasi acak. Gunakan palet harmonis dark navy dan soft cyan.
 * **FANTASY GIMMICKS**: Dilarang menambahkan grafik crypto, koin mengambang, ilustrasi robot 3D kartun, atau blob acak yang tidak memiliki fungsi analitik.
 * **HIERARCHICAL TRUTHS**: Sistem Pakar (Rule-Based System) harus selalu dieksekusi dan diposisikan secara visual sebagai benteng deteksi pertama, bukan disembunyikan di bawah Machine Learning.
-* **DECEPTION-FREE**: Dilarang keras menampilkan model Soft Voting di runtime keputusan utama karena tidak aktif pada backend final. Hanya XGBoost (Utama) dan Random Forest (Pembanding) yang boleh ditampilkan.
+* **DECEPTION-FREE**: Hanya XGBoost (Primary Model) dan Random Forest (Comparison Only) yang ditampilkan pada UI. UI hanya menampilkan model yang digunakan pada sistem final.
 * **READABILITY FIRST**: Jangan pernah mengorbankan keterbacaan teks demi mengejar efek blur atau kegelapan latar belakang. Semua teks harus memiliki rasio kontras minimal 4.5:1.
 
 ---
@@ -40,10 +40,11 @@ Dokumen ini adalah pedoman desain antarmuka utama (*single source of truth*) unt
 | **Accent Violet** | `#8B5CF6` | Secondary highlight |
 | **Text Primary** | `#F8FAFC` | High contrast body & titles |
 | **Text Secondary** | `#CBD5E1` | Standard descriptive copy |
-| **Text Muted** | `#64748B` | Subtitle, labels, and timestamps |
+| **Text Muted** | `#94A3B8` | Subtitle, labels, timestamps, and compact meta |
+| **Text Placeholder** | `#64748B` | Input placeholder and decorative disabled text only |
 | **Legitimate State** | `#10B981` (Emerald) | Safe URL / aman |
 | **Suspicious State** | `#F59E0B` (Amber) | Needs review / mencurigakan |
-| **Phishing State** | `#F43F5E` (Rose) | Phishing website / bahaya |
+| **Phishing State** | `#EF4444` (Red) | Phishing website / bahaya, harus paling jelas |
 | **Imputed/Unknown** | `#38BDF8` (Sky) | Resilient missing features indicator |
 
 ---
@@ -59,6 +60,31 @@ Sistem menggunakan font Sans-Serif modern dan bersih (misal: *Outfit*, *Inter*, 
 * **Body / Copy**: `text-sm md:text-base leading-relaxed text-slate-300`
 * **Technical labels / Codes**: `font-mono text-xs uppercase tracking-wider text-cyan-400`
 
+### Text Contrast Rules (WCAG AA Compliance):
+Pada background `#07111F`, kombinasi warna teks berikut WAJIB dipatuhi:
+
+| Fungsi | Class Tailwind | Hex | Kontras Ratio |
+| :--- | :--- | :--- | :--- |
+| **Section Label (mono)** | `text-cyan-300` | `#67E8F9` | ~10.5:1 |
+| **Card Label (mono)** | `text-slate-400` | `#94A3B8` | ~5.3:1 |
+| **Body Text** | `text-slate-300` | `#CBD5E1` | ~7.6:1 |
+| **Detail / Description** | `text-slate-300` | `#CBD5E1` | ~7.6:1 |
+| **Muted Meta (status, source)** | `text-slate-400` | `#94A3B8` | ~5.3:1 |
+| **Input Placeholder** | `placeholder:text-slate-500` | `#64748B` | ~3.9:1 |
+
+**DILARANG** menggunakan:
+* `text-slate-500` untuk label/teks utama — terlalu redup, hanya untuk placeholder
+* `text-slate-600` di atas background gelap — hampir tidak terbaca
+* `text-slate-450` — bukan class Tailwind valid
+* `text-cyan-200/80` — opacity menyebabkan kontras kurang
+
+### Page-Wide Readability Enforcement:
+* Semua teks informatif pada card, tabel, list, dan panel wajib memakai minimal `text-slate-400`. Untuk copy paragraf dan deskripsi gunakan `text-slate-300`.
+* `text-slate-500` hanya boleh dipakai untuk ikon dekoratif di dalam input, placeholder, atau teks non-esensial yang tidak perlu dibaca sebagai informasi utama.
+* `text-slate-600` tidak dipakai pada dark navy shell.
+* Untuk status phishing, gunakan red yang tegas: `border-red-500/35 bg-red-500/10 text-red-200` atau `text-red-300` untuk badge kecil.
+* Jika panel memakai tint state (`bg-red-500/10`, `bg-amber-500/10`, `bg-cyan-300/10`), body text di dalamnya tetap `text-slate-200` atau state text terang (`text-red-100`, `text-amber-100`, `text-cyan-100`).
+
 ---
 
 ## 5. Layout & Grid System
@@ -69,6 +95,40 @@ Sistem menggunakan font Sans-Serif modern dan bersih (misal: *Outfit*, *Inter*, 
 * **Border Radius System**:
   * Panel Glass Utama: `rounded-3xl` (24px)
   * Badges & Buttons: `rounded-xl` (12px) atau `rounded-full`
+
+### Card Sizing Consistency Rules:
+Semua card dalam section/grid yang SAMA harus memiliki tinggi yang konsisten:
+
+| Pola Grid | Class Wajib | Contoh |
+| :--- | :--- | :--- |
+| **Multi-card row** | `lg:auto-rows-fr` atau `md:auto-rows-fr` | StatTile 4-col, ProblemCards 3-col |
+| **Two-column pair** | `lg:grid-cols-2 lg:auto-rows-fr` | RuntimeModelCard pair, Feature Set pair |
+| **Four-column stats** | `lg:grid-cols-4 lg:auto-rows-fr` | Dashboard stat tiles |
+| **Three-column stats** | `sm:grid-cols-3 sm:auto-rows-fr` | Feature Quality tiles |
+| **Inner sub-grid** | `sm:grid-cols-2 sm:auto-rows-fr` | Expert System 4-card grid |
+| **Card wrapper** | `h-full` pada GlassCard | Semua card dalam grid row |
+| **Reveal wrapper** | `className="h-full"` pada `<Reveal>` | Semua card yang dibungkus animasi Reveal |
+| **Content stretch** | `flex h-full flex-col` + `flex-1` pada body text | ProblemCards, SystemFlow |
+| **Repeated list rows** | `grid gap-3 sm:auto-rows-fr` + row `flex h-full flex-col` | Feature catalog, rule cards, model strips |
+| **Metric helper tile** | `flex h-full min-w-0 flex-col` | StatTile, MetricTile, ModelEvaluationStrip |
+| **Two-panel page body** | `lg:grid-cols-[...] lg:auto-rows-fr` + children `h-full` | Dataset demo, evaluation model pair |
+
+**DILARANG**:
+* Grid multi-kolom tanpa `auto-rows-fr` jika card di section yang sama
+* Card tanpa `h-full` jika berada dalam grid row
+* `<Reveal>` tanpa `className="h-full"` saat membungkus card dalam grid sama tinggi
+* Body text tanpa `flex-1` jika card perlu stretch ke tinggi yang sama
+* Helper tile custom berbasis `<div>` tanpa `h-full` saat tampil dalam grid statistik
+* Page baru yang memakai `bg-slate-950` flat, `border-slate-800`, atau card solid tanpa `DarkVeilBackground`, `Navbar`, dan `GlassCard` shell utama
+
+### Section Consistency Contracts:
+* Setiap section grid harus memilih satu pola tinggi: semua card sama tinggi (`auto-rows-fr`) atau semua item list bebas tinggi dalam satu kolom. Jangan mencampur keduanya dalam section yang sama.
+* Jika sebuah row punya dua panel utama berdampingan, kedua panel wajib memakai `h-full`, padding setara (`p-5 sm:p-6`), border glass setara, dan heading scale setara.
+* Card statistik harus punya tinggi stabil, label mono kecil, value mono tebal, dan detail memakai `flex-1` agar tinggi antar tile tidak meloncat.
+* Card katalog/list yang berulang harus memakai border, radius, dan background yang sama. Status badge boleh berbeda warna, tetapi struktur card tidak boleh berubah antar item.
+* Halaman utility seperti `dataset-demo` tetap memakai dark navy app shell yang sama dengan halaman utama: `DarkVeilBackground`, `Navbar`, `max-w-7xl`, section padding standar, dan `GlassCard`.
+* Panel dense evidence seperti `Evaluated Facts F01-F30` dan `Triggered Expert Rules` harus memakai inner surface yang clear tetapi tetap navy, bukan putih transparan atau hitam pekat: gunakan wrapper `after:opacity-10`, container `bg-slate-900/65`, row `bg-slate-900/45`, hover `bg-slate-800/55`, dan border `border-white/[0.12]`.
+* Nested metric/info tile di `ResultDashboard` jangan memakai glass blur lagi. Gunakan panel solid `rounded-[20px] border border-white/[0.12] bg-slate-900/60 p-4 shadow-inner` agar card utama sejajar dan isi mudah dibaca.
 
 ---
 
@@ -202,7 +262,7 @@ Sebagai pedoman bagi pengembang dan agen AI coding, batasan implementasi (*guard
 * **Visualisasi Model Machine Learning**:
   * **XGBoost** harus selalu disajikan dengan lencana/label jelas sebagai **PRIMARY MODEL** runtime deteksi.
   * **Random Forest** harus selalu disajikan dengan lencana/label jelas sebagai **COMPARISON ONLY** (model pembanding).
-  * **Soft Voting** tidak boleh ditampilkan sama sekali sebagai model yang berkontribusi dalam keputusan runtime, karena backend tidak mengaktifkannya untuk menjaga efisiensi.
+  * UI hanya menampilkan model yang digunakan pada sistem final.
 * **Alur Keputusan (Hybrid Order)**:
   * Penilaian Sistem Pakar (Rule-Based System / Forward Chaining) harus divisualisasikan terlebih dahulu di bagian atas panel atau mendahului visualisasi Machine Learning untuk mencerminkan filosofi *expert-system-first*.
   * Parameter kelengkapan data (*feature quality*) wajib ditampilkan secara transparan kepada pengguna.
@@ -277,7 +337,7 @@ Lencana penanda status keamanan URL.
 * **Skema Visual**:
   * `legitimate`: Latar belakang hijau emerald transparan (`bg-emerald-500/10 border-emerald-500/20 text-emerald-400`).
   * `suspicious`: Latar belakang amber transparan (`bg-amber-500/10 border-amber-500/20 text-amber-400`).
-  * `phishing`: Latar belakang rose transparan (`bg-rose-500/10 border-rose-500/20 text-rose-400`).
+  * `phishing`: Latar belakang merah transparan (`bg-red-500/10 border-red-500/35 text-red-300`).
   * `unknown`: Latar belakang sky/blue-gray transparan (`bg-sky-500/10 border-sky-500/20 text-sky-400`).
 * **Aturan Keterbacaan**: Badge dilarang keras hanya mengandalkan kode warna untuk menandakan status. Teks label status (misalnya "Legitimate Site", "Phishing Danger") wajib ditulis dengan jelas dan tegas untuk menjamin aksesibilitas.
 
@@ -287,7 +347,7 @@ Representasi status nilai dari fakta F01-F30 hasil ekstraksi.
 * **Ketentuan Penampilan**:
   * `value = 1` (Aman): Berwarna hijau (`text-emerald-400 bg-emerald-500/5`).
   * `value = 0` (Mencurigakan/Netral): Berwarna kuning/amber (`text-amber-400 bg-amber-500/5`).
-  * `value = -1` (Berbahaya/Phishing): Berwarna merah/rose (`text-rose-400 bg-rose-500/5`).
+  * `value = -1` (Berbahaya/Phishing): Berwarna merah tegas (`text-red-300 bg-red-500/10`).
   * `isImputed = true` (Nilai tidak dapat diekstraksi/imputed): Wajib menampilkan lencana pendamping khusus berwarna biru muda sky (`text-sky-400 bg-sky-500/10`) bertuliskan `Imputed/Unknown` sebagai penanda transparansi.
 
 ### D. ProgressBar
@@ -334,7 +394,6 @@ Gunakan checklist di bawah ini untuk memastikan tidak terjadi penyimpangan desai
 - [ ] **Glassmorphic Konsisten**: Semua kartu utama menggunakan utility pattern border `border-white/[0.08]` dan blur yang presisi.
 - [ ] **XGBoost Primary Model**: XGBoost dilabeli secara tegas sebagai `PRIMARY MODEL`.
 - [ ] **Random Forest Comparison Only**: Random Forest dilabeli secara tegas sebagai `COMPARISON ONLY`.
-- [ ] **Soft Voting Tersembunyi**: Tidak ada penyebutan, visualisasi, atau kalkulasi model Soft Voting pada runtime dashboard.
 - [ ] **Expert System Sebelum ML**: Analisis rules pakar dan forward chaining diposisikan mendahului Machine Learning pada antarmuka hasil.
 - [ ] **Transparansi imputed_unknown**: Nilai imputasi data ditampilkan secara jelas sebagai indikator transparansi jaringan (*transparency indicator*).
 - [ ] **Fakta F01-F30 Mudah Dibaca**: Seluruh 30 fitur beserta status ketersediaan datanya disajikan dalam bentuk tabel yang teratur atau list mobile yang responsif.

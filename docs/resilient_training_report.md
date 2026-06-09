@@ -31,7 +31,6 @@ Fitur rawan gagal:
 | clean_xgboost | 0.8644 | 0.8620 | 0.8416 | 0.8338 | 0.0282 | 0.7603 |
 | robust_random_forest | 0.8679 | 0.8651 | 0.8578 | 0.8533 | 0.0118 | 0.7721 |
 | robust_xgboost | 0.8666 | 0.8645 | 0.8583 | 0.8547 | 0.0098 | 0.7727 |
-| soft_voting_ensemble | 0.8683 | 0.8663 | 0.8622 | 0.8584 | 0.0079 | 0.7753 |
 
 Composite score = `(0.45 * clean_f1) + (0.45 * robust_f1) - (0.10 * stability_gap)`.
 
@@ -43,7 +42,7 @@ Composite score = `(0.45 * clean_f1) + (0.45 * robust_f1) - (0.10 * stability_ga
 
 ## Best Model
 
-Model terbaik berdasarkan composite score adalah `soft_voting_ensemble` dengan clean F1 `0.866282` dan robust F1 `0.858427`. Stability gap: `0.007855`.
+Model terbaik berdasarkan composite score adalah `robust_xgboost` dengan clean F1 `0.8645` dan robust F1 `0.8547`. Stability gap: `0.0098`.
 
 ## Feature Importance
 

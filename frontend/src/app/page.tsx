@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import AnalyzeSection from "@/components/landing/AnalyzeSection";
-import DarkVeilBackground from "@/components/visual/DarkVeilBackground";
+import DecisionExplainer from "@/components/landing/DecisionExplainer";
 import HeroSection from "@/components/landing/HeroSection";
 import Navbar from "@/components/landing/Navbar";
 import ProblemCards from "@/components/landing/ProblemCards";
@@ -151,9 +151,8 @@ export default function Home() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#07111F] text-slate-100 selection:bg-cyan-300/25 selection:text-cyan-50">
+    <main className="relative min-h-screen overflow-x-hidden text-slate-100 selection:bg-cyan-300/25 selection:text-cyan-50">
       <WelcomeLoader onComplete={() => setLoaderDone(true)} />
-      <DarkVeilBackground />
       <div className="relative z-10">
         <Navbar />
         <HeroSection observeReady={loaderDone} />
@@ -172,12 +171,15 @@ export default function Home() {
           onSubmit={handleSubmit}
         />
         {result && (
-          <ResultDashboard
-            evaluationData={evaluationData}
-            featureCatalog={features}
-            ref={resultRef}
-            result={result}
-          />
+          <>
+            <ResultDashboard
+              evaluationData={evaluationData}
+              featureCatalog={features}
+              ref={resultRef}
+              result={result}
+            />
+            <DecisionExplainer />
+          </>
         )}
       </div>
     </main>

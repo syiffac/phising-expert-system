@@ -14,7 +14,6 @@ import {
   Sigma,
   TableProperties,
 } from "lucide-react";
-import DarkVeilBackground from "@/components/visual/DarkVeilBackground";
 import Navbar from "@/components/landing/Navbar";
 import GlassCard from "@/components/ui-custom/GlassCard";
 import { cn } from "@/lib/cn";
@@ -83,7 +82,6 @@ type OptimizedHybrid = {
   selected_runtime_model: string;
   primary_model: string;
   comparison_model: string;
-  soft_voting: string;
   note: string;
   metrics: OptimizedMetrics;
 };
@@ -171,7 +169,10 @@ function getRuntimeComparison(metrics: OptimizedMetrics) {
 
 function sortedModelEntries(metrics: OptimizedMetrics) {
   return Object.entries(metrics.models)
-    .filter(([key]) => key !== "optional_soft_voting")
+    .filter(
+      ([key]) =>
+        key.includes("xgboost") || key.includes("random_forest")
+    )
     .sort(([, a], [, b]) => {
       const scoreA = validMetric(a.composite_score, 0);
       const scoreB = validMetric(b.composite_score, 0);
@@ -228,7 +229,7 @@ function StatTile({
   }[tone];
 
   return (
-    <div className="min-w-0 rounded-2xl border border-white/[0.08] bg-slate-950/35 p-4">
+    <div className="flex h-full min-w-0 flex-col rounded-2xl border border-white/[0.08] bg-slate-950/35 p-4">
       <div className="flex items-center gap-3">
         <span
           className={cn(
@@ -239,7 +240,7 @@ function StatTile({
           {icon}
         </span>
         <div className="min-w-0">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
             {label}
           </p>
           <p className="mt-1 truncate font-mono text-xl font-black text-slate-100">
@@ -247,7 +248,7 @@ function StatTile({
           </p>
         </div>
       </div>
-      {detail && <p className="mt-3 text-xs leading-5 text-slate-400">{detail}</p>}
+      {detail && <p className="mt-3 flex-1 text-xs leading-5 text-slate-300">{detail}</p>}
     </div>
   );
 }
@@ -271,7 +272,7 @@ function MetricBar({
   return (
     <div>
       <div className="mb-2 flex items-center justify-between gap-4">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+        <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
           {label}
         </span>
         <span className="font-mono text-xs font-black text-slate-100">
@@ -303,7 +304,7 @@ function ConfusionMatrix({ matrix }: { matrix?: number[][] }) {
           className="rounded-2xl border border-white/[0.08] bg-slate-950/35 p-3 text-center"
           key={cell.label}
         >
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
             {cell.label}
           </p>
           <p className={cn("mt-2 font-mono text-lg font-black", cell.tone)}>
@@ -333,7 +334,7 @@ function RuntimeModelCard({
 
   return (
     <GlassCard
-      className="p-5 sm:p-6"
+      className="h-full p-5 sm:p-6"
       glassIntensity={primary ? "strong" : "medium"}
       interactive={false}
     >
@@ -358,7 +359,7 @@ function RuntimeModelCard({
         </div>
 
         <div className="min-w-[8rem] rounded-2xl border border-white/[0.08] bg-white/[0.04] p-3 text-left sm:text-right">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
             Robust F1-score
           </p>
           <p className="mt-1 font-mono text-2xl font-black text-cyan-200">
@@ -378,9 +379,9 @@ function RuntimeModelCard({
         <ConfusionMatrix matrix={model.robust_test?.confusion_matrix} />
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+      <div className="mt-5 grid gap-3 sm:grid-cols-3 sm:auto-rows-fr">
         <div className="rounded-2xl border border-white/[0.08] bg-slate-950/30 p-3">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
             Clean Accuracy
           </p>
           <p className="mt-1 font-mono text-lg font-black text-slate-100">
@@ -388,7 +389,7 @@ function RuntimeModelCard({
           </p>
         </div>
         <div className="rounded-2xl border border-white/[0.08] bg-slate-950/30 p-3">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
             Stability Gap
           </p>
           <p className="mt-1 font-mono text-lg font-black text-amber-200">
@@ -396,7 +397,7 @@ function RuntimeModelCard({
           </p>
         </div>
         <div className="rounded-2xl border border-white/[0.08] bg-slate-950/30 p-3">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
             Estimators
           </p>
           <p className="mt-1 font-mono text-lg font-black text-slate-100">
@@ -423,7 +424,7 @@ function ModelRow({
   return (
     <div
       className={cn(
-        "grid gap-3 rounded-2xl border p-4 md:grid-cols-[minmax(0,1.1fr)_repeat(5,minmax(5.4rem,0.55fr))]",
+        "grid gap-3 rounded-2xl border p-4 md:grid-cols-[minmax(0,1.1fr)_repeat(5,minmax(5.4rem,0.55fr))] md:auto-rows-fr",
         selected
           ? "border-cyan-300/25 bg-cyan-300/[0.06]"
           : "border-white/[0.08] bg-slate-950/30"
@@ -433,7 +434,7 @@ function ModelRow({
         <p className="truncate text-sm font-black text-slate-100">
           {modelTitle(modelKey)}
         </p>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="mt-1 text-xs text-slate-400">
           {meta.algorithm}, {meta.featureSet}
         </p>
       </div>
@@ -445,7 +446,7 @@ function ModelRow({
         ["Gap", performance.stabilityGap],
       ].map(([label, value]) => (
         <div className="min-w-0" key={label as string}>
-          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
             {label}
           </p>
           <p className="mt-1 font-mono text-sm font-black text-slate-100">
@@ -480,14 +481,14 @@ export default function EvaluationPage() {
         const response = await fetch(`${API_BASE_URL}/api/evaluation/`);
 
         if (!response.ok) {
-          throw new Error("Failed to fetch model evaluation.");
+          throw new Error("Gagal mengambil data evaluasi model.");
         }
 
         const result = (await response.json()) as EvaluationResponse;
         setData(result.data || null);
       } catch {
         setErrorMessage(
-          "Backend belum aktif atau terjadi kesalahan saat mengambil data evaluasi model."
+          "Backend API tidak dapat dijangkau. Pastikan server FastAPI berjalan di port 8000."
         );
       } finally {
         setLoading(false);
@@ -512,8 +513,7 @@ export default function EvaluationPage() {
   );
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#07111F] text-slate-100 selection:bg-cyan-300/25 selection:text-cyan-50">
-      <DarkVeilBackground />
+    <main className="relative min-h-screen overflow-x-hidden text-slate-100 selection:bg-cyan-300/25 selection:text-cyan-50">
       <div className="relative z-10">
         <Navbar />
 
@@ -553,13 +553,13 @@ export default function EvaluationPage() {
                     <CheckCircle2 className="h-5 w-5" />
                   </span>
                   <div className="min-w-0">
-                    <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-400">
+                    <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-300">
                       Runtime Status
                     </p>
                     <p className="mt-1 text-sm font-semibold text-slate-200">
                       {metrics?.runtime_apply_status.applied_to_backend
-                        ? "Applied to backend"
-                        : "Not applied"}
+                        ? "Diterapkan di backend"
+                        : "Belum diterapkan"}
                     </p>
                   </div>
                 </div>
@@ -591,7 +591,7 @@ export default function EvaluationPage() {
               <p className="mt-4 text-base font-bold text-slate-100">
                 Data optimized hybrid belum tersedia
               </p>
-              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-400">
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-300">
                 Jalankan proses training optimized hybrid untuk mengisi metrik
                 evaluasi model.
               </p>
@@ -600,9 +600,9 @@ export default function EvaluationPage() {
 
           {!loading && !errorMessage && optimized && metrics && (
             <div className="mt-8 space-y-8">
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-fr">
                 <StatTile
-                  detail="Balanced legitimate and phishing samples"
+                  detail="Sampel legitimate dan phishing yang seimbang"
                   icon={<TableProperties className="h-4 w-4" />}
                   label="Dataset Rows"
                   value={numberFormat(metrics.dataset_summary.total_rows_after_cleaning)}
@@ -615,14 +615,14 @@ export default function EvaluationPage() {
                   value={metrics.feature_sets.augmented.total_features.toString()}
                 />
                 <StatTile
-                  detail="Quality gate passed for backend runtime"
+                  detail="Quality gate lolos untuk runtime backend"
                   icon={<ShieldCheck className="h-4 w-4" />}
                   label="Quality Gate"
                   tone={metrics.quality_gate.passed ? "emerald" : "amber"}
                   value={metrics.quality_gate.passed ? "Passed" : "Failed"}
                 />
                 <StatTile
-                  detail="Soft voting is benchmark-only, not runtime"
+                  detail="XGBoost digunakan sebagai model runtime utama"
                   icon={<Activity className="h-4 w-4" />}
                   label="Runtime Model"
                   tone="violet"
@@ -632,27 +632,27 @@ export default function EvaluationPage() {
 
               <GlassCard className="p-4 sm:p-5" glassIntensity="soft" interactive={false}>
                 <p className="font-mono text-[11px] font-black uppercase tracking-[0.22em] text-cyan-300">
-                  Metric Guidance
+                  Panduan Metrik
                 </p>
                 <p className="mt-3 text-sm leading-6 text-slate-300">
-                  Displayed metrics focus on model performance: clean accuracy,
-                  robust accuracy, phishing recall, precision, and F1-score.
-                  Composite score is used internally for model selection, not as
-                  an accuracy metric.
+                  Metrik yang ditampilkan berfokus pada performa model: akurasi clean,
+                  akurasi robust, recall phishing, presisi, dan skor F1.
+                  Skor komposit digunakan secara internal untuk pemilihan model, bukan
+                  sebagai metrik akurasi.
                 </p>
-                <div className="mt-4 grid gap-3 text-xs leading-5 text-slate-400 sm:grid-cols-2">
+                <div className="mt-4 grid gap-3 text-xs leading-5 text-slate-300 sm:grid-cols-2">
                   <p className="rounded-2xl border border-white/[0.08] bg-slate-950/30 p-3">
-                    Clean test measures performance when all evaluation features
-                    are complete.
+                    Pengujian clean mengukur performa ketika semua fitur evaluasi
+                    tersedia lengkap.
                   </p>
                   <p className="rounded-2xl border border-white/[0.08] bg-slate-950/30 p-3">
-                    Robust test measures performance when some features are
-                    handled as imputed_unknown.
+                    Pengujian robust mengukur performa ketika beberapa fitur
+                    ditangani sebagai imputed_unknown.
                   </p>
                 </div>
               </GlassCard>
 
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className="grid gap-4 lg:grid-cols-2 lg:auto-rows-fr">
                 {primaryModel && (
                   <RuntimeModelCard
                     badge="Primary Model"
@@ -673,38 +673,18 @@ export default function EvaluationPage() {
               </div>
 
               <GlassCard className="p-5 sm:p-6" interactive={false}>
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <p className="font-mono text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
-                      Runtime Integrity
-                    </p>
-                    <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-50">
-                      Soft voting tidak digunakan pada runtime
-                    </h2>
-                    <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">
-                      {optimized.note} Soft voting is treated as a benchmark
-                      experiment only and is not shown as a runtime model.
-                    </p>
-                  </div>
-                  <span className="w-fit rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 font-mono text-[10px] font-black uppercase tracking-wider text-cyan-200">
-                    Backend contract safe
-                  </span>
-                </div>
-              </GlassCard>
-
-              <GlassCard className="p-5 sm:p-6" interactive={false}>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="font-mono text-xs font-black uppercase tracking-[0.22em] text-cyan-300">
                       Model Ranking
                     </p>
                     <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-50">
-                      Individual model comparison
+                      Perbandingan model individual
                     </h2>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-400">
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
                     <GitCompare className="h-4 w-4 text-cyan-300" />
-                    Sorted by internal selection score
+                    Diurutkan berdasarkan skor seleksi internal
                   </div>
                 </div>
 
@@ -720,8 +700,8 @@ export default function EvaluationPage() {
                 </div>
               </GlassCard>
 
-              <div className="grid gap-4 lg:grid-cols-2">
-                <GlassCard className="p-5 sm:p-6" interactive={false}>
+              <div className="grid gap-4 lg:grid-cols-2 lg:auto-rows-fr">
+                <GlassCard className="h-full p-5 sm:p-6" interactive={false}>
                   <div className="flex items-center gap-3">
                     <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cyan-300/20 bg-cyan-300/10 text-cyan-200">
                       <ListChecks className="h-4 w-4" />
@@ -735,12 +715,12 @@ export default function EvaluationPage() {
                       </p>
                     </div>
                   </div>
-                  <p className="mt-4 text-sm leading-6 text-slate-400">
+                  <p className="mt-4 text-sm leading-6 text-slate-300">
                     {metrics.feature_sets.symbolic.description}
                   </p>
                 </GlassCard>
 
-                <GlassCard className="p-5 sm:p-6" interactive={false}>
+                <GlassCard className="h-full p-5 sm:p-6" interactive={false}>
                   <div className="flex items-center gap-3">
                     <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-blue-300/20 bg-blue-300/10 text-blue-200">
                       <Sigma className="h-4 w-4" />
@@ -754,7 +734,7 @@ export default function EvaluationPage() {
                       </p>
                     </div>
                   </div>
-                  <p className="mt-4 text-sm leading-6 text-slate-400">
+                  <p className="mt-4 text-sm leading-6 text-slate-300">
                     {metrics.feature_sets.augmented.description}
                   </p>
                 </GlassCard>

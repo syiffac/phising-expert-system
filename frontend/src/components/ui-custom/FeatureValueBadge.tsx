@@ -33,8 +33,8 @@ export default function FeatureValueBadge({
       classes = "border-amber-500/15 bg-amber-500/5 text-amber-400";
       label = "0 suspicious";
     } else if (val === -1) {
-      // value = -1 (Berbahaya/Phishing): Berwarna merah/rose (text-rose-400 bg-rose-500/5).
-      classes = "border-rose-500/15 bg-rose-500/5 text-rose-400";
+      // value = -1 (Berbahaya/Phishing): merah tegas untuk status phishing.
+      classes = "border-red-500/20 bg-red-500/10 text-red-300";
       label = "-1 phishing";
     }
   }
@@ -51,4 +51,3 @@ export default function FeatureValueBadge({
     </span>
   );
 }
-

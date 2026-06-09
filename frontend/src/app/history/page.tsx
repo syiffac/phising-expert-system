@@ -13,7 +13,6 @@ import {
   SearchX,
   ShieldCheck,
 } from "lucide-react";
-import DarkVeilBackground from "@/components/visual/DarkVeilBackground";
 import Navbar from "@/components/landing/Navbar";
 import GlassCard from "@/components/ui-custom/GlassCard";
 import StatusBadge from "@/components/ui-custom/StatusBadge";
@@ -89,7 +88,7 @@ function statusTone(status: string) {
   const normalized = normalizeStatus(status);
 
   if (normalized === "phishing") {
-    return "text-rose-200";
+    return "text-red-200";
   }
 
   if (normalized === "suspicious") {
@@ -113,8 +112,8 @@ function MetricTile({
   value: string;
 }) {
   return (
-    <div className="min-w-0 rounded-2xl border border-white/[0.08] bg-slate-950/35 p-4">
-      <div className="flex items-center gap-2 text-slate-400">
+    <div className="flex h-full min-w-0 flex-col rounded-2xl border border-white/[0.08] bg-slate-950/35 p-4">
+      <div className="flex items-center gap-2 text-slate-300">
         {icon}
         <p className="text-xs font-bold uppercase tracking-wider">{label}</p>
       </div>
@@ -141,7 +140,7 @@ function ModelStrip({
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
           <span className="text-cyan-300">{icon}</span>
-          <p className="truncate text-xs font-bold uppercase tracking-wider text-slate-400">
+          <p className="truncate text-xs font-bold uppercase tracking-wider text-slate-300">
             {label}
           </p>
         </div>
@@ -195,7 +194,7 @@ export default function HistoryPage() {
         setHistories(Array.isArray(result.data) ? result.data : []);
       } catch {
         setErrorMessage(
-          "Backend belum aktif atau terjadi kesalahan saat mengambil riwayat deteksi."
+          "Backend API is not reachable. Please start FastAPI server on port 8000."
         );
       } finally {
         setLoading(false);
@@ -220,8 +219,7 @@ export default function HistoryPage() {
   }, [histories]);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#07111F] text-slate-100 selection:bg-cyan-300/25 selection:text-cyan-50">
-      <DarkVeilBackground />
+    <main className="relative min-h-screen overflow-x-hidden text-slate-100 selection:bg-cyan-300/25 selection:text-cyan-50">
       <div className="relative z-10">
         <Navbar />
 
@@ -259,7 +257,7 @@ export default function HistoryPage() {
                   <History className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-400">
+                  <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-300">
                     Latest Records
                   </p>
                   <p className="mt-1 truncate text-sm font-semibold text-slate-200">
@@ -270,7 +268,7 @@ export default function HistoryPage() {
             </GlassCard>
           </div>
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 sm:auto-rows-fr lg:grid-cols-4">
             <MetricTile
               icon={<ListChecks className="h-4 w-4" />}
               label="Total"
@@ -287,7 +285,7 @@ export default function HistoryPage() {
               value={summary.suspicious.toString()}
             />
             <MetricTile
-              icon={<ExternalLink className="h-4 w-4 text-rose-300" />}
+              icon={<ExternalLink className="h-4 w-4 text-red-300" />}
               label="Phishing"
               value={summary.phishing.toString()}
             />
@@ -301,7 +299,7 @@ export default function HistoryPage() {
               glassIntensity="strong"
               interactive={false}
             >
-              <p className="text-sm font-semibold text-rose-200">
+              <p className="text-sm font-semibold text-red-200">
                 {errorMessage}
               </p>
             </GlassCard>
@@ -317,7 +315,7 @@ export default function HistoryPage() {
               <p className="mt-4 text-base font-bold text-slate-100">
                 Belum ada riwayat deteksi
               </p>
-              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-400">
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-300">
                 Jalankan analisis URL dari halaman utama, lalu hasilnya akan
                 muncul di arsip ini.
               </p>
@@ -336,7 +334,7 @@ export default function HistoryPage() {
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <StatusBadge status={normalizeStatus(item.final_result)} />
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] font-bold text-slate-400">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] font-bold text-slate-300">
                           <Clock3 className="h-3 w-3" />
                           {formatDate(item.created_at)}
                         </span>
@@ -345,14 +343,14 @@ export default function HistoryPage() {
                       <p className="mt-4 break-all text-sm font-bold leading-6 text-slate-100 sm:text-base">
                         {item.url}
                       </p>
-                      <p className="mt-2 break-all font-mono text-xs text-slate-500">
+                      <p className="mt-2 break-all font-mono text-xs text-slate-400">
                         {item.hostname || item.normalized_url || "-"}
                       </p>
                     </div>
 
                     <div className="grid shrink-0 grid-cols-2 gap-2 text-right sm:grid-cols-3 lg:w-[23rem]">
                       <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-3">
-                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
                           Facts
                         </p>
                         <p className="mt-1 font-mono text-lg font-black text-cyan-200">
@@ -360,7 +358,7 @@ export default function HistoryPage() {
                         </p>
                       </div>
                       <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-3">
-                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
                           Rules
                         </p>
                         <p className="mt-1 font-mono text-lg font-black text-violet-200">
@@ -368,7 +366,7 @@ export default function HistoryPage() {
                         </p>
                       </div>
                       <div className="col-span-2 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-3 sm:col-span-1">
-                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
                           Expert
                         </p>
                         <p
@@ -383,7 +381,7 @@ export default function HistoryPage() {
                     </div>
                   </div>
 
-                  <div className="mt-5 grid gap-3 md:grid-cols-2">
+                  <div className="mt-5 grid gap-3 md:grid-cols-2 md:auto-rows-fr">
                     <ModelStrip
                       confidence={item.xgb_confidence}
                       icon={<Cpu className="h-4 w-4" />}
