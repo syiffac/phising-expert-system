@@ -4,8 +4,9 @@ nixPkgs = ["python311", "python311Packages.pip", "git", "git-lfs"]
 [phases.install]
 cmds = [
   "git lfs install",
-  "git lfs pull --include=\"app/ml_models/*.joblib\"",
-  "python - <<'PY'\nfrom pathlib import Path\nfor p in Path('app/ml_models').glob('*.joblib'):\n    b = p.read_bytes()[:80]\n    print(p, 'size=', p.stat().st_size, 'head=', b[:30])\n    if b.startswith(b'version https://git-lfs'):\n        raise SystemExit(f'LFS pointer still present: {p}')\nPY",
+  "git lfs fetch --all",
+  "git lfs checkout",
+  "python - <<'PY'\nfrom pathlib import Path\np = Path('app/ml_models/final_augmented_robust_random_forest.joblib')\nprint('RF exists:', p.exists())\nif p.exists():\n    b = p.read_bytes()[:80]\n    print('RF size:', p.stat().st_size)\n    print('RF head:', b[:40])\n    if b.startswith(b'version https://git-lfs'):\n        raise SystemExit('Random Forest is still a Git LFS pointer')\nelse:\n    raise SystemExit('Random Forest model file not found')\nPY",
   "python -m pip install --upgrade pip",
   "python -m pip install -r requirements.txt"
 ]
