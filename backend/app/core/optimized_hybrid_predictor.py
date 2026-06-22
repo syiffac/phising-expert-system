@@ -1,5 +1,6 @@
 from functools import lru_cache
 import json
+import logging
 from pathlib import Path
 from typing import Any
 
@@ -8,6 +9,8 @@ import pandas as pd
 
 APP_DIR = Path(__file__).resolve().parents[1]
 MODEL_DIR = APP_DIR / "ml_models"
+RF_MODEL_FILENAME = "final_augmented_robust_random_forest.joblib"
+logger = logging.getLogger(__name__)
 
 
 @lru_cache(maxsize=1)
@@ -34,15 +37,38 @@ def load_primary_xgboost_model() -> tuple[Any, list[str], dict[str, Any]]:
 
 
 @lru_cache(maxsize=1)
+def _load_comparison_random_forest_model_result() -> dict[str, Any]:
+    """Memuat model Random Forest pembanding beserta status error yang eksplisit."""
+    model_path = MODEL_DIR / RF_MODEL_FILENAME
+    if not model_path.exists():
+        note = f"Random Forest file not found at {model_path}"
+        logger.warning("Random Forest file not exists: %s", model_path)
+        return {"model": None, "note": note}
+
+    try:
+        file_size = model_path.stat().st_size
+        logger.info("Random Forest file exists: %s", model_path)
+        logger.info("Random Forest file size: %s bytes", file_size)
+    except OSError as error:
+        logger.warning(
+            "Random Forest file exists but size could not be read: %s (%s)",
+            model_path,
+            error,
+        )
+
+    try:
+        model = joblib.load(model_path)
+        logger.info("Random Forest loaded successfully from %s", model_path)
+        return {"model": model, "note": "Random Forest model loaded successfully."}
+    except Exception as error:
+        note = f"Random Forest failed to load from {model_path}: {error}"
+        logger.exception("Random Forest failed to load from %s", model_path)
+        return {"model": None, "note": note}
+
+
 def load_comparison_random_forest_model() -> Any | None:
     """Memuat model Random Forest pembanding jika tersedia, tanpa crash jika tidak ada."""
-    model_path = MODEL_DIR / "final_augmented_robust_random_forest.joblib"
-    if not model_path.exists():
-        return None
-    try:
-        return joblib.load(model_path)
-    except Exception:
-        return None
+    return _load_comparison_random_forest_model_result()["model"]
 
 
 def label_to_text(label: int) -> str:
@@ -59,6 +85,22 @@ def get_confidence(model, input_df: pd.DataFrame, prediction: int) -> float | No
         confidence = probabilities[int(prediction)]
         return round(float(confidence), 4)
     except Exception:
+        return None
+
+
+def get_random_forest_confidence(model, input_df: pd.DataFrame, prediction: int) -> float | None:
+    """Menghitung confidence Random Forest dengan logging eksplisit untuk predict_proba."""
+    if not hasattr(model, "predict_proba"):
+        logger.warning("Random Forest predict_proba failed: method is not available.")
+        return None
+
+    try:
+        probabilities = model.predict_proba(input_df)[0]
+        confidence = probabilities[int(prediction)]
+        logger.info("Random Forest predict_proba success.")
+        return round(float(confidence), 4)
+    except Exception:
+        logger.exception("Random Forest predict_proba failed.")
         return None
 
 
@@ -110,7 +152,8 @@ def predict_optimized_hybrid(extraction_result: dict) -> dict:
             "reason": f"Model Augmented Robust XGBoost belum tersedia: {str(e)}"
         }
 
-    rf_model = load_comparison_random_forest_model()
+    rf_load_result = _load_comparison_random_forest_model_result()
+    rf_model = rf_load_result["model"]
 
     # Build features dataframe
     input_df = build_runtime_ml_features(extraction_result, feature_columns)
@@ -131,24 +174,38 @@ def predict_optimized_hybrid(extraction_result: dict) -> dict:
     comparison_model_res = {
         "name": "augmented_robust_random_forest",
         "algorithm": "random_forest",
-        "prediction": "legitimate",
+        "prediction": None,
         "confidence": None,
-        "available": False
+        "available": False,
+        "note": rf_load_result["note"],
     }
 
     if rf_model is not None:
         try:
             rf_pred_val = int(rf_model.predict(input_df)[0])
-            rf_confidence = get_confidence(rf_model, input_df, rf_pred_val)
+            logger.info("Random Forest predict success.")
+            rf_confidence = get_random_forest_confidence(rf_model, input_df, rf_pred_val)
             rf_pred_text = label_to_text(rf_pred_val)
-            
+
             comparison_model_res.update({
                 "prediction": rf_pred_text,
                 "confidence": rf_confidence,
-                "available": True
+                "available": True,
+                "note": (
+                    "Random Forest prediction and confidence score are available."
+                    if rf_confidence is not None
+                    else "Random Forest prediction available, but confidence score is not available."
+                ),
             })
-        except Exception:
-            pass
+        except Exception as error:
+            note = f"Random Forest failed to predict: {error}"
+            logger.exception("Random Forest predict failed.")
+            comparison_model_res.update({
+                "prediction": None,
+                "confidence": None,
+                "available": False,
+                "note": note,
+            })
 
     # Extract quality
     quality = extraction_result.get("feature_quality", {
