@@ -1,15 +1,14 @@
-<<'EOF'
 [phases.setup]
 nixPkgs = ["python311", "python311Packages.pip", "git", "git-lfs"]
 
 [phases.install]
 cmds = [
   "git lfs install",
-  "git lfs pull",
+  "git lfs pull --include=\"app/ml_models/*.joblib\"",
+  "python - <<'PY'\nfrom pathlib import Path\nfor p in Path('app/ml_models').glob('*.joblib'):\n    b = p.read_bytes()[:80]\n    print(p, 'size=', p.stat().st_size, 'head=', b[:30])\n    if b.startswith(b'version https://git-lfs'):\n        raise SystemExit(f'LFS pointer still present: {p}')\nPY",
   "python -m pip install --upgrade pip",
   "python -m pip install -r requirements.txt"
 ]
 
 [start]
 cmd = "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
-EOF
