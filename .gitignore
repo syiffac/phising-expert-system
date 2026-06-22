@@ -13,6 +13,8 @@ venv/
 # ML model files
 *.joblib
 *.pkl
+backend/app/ml_models/*.backup
+backend/app/ml_models/*.compressed.joblib
 
 # Dataset besar
 dataset/raw/

@@ -1,1 +1,2 @@
-backend/app/ml_models/final_augmented_robust_random_forest.joblib filter=lfs diff=lfs merge=lfs -text
+# Model artifacts are tracked directly in Git when they stay below GitHub's file-size limit.
+# No Git LFS paths are required for the current production models.
