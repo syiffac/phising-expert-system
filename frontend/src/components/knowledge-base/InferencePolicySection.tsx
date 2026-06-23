@@ -4,7 +4,6 @@ import {
   Cpu,
   GitBranch,
   Shield,
-  ShieldAlert,
   ShieldCheck,
   ShieldX,
 } from "lucide-react";
@@ -32,32 +31,37 @@ const factValues = [
   },
 ];
 
-const hybridRules = [
+const hybridThresholds = [
   {
-    condition: "Expert System = Phishing",
+    condition: "Hybrid Score >= 0.65",
     result: "Phishing",
     tone: "border-red-500/30 bg-red-500/10 text-red-200",
   },
   {
-    condition: "Expert System = Suspicious + XGBoost = Phishing",
-    result: "Phishing",
-    tone: "border-red-500/30 bg-red-500/10 text-red-200",
-  },
-  {
-    condition: "Expert System = Legitimate + XGBoost = Phishing",
+    condition: "0.35 <= Hybrid Score < 0.65",
     result: "Suspicious",
     tone: "border-amber-500/25 bg-amber-500/10 text-amber-200",
   },
   {
-    condition: "Expert System = Suspicious + XGBoost = Legitimate",
-    result: "Suspicious",
-    tone: "border-amber-500/25 bg-amber-500/10 text-amber-200",
-  },
-  {
-    condition: "Expert System = Legitimate + XGBoost = Legitimate",
+    condition: "Hybrid Score < 0.35",
     result: "Legitimate",
     tone: "border-emerald-500/25 bg-emerald-500/10 text-emerald-200",
   },
+];
+
+const expertScores = [
+  "Tidak ada rule terpicu -> 0.00",
+  "1 rule suspicious -> 0.20",
+  "2-3 rule suspicious -> 0.40",
+  "4+ rule suspicious -> 0.55",
+  "1 rule phishing -> 0.75",
+  "2+ rule phishing -> 0.90",
+];
+
+const mlScores = [
+  "XGBoost phishing: ML Phishing Score = confidence phishing",
+  "XGBoost legitimate: ML Phishing Score = 1 - confidence legitimate",
+  "Random Forest hanya pembanding, tidak ikut menentukan final result",
 ];
 
 function SectionLabel({ icon, text }: { icon: React.ReactNode; text: string }) {
@@ -148,66 +152,11 @@ export default function InferencePolicySection() {
         </div>
       </GlassCard>
 
-      {/* C. Severity Tertinggi */}
-      <GlassCard className="p-5 sm:p-6" interactive={false}>
-        <SectionLabel
-          icon={<ShieldAlert className="h-4 w-4 text-amber-300" />}
-          text="C. Kebijakan Severity Tertinggi"
-        />
-        <h3 className="mt-3 text-lg font-black text-slate-50">
-          Hasil expert system ditentukan oleh severity tertinggi
-        </h3>
-        <p className="mt-2 text-sm leading-6 text-slate-300">
-          Hasil expert system tidak ditentukan hanya dari jumlah rule yang
-          terpicu, tetapi dari <span className="font-bold text-amber-200">tingkat bahaya tertinggi</span> dari
-          rule tersebut.
-        </p>
-
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 font-mono text-xs font-bold text-red-200">
-            Phishing
-          </span>
-          <ArrowDown className="h-4 w-4 rotate-[-90deg] text-slate-500" />
-          <span className="rounded-full border border-amber-500/25 bg-amber-500/10 px-3 py-1 font-mono text-xs font-bold text-amber-200">
-            Suspicious
-          </span>
-          <ArrowDown className="h-4 w-4 rotate-[-90deg] text-slate-500" />
-          <span className="rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 font-mono text-xs font-bold text-emerald-200">
-            Legitimate
-          </span>
-        </div>
-
-        <div className="mt-5 grid gap-2">
-          {[
-            {
-              text: "Jika hanya rule suspicious yang terpicu, maka expert system = suspicious.",
-              icon: <Shield className="h-4 w-4 text-amber-300" />,
-            },
-            {
-              text: "Jika ada minimal satu rule phishing yang terpicu, maka expert system = phishing.",
-              icon: <ShieldAlert className="h-4 w-4 text-red-300" />,
-            },
-            {
-              text: "Jika tidak ada rule yang terpicu, maka expert system = legitimate.",
-              icon: <ShieldCheck className="h-4 w-4 text-emerald-300" />,
-            },
-          ].map((item, index) => (
-            <div
-              className="flex items-start gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3"
-              key={index}
-            >
-              {item.icon}
-              <p className="text-xs leading-5 text-slate-300">{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </GlassCard>
-
-      {/* D. Imputed Unknown Policy */}
+      {/* C. Imputed Unknown Policy */}
       <GlassCard className="p-5 sm:p-6" interactive={false}>
         <SectionLabel
           icon={<ShieldX className="h-4 w-4 text-sky-300" />}
-          text="D. Kebijakan Imputed Unknown"
+          text="C. Kebijakan Imputed Unknown"
         />
         <h3 className="mt-3 text-lg font-black text-slate-50">
           Penanganan fitur yang gagal diekstraksi
@@ -249,11 +198,11 @@ export default function InferencePolicySection() {
         </div>
       </GlassCard>
 
-      {/* E. Primary ML Policy */}
+      {/* D. Primary ML Policy */}
       <GlassCard className="p-5 sm:p-6" interactive={false}>
         <SectionLabel
           icon={<Cpu className="h-4 w-4 text-cyan-300" />}
-          text="E. Kebijakan Model Machine Learning"
+          text="D. Kebijakan Model Machine Learning"
         />
         <h3 className="mt-3 text-lg font-black text-slate-50">
           XGBoost sebagai model utama
@@ -292,23 +241,26 @@ export default function InferencePolicySection() {
 
       </GlassCard>
 
-      {/* F. Hybrid Decision Policy */}
+      {/* E. Hybrid Decision Policy */}
       <GlassCard className="p-5 sm:p-6" interactive={false}>
         <SectionLabel
           icon={<ShieldCheck className="h-4 w-4 text-cyan-300" />}
-          text="F. Kebijakan Keputusan Hybrid"
+          text="E. Kebijakan Keputusan Hybrid"
         />
         <h3 className="mt-3 text-lg font-black text-slate-50">
-          Aturan kombinasi expert system dan machine learning
+          Skor 50:50 dari Sistem Pakar dan XGBoost
         </h3>
         <p className="mt-2 text-sm leading-6 text-slate-300">
-          Hasil akhir ditentukan oleh kombinasi status sistem pakar dan prediksi
-          XGBoost menggunakan aturan berikut:
+          Hasil akhir dihitung dari Expert Risk Score dan ML Phishing Score
+          dengan bobot seimbang. Formula yang digunakan adalah{" "}
+          <span className="font-bold text-cyan-200">
+            Hybrid Score = 0.5 x Expert Risk Score + 0.5 x ML Phishing Score
+          </span>
+          .
         </p>
 
-        {/* Mobile-friendly card list */}
         <div className="mt-5 grid gap-2">
-          {hybridRules.map((rule, index) => (
+          {hybridThresholds.map((rule, index) => (
             <div
               className="flex flex-col gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 sm:flex-row sm:items-center sm:justify-between"
               key={index}
@@ -331,14 +283,64 @@ export default function InferencePolicySection() {
           ))}
         </div>
 
-        <div className="mt-5 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3">
+        <div className="mt-5 grid gap-3 lg:grid-cols-2">
+          <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 p-4">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+              Expert Risk Score
+            </p>
+            <div className="mt-3 grid gap-2">
+              {expertScores.map((item) => (
+                <p className="text-xs leading-5 text-cyan-100" key={item}>
+                  {item}
+                </p>
+              ))}
+            </div>
+            <p className="mt-3 text-xs leading-5 text-cyan-200">
+              Jika rule suspicious dan phishing muncul bersamaan, skor phishing
+              diprioritaskan.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-violet-500/20 bg-violet-500/10 p-4">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-violet-300">
+              ML Phishing Score
+            </p>
+            <div className="mt-3 grid gap-2">
+              {mlScores.map((item) => (
+                <p className="text-xs leading-5 text-violet-100" key={item}>
+                  {item}
+                </p>
+              ))}
+            </div>
+            <p className="mt-3 text-xs leading-5 text-violet-200">
+              Contoh: XGBoost phishing confidence 0.95 menjadi 0.95. XGBoost
+              legitimate confidence 0.99 menjadi 0.01.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-5 rounded-xl border border-sky-500/20 bg-sky-500/10 p-3">
+          <div className="flex items-start gap-2">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" />
+            <p className="text-xs leading-5 text-sky-200">
+              <span className="font-bold">Contoh:</span> 1 rule suspicious
+              memberi Expert Risk Score 0.20. Jika XGBoost legitimate dengan
+              confidence 0.99, ML Phishing Score = 0.01 dan Hybrid Score =
+              0.105. Final result menjadi legitimate, jadi satu rule
+              suspicious ringan tidak otomatis mengalahkan XGBoost yang sangat
+              yakin legitimate.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-3 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3">
           <div className="flex items-start gap-2">
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
             <p className="text-xs leading-5 text-amber-200">
-              <span className="font-bold">Fallback:</span> Jika machine
-              learning tidak tersedia, sistem menggunakan hasil expert system
-              sebagai fallback agar sistem tetap dapat berjalan sebagai sistem
-              pakar murni.
+              <span className="font-bold">Safety guard:</span> Jika Expert Risk
+              Score cukup tinggi atau XGBoost sangat yakin phishing, hasil
+              minimal dapat dinaikkan menjadi suspicious. Status phishing tetap
+              terutama ditentukan oleh Hybrid Score {">="} 0.65.
             </p>
           </div>
         </div>

@@ -17,6 +17,62 @@ class DetectionRequest(BaseModel):
     url: str
 
 
+def calculate_expert_risk_score(triggered_rules: list[dict]) -> float:
+    phishing_count = sum(1 for rule in triggered_rules if rule.get("conclusion") == "phishing")
+    suspicious_count = sum(1 for rule in triggered_rules if rule.get("conclusion") == "suspicious")
+
+    if phishing_count >= 2:
+        return 0.90
+    if phishing_count == 1:
+        return 0.75
+    if suspicious_count >= 4:
+        return 0.55
+    if suspicious_count >= 2:
+        return 0.40
+    if suspicious_count == 1:
+        return 0.20
+    return 0.00
+
+
+def calculate_ml_phishing_score(prediction: str, confidence: float | None) -> float:
+    if confidence is None:
+        return 0.70 if prediction == "phishing" else 0.30
+
+    confidence_value = float(confidence)
+    if prediction == "phishing":
+        return confidence_value
+    return 1 - confidence_value
+
+
+def determine_hybrid_final_result(
+    expert_risk_score: float,
+    ml_phishing_score: float,
+    xgb_prediction: str,
+    xgb_confidence: float | None,
+) -> str:
+    hybrid_score = (0.5 * expert_risk_score) + (0.5 * ml_phishing_score)
+
+    if hybrid_score >= 0.65:
+        final_result = "phishing"
+    elif hybrid_score >= 0.35:
+        final_result = "suspicious"
+    else:
+        final_result = "legitimate"
+
+    if expert_risk_score >= 0.55 and final_result == "legitimate":
+        final_result = "suspicious"
+
+    if (
+        xgb_prediction == "phishing"
+        and xgb_confidence is not None
+        and float(xgb_confidence) >= 0.90
+        and final_result == "legitimate"
+    ):
+        final_result = "suspicious"
+
+    return final_result
+
+
 @router.post("/")
 def detect_url(payload: DetectionRequest, db: Session = Depends(get_db)):
     if not payload.url or not payload.url.strip():
@@ -42,21 +98,17 @@ def detect_url(payload: DetectionRequest, db: Session = Depends(get_db)):
     
     if ml_result.get("available") is True:
         xgb_pred = ml_result["primary_model"]["prediction"]
-        
-        # Logika Keputusan Hybrid Final
-        if initial_status == "phishing":
-            final_result = "phishing"
-        elif initial_status == "suspicious" and xgb_pred == "phishing":
-            final_result = "phishing"
-        elif initial_status == "legitimate" and xgb_pred == "phishing":
-            final_result = "suspicious"
-        elif initial_status == "suspicious" and xgb_pred == "legitimate":
-            final_result = "suspicious"
-        else:  # legitimate & legitimate
-            final_result = "legitimate"
-            
-        xgb_prediction_val = xgb_pred
         xgb_confidence_val = ml_result["primary_model"]["confidence"]
+        expert_risk_score = calculate_expert_risk_score(inference_result.get("triggered_rules", []))
+        ml_phishing_score = calculate_ml_phishing_score(xgb_pred, xgb_confidence_val)
+        final_result = determine_hybrid_final_result(
+            expert_risk_score,
+            ml_phishing_score,
+            xgb_pred,
+            xgb_confidence_val,
+        )
+
+        xgb_prediction_val = xgb_pred
         
         rf_prediction_val = None
         rf_confidence_val = None

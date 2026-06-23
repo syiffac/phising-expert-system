@@ -6,15 +6,15 @@ import GlassCard from "@/components/ui-custom/GlassCard";
 import { cn } from "@/lib/cn";
 
 const steps = [
-  "URL diubah menjadi fakta F01–F30 melalui proses ekstraksi fitur.",
-  "Fakta dievaluasi menggunakan aturan forward chaining pada sistem pakar.",
-  "Status sistem pakar mengikuti tingkat severity tertinggi dari rule yang terpicu.",
-  "XGBoost digunakan sebagai model utama untuk validasi machine learning.",
-  "Hasil akhir ditentukan menggunakan aturan keputusan hybrid.",
+  "URL diubah menjadi fakta F01-F30 melalui proses ekstraksi fitur.",
+  "Rule yang terpicu dihitung menjadi Expert Risk Score.",
+  "XGBoost sebagai primary model menghasilkan ML Phishing Score.",
+  "Hybrid Score dihitung dengan bobot 50:50 dari kedua skor.",
+  "Final result mengikuti threshold hybrid dan safety guard.",
 ];
 
 const badges = [
-  { label: "Phishing > Suspicious > Legitimate", title: "Severity" },
+  { label: "0.5 x Expert + 0.5 x XGBoost", title: "Hybrid Score" },
   { label: "Primary Model", title: "XGBoost" },
   { label: "Comparison Only", title: "Random Forest" },
   { label: "Indikator Transparansi", title: "Imputed Unknown" },
@@ -61,10 +61,11 @@ export default function DecisionExplainer() {
           >
             <div className="border-t border-white/10 pt-5">
               <p className="text-sm leading-7 text-slate-300">
-                PhishGuard mengevaluasi URL melalui sistem pakar terlebih
-                dahulu, kemudian memvalidasinya dengan model machine learning
-                utama yaitu XGBoost. Random Forest hanya ditampilkan sebagai
-                model pembanding.
+                PhishGuard menggabungkan Sistem Pakar dan XGBoost secara
+                seimbang. Sistem Pakar memberi Expert Risk Score dari rule yang
+                terpicu, XGBoost memberi ML Phishing Score dari prediksi dan
+                confidence. Keduanya digabungkan dengan bobot 50:50. Random
+                Forest hanya ditampilkan sebagai model pembanding.
               </p>
 
               <div className="mt-6 grid gap-3">
@@ -104,10 +105,10 @@ export default function DecisionExplainer() {
                 <div className="flex items-start gap-2">
                   <ListOrdered className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" />
                   <p className="text-xs leading-5 text-sky-200">
-                    Fitur dengan status <span className="font-bold">imputed_unknown</span>{" "}
-                    tidak memicu rule individual pada sistem pakar, tetapi
-                    tetap digunakan sebagai input machine learning agar feature
-                    vector tetap lengkap.
+                    Contoh: 1 rule suspicious memberi Expert Risk Score 0.20.
+                    Jika XGBoost legitimate dengan confidence 0.99, ML
+                    Phishing Score menjadi 0.01 dan Hybrid Score 0.105, sehingga
+                    final result adalah legitimate.
                   </p>
                 </div>
               </div>
